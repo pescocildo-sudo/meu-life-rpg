@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM - MONARCH INTERFACE</title>
+    <title>SYSTEM - SOVEREIGN INTERFACE</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
@@ -37,7 +37,6 @@
         .container { 
             width: 100%; max-width: 600px; margin: 0 auto; 
             padding: 20px; min-height: 100vh;
-            background: transparent; 
             border-left: 1px solid rgba(0, 243, 255, 0.15);
             border-right: 1px solid rgba(0, 243, 255, 0.15);
         }
@@ -55,8 +54,8 @@
         .hud {
             border: 1px solid var(--neon-blue); padding: 18px; margin-bottom: 25px;
             position: sticky; top: 10px; z-index: 100; 
-            background: rgba(0, 0, 15, 0.8);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            background: rgba(0, 0, 15, 0.85);
+            box-shadow: 0 5px 20px rgba(0, 243, 255, 0.1);
         }
 
         .daily-tip {
@@ -66,46 +65,39 @@
         }
 
         .sync-bar-bg { background: rgba(255,255,255,0.1); height: 4px; margin-top: 5px; }
-        .sync-bar-fill { background: var(--neon-blue); height: 100%; width: 0%; transition: 1s; box-shadow: 0 0 8px var(--neon-blue); }
+        .sync-bar-fill { background: var(--neon-blue); height: 100%; width: 0%; transition: 1s; box-shadow: 0 0 10px var(--neon-blue); }
 
         .xp-bg { background: rgba(0,0,0,0.6); height: 8px; border: 1px solid #333; margin: 12px 0; }
-        .xp-bar { background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); height: 100%; width: 0%; transition: 1s; }
-
-        .player-nick { cursor: pointer; color: var(--neon-blue); letter-spacing: 2px; font-size: 0.85rem; }
+        .xp-bar { background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); height: 100%; width: 0%; transition: 1.5s; }
 
         .card {
-            background: rgba(0,0,0,0.5); 
+            background: rgba(0,0,0,0.55); 
             border: 1px solid rgba(255,255,255,0.15); margin-bottom: 15px;
-            padding: 15px; position: relative; border-left: 3px solid #555;
+            padding: 15px; border-left: 4px solid #555;
         }
-        
-        /* CORES DOS DIAS NA CRIAÇÃO (FIXED) */
+
         .day-label { 
             flex: 1; border: 1px solid #444; text-align: center; 
             padding: 12px 0; cursor: pointer; transition: 0.2s; 
             font-size: 1rem; color: #666; background: rgba(0,0,0,0.8);
         }
         .d-chk:checked + .day-label { 
-            border-color: var(--neon-blue); 
-            color: var(--neon-blue); 
-            background: rgba(0, 243, 255, 0.25); 
+            border-color: var(--neon-blue); color: var(--neon-blue); 
+            background: rgba(0, 243, 255, 0.2); 
             box-shadow: inset 0 0 10px var(--neon-blue);
-            font-weight: bold;
         }
 
-        /* SEMI DIÁRIO MAIOR */
         .semi-diario-input {
             width: 100%; background: rgba(0,0,0,0.8); 
             border: 1px solid var(--neon-purple); color: #fff; 
             padding: 15px; font-family: inherit; margin-top: 10px;
-            font-size: 1rem; line-height: 1.4; min-height: 120px;
+            font-size: 1.1rem; min-height: 150px;
         }
 
         .log-entry {
             background: rgba(188, 19, 254, 0.05);
             border: 1px solid rgba(188, 19, 254, 0.2);
-            padding: 15px; margin-bottom: 10px;
-            font-size: 0.95rem; line-height: 1.5;
+            padding: 15px; margin-bottom: 10px; font-size: 1rem;
         }
 
         .btn {
@@ -113,7 +105,7 @@
             padding: 15px; cursor: pointer; font-family: inherit; width: 100%; font-weight: bold;
             text-transform: uppercase; margin-bottom: 10px;
         }
-        .btn:active { transform: scale(0.98); }
+        .btn:hover { background: rgba(0, 243, 255, 0.1); }
         .btn-sm { width: auto; padding: 6px 12px; font-size: 0.7rem; margin-left: 5px; }
 
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
@@ -123,6 +115,10 @@
     </style>
 </head>
 <body>
+
+<audio id="snd-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
+<audio id="snd-success" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
+<audio id="snd-warn" src="https://assets.mixkit.co/active_storage/sfx/951/951-preview.mp3"></audio>
 
 <div class="container">
     <div id="motive-banner" class="system-msg">AGUARDANDO ORDENS...</div>
@@ -135,7 +131,7 @@
         </div>
         <div class="sync-bar-bg"><div id="sync-bar" class="sync-bar-fill"></div></div>
         <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px">
-            <span class="player-nick" onclick="changeNick()">PLAYER: <strong id="nick-txt">...</strong></span>
+            <span style="cursor:pointer; color:var(--neon-blue); font-size:0.85rem" onclick="changeNick()">PLAYER: <strong id="nick-txt">...</strong></span>
             <span style="color:var(--neon-purple)">LVL <strong id="lvl-txt">1</strong></span>
         </div>
         <div class="xp-bg"><div id="xp-bar" class="xp-bar"></div></div>
@@ -146,28 +142,34 @@
         </div>
     </div>
 
-    <button class="btn" onclick="openModal('quest')">[+] REGISTER MISSION</button>
+    <button class="btn" onclick="openModal('quest')">[+] REGISTER DIRECTIVE</button>
 
     <div id="todo-list"></div>
     <div id="done-list" style="opacity:0.4; margin-top:20px"></div>
+
+    <div style="margin-top:40px">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid var(--neon-blue); padding-bottom: 5px; margin-bottom: 15px;">
+            <span style="font-size:0.8rem; color:var(--neon-blue); letter-spacing:2px">SYSTEM SHOP</span>
+            <button class="btn-sm btn" style="border-color:var(--neon-purple); color:var(--neon-purple)" onclick="addShopItem()">[+] ITEM</button>
+        </div>
+        <div id="shop-list"></div>
+    </div>
 
     <div style="margin-top:50px">
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid var(--neon-purple); padding-bottom: 10px;">
             <span style="font-size:1rem; color:var(--neon-purple); letter-spacing:3px; font-weight:bold">SEMI DIÁRIO</span>
             <button class="btn-sm btn" style="margin:0; border-color:#555; color:#555" onclick="openModal('bg')">⚙️</button>
         </div>
-        <textarea id="log-input" class="semi-diario-input" placeholder="Relate os detalhes da sua jornada hoje..."></textarea>
-        <button class="btn" style="border-color: var(--neon-purple); color: var(--neon-purple); margin-top: 10px;" onclick="saveLog()">ARQUIVAR RELATÓRIO</button>
+        <textarea id="log-input" class="semi-diario-input" placeholder="O que aconteceu na dungeon de hoje?"></textarea>
+        <button class="btn" style="border-color: var(--neon-purple); color: var(--neon-purple); margin-top: 10px;" onclick="saveLog()">GRAVAR RELATÓRIO</button>
         <div id="logs-area" style="margin-top:20px"></div>
     </div>
 </div>
 
 <div id="modal-quest" class="modal">
     <div class="modal-content">
-        <p style="color:var(--neon-blue); font-weight:bold">NOVA DIRETRIZ</p>
-        <input type="text" id="q-title" placeholder="Nome do objetivo...">
-        
-        <label style="font-size:0.7rem; color:#888">RANK DA MISSÃO:</label>
+        <p style="color:var(--neon-blue)">NOVA MISSÃO</p>
+        <input type="text" id="q-title" placeholder="Nome...">
         <div style="display:grid; grid-template-columns: repeat(6, 1fr); gap:4px; margin:10px 0">
             <label><input type="radio" name="diff" value="E" checked hidden><div class="day-label" style="font-size:0.7rem">E</div></label>
             <label><input type="radio" name="diff" value="D" hidden><div class="day-label" style="font-size:0.7rem">D</div></label>
@@ -176,33 +178,33 @@
             <label><input type="radio" name="diff" value="A" hidden><div class="day-label" style="font-size:0.7rem">A</div></label>
             <label><input type="radio" name="diff" value="S" hidden><div class="day-label" style="font-size:0.7rem">S</div></label>
         </div>
-
-        <label style="font-size:0.7rem; color:#888">DIAS DE ATIVAÇÃO:</label>
         <div style="display:flex; gap:4px; margin:10px 0;" id="day-selector"></div>
-        
         <button class="btn" onclick="saveQuest()">INICIAR</button>
-        <button class="btn" style="border-color:var(--danger); color:var(--danger)" onclick="closeModal('quest')">VOLTAR</button>
+        <button class="btn" style="border-color:var(--danger)" onclick="closeModal('quest')">VOLTAR</button>
     </div>
 </div>
 
 <div id="modal-bg" class="modal">
     <div class="modal-content">
-        <p style="color:var(--neon-blue)">SISTEMA</p>
+        <p style="color:var(--neon-blue)">CONFIGURAÇÕES</p>
         <input type="text" id="bg-url-input" placeholder="Link do Wallpaper...">
-        <button class="btn" onclick="applyBg()">APLICAR</button>
-        <button class="btn" style="border-color:var(--danger); color:var(--danger)" onclick="purgeQuests()">DELETAR TUDO</button>
-        <button class="btn" onclick="closeModal('bg')" style="border-color:#555">FECHAR</button>
+        <button class="btn" onclick="applyBg()">APLICAR BG</button>
+        <button class="btn" style="border-color:var(--danger)" onclick="purgeQuests()">DELETAR TUDO</button>
+        <button class="btn" onclick="closeModal('bg')">FECHAR</button>
     </div>
 </div>
 
 <script>
-    const phrases = ["ERGA-SE.", "NÃO PARE.", "A EVOLUÇÃO É CONSTANTE.", "SUPERE SEUS LIMITES.", "O SISTEMA ESTÁ DE OLHO."];
-    const tips = ["SISTEMA: O descanso é parte do treino.", "SISTEMA: Missões Rank S exigem foco total.", "SISTEMA: O Semi Diário ajuda na clareza mental.", "SISTEMA: Mantenha o foco Hunter."];
+    const phrases = ["ERGA-SE.", "O DESTINO É SEU.", "LIMITES SÃO APENAS PALAVRAS.", "FOCO NO OBJETIVO.", "O MUNDO É SUA DUNGEON."];
+    const tips = ["SISTEMA: Itens no Shop podem acelerar seu progresso.", "SISTEMA: Missões perdidas reduzem seu Streak.", "SISTEMA: O Semi Diário é sua maior prova de esforço.", "SISTEMA: Beba água, Hunter."];
 
-    let db = JSON.parse(localStorage.getItem('solo_v10_core')) || {
+    let db = JSON.parse(localStorage.getItem('solo_v11_core')) || {
         xp: 0, lvl: 1, gold: 0, streak: 0, tasks: [], logs: [], 
+        shop: [{id: 1, title: "ENERGY DRINK", cost: 100}],
         bg: "https://images.alphacoders.com/105/1053746.jpg", nick: "HUNTER"
     };
+
+    const playSnd = (id) => { document.getElementById(id).currentTime = 0; document.getElementById(id).play(); };
 
     function render() {
         document.getElementById('lvl-txt').innerText = db.lvl;
@@ -210,7 +212,7 @@
         document.getElementById('streak-txt').innerText = db.streak;
         document.getElementById('nick-txt').innerText = db.nick;
         document.body.style.backgroundImage = `url('${db.bg}')`;
-        document.getElementById('xp-bar').style.width = (db.xp / (db.lvl * 200) * 100) + "%";
+        document.getElementById('xp-bar').style.width = (db.xp / (db.lvl * 250) * 100) + "%";
 
         const today = new Date().getDay();
         const dateKey = new Date().toLocaleDateString('pt-BR');
@@ -224,7 +226,7 @@
                 active++;
                 const isDone = t.lastDone === dateKey;
                 if(isDone) done++;
-                const html = `<div class="card" style="border-left-color:var(--rank-${t.difficulty.toLowerCase() || 'c'})">
+                const html = `<div class="card" style="border-left-color:var(--rank-${t.difficulty.toLowerCase()})">
                     <div style="display:flex; justify-content:space-between">
                         <b>${t.title}</b>
                         <span style="color:var(--neon-blue); font-size:0.6rem">RANK_${t.difficulty}</span>
@@ -240,32 +242,24 @@
 
         document.getElementById('sync-bar').style.width = (active > 0 ? (done/active*100) : 0) + "%";
         document.getElementById('sync-val').innerText = (active > 0 ? Math.round(done/active*100) : 0) + "%";
-        
-        document.getElementById('logs-area').innerHTML = db.logs.map(l => `
-            <div class="log-entry">
-                <div style="color:var(--neon-purple); font-size:0.7rem; margin-bottom:5px">[${l.date}]</div>
-                <div>${l.text}</div>
+
+        // RENDER SHOP
+        document.getElementById('shop-list').innerHTML = db.shop.map(i => `
+            <div class="card" style="border-left: 2px solid var(--neon-purple); display:flex; justify-content:space-between; align-items:center; padding:10px; background:rgba(0,0,0,0.7)">
+                <span style="font-size:0.85rem">${i.title}</span>
+                <button class="btn-sm btn" onclick="buy(${i.id})">${i.cost}G</button>
             </div>
         `).join('');
+
+        document.getElementById('logs-area').innerHTML = db.logs.map(l => `
+            <div class="log-entry"><small style="color:var(--neon-purple)">[${l.date}]</small><br>${l.text}</div>
+        `).join('');
         
-        localStorage.setItem('solo_v10_core', JSON.stringify(db));
+        localStorage.setItem('solo_v11_core', JSON.stringify(db));
     }
 
-    function changeNick() {
-        const n = prompt("NOME DO HUNTER:", db.nick);
-        if(n) { db.nick = n.toUpperCase(); render(); }
-    }
-
-    function openModal(id) { 
-        document.getElementById('modal-' + id).style.display = 'flex'; 
-        if(id==='quest') {
-            const days = ['D','S','T','Q','Q','S','S'];
-            document.getElementById('day-selector').innerHTML = days.map((d, i) => `
-                <input type="checkbox" id="d-${i}" class="d-chk" value="${i}" hidden>
-                <label for="d-${i}" class="day-label">${d}</label>
-            `).join('');
-        }
-    }
+    function changeNick() { playSnd('snd-click'); const n = prompt("CODENOME:", db.nick); if(n) { db.nick = n.toUpperCase(); render(); } }
+    function openModal(id) { playSnd('snd-click'); document.getElementById('modal-' + id).style.display = 'flex'; if(id==='quest') { const days = ['D','S','T','Q','Q','S','S']; document.getElementById('day-selector').innerHTML = days.map((d, i) => `<input type="checkbox" id="d-${i}" class="d-chk" value="${i}" hidden><label for="d-${i}" class="day-label">${d}</label>`).join(''); } }
     function closeModal(id) { document.getElementById('modal-' + id).style.display = 'none'; }
     function applyBg() { const url = document.getElementById('bg-url-input').value; if(url) { db.bg = url; render(); closeModal('bg'); } }
 
@@ -273,32 +267,37 @@
         const title = document.getElementById('q-title').value.toUpperCase();
         const diff = document.querySelector('input[name="diff"]:checked').value;
         const days = Array.from(document.querySelectorAll('.d-chk:checked')).map(c => parseInt(c.value));
-        if(!title || days.length === 0) return alert("ERRO: DADOS INCOMPLETOS");
+        if(!title || days.length === 0) return playSnd('snd-warn');
         db.tasks.push({id: Date.now(), title, difficulty: diff, days, lastDone: ""});
-        closeModal('quest'); render();
+        playSnd('snd-success'); closeModal('quest'); render();
     }
 
     function complete(id) {
         const t = db.tasks.find(x => x.id === id);
         t.lastDone = new Date().toLocaleDateString('pt-BR');
-        const xp = {E:20,D:40,C:70,B:130,A:260,S:600}[t.difficulty];
+        const xp = {E:25,D:50,C:80,B:150,A:300,S:650}[t.difficulty];
         db.xp += xp; db.gold += Math.floor(xp/2); db.streak++;
-        if(db.xp >= db.lvl * 200) { db.xp = 0; db.lvl++; alert("LEVEL UP!"); }
+        playSnd('snd-success');
+        if(db.xp >= db.lvl * 250) { db.xp = 0; db.lvl++; alert("LEVEL UP!"); }
         render();
     }
 
-    function abort(id) { if(db.gold >= 30 && confirm("ABORTAR? (-30G)")) { db.gold -= 30; db.tasks = db.tasks.filter(x => x.id !== id); render(); } }
+    function abort(id) { if(db.gold >= 30 && confirm("ABORTAR? (-30G)")) { db.gold -= 30; db.tasks = db.tasks.filter(x => x.id !== id); playSnd('snd-warn'); render(); } }
 
     function saveLog() { 
         const txt = document.getElementById('log-input').value; 
-        if(txt) { 
-            db.logs.unshift({date: new Date().toLocaleString('pt-BR'), text: txt}); 
-            document.getElementById('log-input').value = ''; 
-            render(); 
-        } 
+        if(txt) { db.logs.unshift({date: new Date().toLocaleString('pt-BR'), text: txt}); document.getElementById('log-input').value = ''; playSnd('snd-success'); render(); } 
     }
 
-    function purgeQuests() { if(confirm("RESETAR TUDO?")) { db.tasks = []; db.logs = []; render(); } }
+    function addShopItem() { const t = prompt("ITEM:"), c = parseInt(prompt("PREÇO:")); if(t && c) { db.shop.push({id: Date.now(), title: t.toUpperCase(), cost: c}); render(); } }
+    
+    function buy(id) {
+        const i = db.shop.find(x => x.id === id);
+        if(db.gold >= i.cost) { db.gold -= i.cost; playSnd('snd-success'); alert("ADQUIRIDO!"); render(); }
+        else { playSnd('snd-warn'); alert("GOLD INSUFICIENTE"); }
+    }
+
+    function purgeQuests() { if(confirm("REINICIAR SISTEMA?")) { db.tasks = []; db.logs = []; render(); } }
 
     document.getElementById('motive-banner').innerText = phrases[Math.floor(Math.random() * phrases.length)];
     document.getElementById('daily-tip').innerText = tips[Math.floor(Math.random() * tips.length)];
