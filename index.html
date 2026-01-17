@@ -3,154 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM.EXE - Player Interface</title>
+    <title>SYSTEM - SOLO LEVELING</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
         :root {
-            --bg-color: #050510;
-            --panel-bg: rgba(10, 10, 25, 0.9);
+            --bg: #050510;
             --neon-blue: #00f3ff;
             --neon-purple: #bc13fe;
-            --system-blue: #2980b9;
             --danger: #ff003c;
-            --text-main: #e0e0e0;
-            --grid-color: rgba(0, 243, 255, 0.05);
+            --panel: rgba(15, 15, 35, 0.95);
         }
-
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
 
         body { 
-            font-family: 'Share Tech Mono', 'Courier New', monospace; 
-            background-color: var(--bg-color);
-            background-image: 
-                linear-gradient(var(--grid-color) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-            background-size: 30px 30px;
-            color: var(--text-main); 
-            margin: 0; padding: 15px; 
-            display: flex; justify-content: center;
-            min-height: 100vh;
+            font-family: 'Share Tech Mono', monospace; 
+            background: var(--bg); color: #fff; margin: 0; padding: 15px;
+            background-image: linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
         }
 
-        .container { width: 100%; max-width: 650px; padding-bottom: 80px; position: relative; }
+        .container { width: 100%; max-width: 500px; margin: 0 auto; padding-bottom: 50px; }
 
-        /* STATUS / HUD */
-        .hud-panel {
-            background: var(--panel-bg);
-            border: 1px solid var(--neon-blue);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
-            padding: 20px;
-            border-radius: 5px;
-            position: sticky; top: 10px; z-index: 100;
-            backdrop-filter: blur(5px);
-            margin-bottom: 30px;
+        /* HUD */
+        .hud {
+            background: var(--panel); border: 1px solid var(--neon-blue);
+            padding: 15px; border-radius: 5px; position: sticky; top: 10px; z-index: 100;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2); margin-bottom: 20px;
         }
-        
-        .hud-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .player-name { font-size: 1.2rem; color: var(--neon-blue); text-shadow: 0 0 5px var(--neon-blue); letter-spacing: 2px; }
-        .rank-badge { background: var(--neon-purple); color: #fff; padding: 2px 8px; font-size: 0.8rem; border: 1px solid #fff; box-shadow: 0 0 10px var(--neon-purple); }
 
-        .xp-bar-container { height: 8px; background: #000; border: 1px solid #333; margin: 10px 0; position: relative; }
-        .xp-fill { height: 100%; background: var(--neon-blue); width: 0%; box-shadow: 0 0 10px var(--neon-blue); transition: width 0.5s ease; }
+        .xp-bg { background: #000; height: 10px; border: 1px solid #333; margin: 10px 0; }
+        .xp-bar { background: var(--neon-blue); height: 100%; width: 0%; box-shadow: 0 0 10px var(--neon-blue); transition: 0.5s; }
 
-        .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; text-align: center; }
-        .stat-box { border: 1px solid rgba(255,255,255,0.1); padding: 5px; }
-        .stat-val { display: block; font-size: 1.1rem; color: var(--neon-blue); font-weight: bold; }
-        .stat-lbl { font-size: 0.7rem; color: #888; letter-spacing: 1px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; }
+        .stat-val { color: var(--neon-blue); font-size: 1.1rem; display: block; font-weight: bold; }
+        .stat-lbl { font-size: 0.6rem; color: #888; }
+
+        /* BOTÃO PRINCIPAL */
+        .btn-create {
+            width: 100%; background: rgba(0, 243, 255, 0.1); border: 1px solid var(--neon-blue);
+            color: var(--neon-blue); padding: 15px; font-family: inherit; font-size: 1rem;
+            cursor: pointer; margin-bottom: 25px; box-shadow: 0 0 5px var(--neon-blue);
+        }
 
         /* QUESTS */
-        h3 { 
-            color: var(--neon-purple); border-bottom: 2px solid var(--neon-purple); 
-            display: inline-block; padding-bottom: 5px; margin-top: 30px; 
-            text-transform: uppercase; letter-spacing: 1px;
-        }
-
+        h3 { color: var(--neon-purple); font-size: 0.9rem; border-left: 3px solid var(--neon-purple); padding-left: 10px; }
+        
         .quest-card {
-            background: rgba(0, 0, 0, 0.6);
-            border-left: 3px solid var(--neon-blue);
-            border-bottom: 1px solid #333;
-            padding: 15px; margin-bottom: 10px;
-            display: flex; justify-content: space-between; align-items: center;
-            transition: 0.3s;
+            background: rgba(0,0,0,0.8); border: 1px solid #222; border-left: 3px solid var(--neon-blue);
+            padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
         }
-        
-        .quest-card.done { 
-            border-left-color: #555; opacity: 0.6; filter: grayscale(0.8); 
-            text-decoration: line-through; 
+        .quest-card.done { border-left-color: #444; opacity: 0.5; filter: grayscale(1); }
+
+        .btn-small { 
+            background: transparent; border: 1px solid var(--neon-blue); color: var(--neon-blue);
+            padding: 5px 10px; cursor: pointer; font-family: inherit; font-size: 0.7rem; margin-left: 5px;
+        }
+        .btn-abort { border-color: var(--danger); color: var(--danger); }
+
+        /* MODAL */
+        .modal { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-content { 
+            background: #0a0a1a; border: 2px solid var(--neon-blue); padding: 20px; width: 90%; max-width: 350px;
         }
 
-        .btn-action {
-            background: transparent;
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            padding: 8px 15px;
-            cursor: pointer;
-            font-family: inherit;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            transition: 0.2s;
-        }
-        .btn-action:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 15px var(--neon-blue); }
-        
-        .btn-main {
-            width: 100%; background: rgba(0, 243, 255, 0.1); 
-            border: 1px solid var(--neon-blue); color: var(--neon-blue);
-            padding: 15px; font-size: 1rem; margin-bottom: 20px;
-            letter-spacing: 2px; text-transform: uppercase;
-            cursor: pointer; transition: 0.3s;
-        }
-        .btn-main:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 20px var(--neon-blue); }
+        .day-select { display: flex; justify-content: space-between; margin: 15px 0; }
+        .day-btn { flex: 1; border: 1px solid #333; text-align: center; padding: 5px; font-size: 0.7rem; cursor: pointer; color: #555; }
+        input[type="checkbox"]:checked + .day-btn { border-color: var(--neon-blue); color: var(--neon-blue); background: rgba(0, 243, 255, 0.1); }
 
-        /* MODAL SYSTEM */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9); z-index: 999;
-            display: none; justify-content: center; align-items: center;
-        }
-        .sys-window {
-            background: #050510; border: 2px solid var(--neon-blue);
-            padding: 20px; width: 90%; max-width: 400px;
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
-            position: relative;
-        }
-        .sys-window::before {
-            content: "SYSTEM ALERT"; position: absolute; top: -12px; left: 20px;
-            background: #050510; color: var(--neon-blue); padding: 0 10px; font-size: 0.8rem;
-        }
-
-        input {
-            width: 100%; background: #000; border: 1px solid #333; color: var(--neon-blue);
-            padding: 10px; font-family: inherit; margin: 10px 0;
-        }
-        
-        .days-grid { display: flex; gap: 5px; margin: 10px 0; }
-        .day-opt { 
-            flex: 1; text-align: center; padding: 5px; border: 1px solid #333; 
-            font-size: 0.8rem; cursor: pointer; color: #555; 
-        }
-        input:checked + .day-opt { border-color: var(--neon-blue); color: var(--neon-blue); background: rgba(0, 243, 255, 0.1); }
-
-        .system-msg { text-align: center; color: #555; font-size: 0.8rem; margin-top: 50px; }
+        input[type="text"] { width: 100%; background: #000; border: 1px solid #333; color: var(--neon-blue); padding: 10px; font-family: inherit; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    
-    <div class="hud-panel">
-        <div class="hud-header">
-            <span class="player-name">PLAYER</span>
-            <span class="rank-badge">RANK E</span>
+    <div class="hud">
+        <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+            <span style="color:var(--neon-blue); font-size:1.2rem;">SYSTEM PLAYER</span>
+            <span style="font-size:0.7rem;">LVL <strong id="lvl-txt" style="font-size:1rem; color:var(--neon-purple)">1</strong></span>
         </div>
-        <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:5px;">
-            <span>LEVEL <span id="lvl-display" style="color:var(--neon-purple); font-size:1.2rem;">1</span></span>
-            <span id="date-display">...</span>
+        <div class="xp-bg"><div id="xp-bar" class="xp-bar"></div></div>
+        <div class="stats-grid">
+            <div class="stat-box"><span id="gold-txt" class="stat-val">0</span><span class="stat-lbl">GOLD</span></div>
+            <div class="stat-box"><span id="streak-txt" class="stat-val">0</span><span class="stat-lbl">STREAK</span></div>
+            <div class="stat-box"><span id="rank-txt" class="stat-val" style="font-size:0.8rem">RANK E</span><span class="stat-lbl">STATUS</span></div>
         </div>
+    </div>
+
+    <button class="btn-create" onclick="openModal()">[+] ADD NEW DIRECTIVE</button>
+
+    <div id="active-quests">
+        <h3>ACTIVE QUESTS</h3>
+        <div id="todo-list"></div>
+    </div>
+
+    <div id="completed-quests" style="margin-top: 30px;">
+        <h3>COMPLETED</h3>
+        <div id="done-list"></div>
+    </div>
+</div>
+
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <p style="color:var(--neon-blue); margin-top:0;">NEW DIRECTIVE</p>
+        <input type="text" id="quest-title" placeholder="QUEST NAME...">
+        <div class="day-select">
+            <label><input type="checkbox" class="day-chk" value="0" hidden><div class="day-btn">D</div></label>
+            <label><input type="checkbox" class="day-chk" value="1" hidden><div class="day-btn">S</div></label>
+            <label><input type="checkbox" class="day-chk" value="2" hidden><div class="day-btn">T</div></label>
+            <label><input type="checkbox" class="day-chk" value="3" hidden><div class="day-btn">Q</div></label>
+            <label><input type="checkbox" class="day-chk" value="4" hidden><div class="day-btn">Q</div></label>
+            <label><input type="checkbox" class="day-chk" value="5" hidden><div class="day-btn">S</div></label>
+            <label><input type="checkbox" class="day-chk" value="6" hidden><div class="day-btn">S</div></label>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <button class="btn-small" style="border-color:var(--danger); color:var(--danger)" onclick="closeModal()">CANCEL</button>
+            <button class="btn-small" onclick="saveQuest()">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let db = JSON.parse(localStorage.getItem('solo_system_v5')) || {
+        xp: 0, lvl: 1, gold: 0, streak: 0, tasks: []
+    };
+
+    function render() {
+        const nextXp = Math.floor(100 * Math.pow(db.lvl, 1.5));
+        document.getElementById('lvl-txt').innerText = db.lvl;
+        document.getElementById('gold-txt').innerText = db.gold;
+        document.getElementById('streak-txt').innerText = `🔥 ${db.streak}`;
+        document.getElementById('xp-bar').style.width = (db.xp / nextXp * 100) + "%";
         
-        <div class="xp-bar-container"><div id="xp-fill" class="xp-fill"></div></div>
+        const ranks = ["E-RANK", "D-RANK", "C-RANK", "B-RANK", "A-RANK", "S-RANK"];
+        document.getElementById('rank-txt').innerText = ranks[Math.min(Math.floor(db.lvl/5), 5)];
+
+        const today = new Date().getDay();
+        const dateKey = new Date().toLocaleDateString('pt-BR');
+        const todoEl = document.getElementById('todo-list');
+        const doneEl = document.getElementById('done-list');
         
-        <div class="stats-row">
-            <div class="stat-box"><span id="xp-val" class="stat-val">0</span><span class="stat-lbl">XP</span></div>
-            <div class="stat-box"><span id="coin-val" class="stat-val">0</span><span class="stat-lbl">GOLD</span></div>
-            <div class="stat-box"><span id="streak-val" class="stat-val">0</span><span class="stat-lbl">ST
+        todoEl.innerHTML = ''; doneEl.innerHTML = '';
+
+        db.tasks.forEach(t => {
+            if(t.days.includes(today)) {
+                const isDone = t.lastDone === dateKey;
+                const html = `
+                    <div class="quest-card ${isDone ? 'done' : ''}">
+                        <div style="font-size:0.9rem;">${t.title}</div>
+                        <div>
+                            ${!isDone ? `<button class="btn-small" onclick="complete(${t.id})">DONE</button>` : ''}
+                            <button class="btn-small btn-abort" onclick="abort(${t.id})">ABORT</button>
+                        </div>
+                    </div>
+                `;
+                isDone ? doneEl.innerHTML += html : todoEl.innerHTML += html;
+            }
+        });
+        localStorage.setItem('solo_system_v5', JSON.stringify(db));
+    }
+
+    function openModal() { document.getElementById('modal').style.display = 'flex'; }
+    function closeModal() { document.getElementById('modal').style.display = 'none'; }
+
+    function saveQuest() {
+        const title = document.getElementById('quest-title').value.toUpperCase();
+        const days = Array.from(document.querySelectorAll('.day-chk:checked')).map(c => parseInt(c.value));
+        if(!title || days.length === 0) return alert("MISSING DATA");
+        db.tasks.push({id: Date.now(), title, days, lastDone: ""});
+        document.getElementById('quest-title').value = '';
+        document.querySelectorAll('.day-chk').forEach(c => c.checked = false);
+        closeModal();
+        render();
+    }
+
+    function complete(id) {
+        const task = db.tasks.find(t => t.id === id);
+        task.lastDone = new Date().toLocaleDateString('pt-BR');
+        db.xp += 50 + (db.streak * 5);
+        db.gold += 20;
+        const nextXp = Math.floor(100 * Math.pow(db.lvl, 1.5));
+        if(db.xp >= nextXp) { db.lvl++; db.xp = 0; alert("LEVEL UP!"); }
+        render();
+    }
+
+    function abort(id) {
+        if(db.gold < 30) return alert("INSUFFICIENT GOLD TO ABORT (COST: 30G)");
+        if(confirm("ABORT THIS QUEST? COST: 30 GOLD")) {
+            db.gold -= 30;
+            db.tasks = db.tasks.filter(t => t.id !== id);
+            render();
+        }
+    }
+
+    render();
+</script>
+</body>
+</html>
