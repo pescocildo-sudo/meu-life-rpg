@@ -27,22 +27,12 @@
             background-size: cover;
             background-position: center;
             color: #fff; margin: 0; padding: 0;
-            transition: background-image 0.5s ease;
         }
 
         body::before {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.3); z-index: -1;
         }
-
-        .scanner-line {
-            position: fixed; top: 0; left: 0; width: 100%; height: 2px;
-            background: rgba(0, 243, 255, 0.3);
-            box-shadow: 0 0 10px var(--neon-blue);
-            z-index: 999; pointer-events: none;
-            animation: scanMove 12s linear infinite;
-        }
-        @keyframes scanMove { 0% { top: -5%; } 100% { top: 105%; } }
 
         .container { 
             width: 100%; max-width: 600px; margin: 0 auto; 
@@ -58,23 +48,21 @@
             padding: 10px; margin-bottom: 20px;
             text-align: center; font-size: 0.75rem;
             color: var(--neon-blue); text-transform: uppercase;
-            letter-spacing: 1px; animation: pulse 2s infinite;
+            animation: pulse 2s infinite;
         }
         @keyframes pulse { 0% { opacity: 0.7; } 50% { opacity: 1; } 100% { opacity: 0.7; } }
 
         .hud {
             border: 1px solid var(--neon-blue); padding: 18px; margin-bottom: 25px;
             position: sticky; top: 10px; z-index: 100; 
-            background: rgba(0, 0, 15, 0.7);
+            background: rgba(0, 0, 15, 0.8);
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
-        /* DICA DIÁRIA - AUMENTADA */
         .daily-tip {
             font-size: 0.85rem; color: #fff; margin-bottom: 18px;
             border-left: 3px solid var(--neon-purple); padding-left: 10px;
             text-shadow: 0 0 5px var(--neon-purple);
-            line-height: 1.2;
         }
 
         .sync-bar-bg { background: rgba(255,255,255,0.1); height: 4px; margin-top: 5px; }
@@ -83,219 +71,234 @@
         .xp-bg { background: rgba(0,0,0,0.6); height: 8px; border: 1px solid #333; margin: 12px 0; }
         .xp-bar { background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); height: 100%; width: 0%; transition: 1s; }
 
-        .player-nick { 
-            cursor: pointer; color: var(--neon-blue); 
-            letter-spacing: 2px; font-size: 0.85rem;
-            transition: 0.3s;
-        }
-        .player-nick:hover { text-shadow: 0 0 10px var(--neon-blue); }
+        .player-nick { cursor: pointer; color: var(--neon-blue); letter-spacing: 2px; font-size: 0.85rem; }
 
         .card {
-            background: rgba(0,0,0,0.4); 
+            background: rgba(0,0,0,0.5); 
             border: 1px solid rgba(255,255,255,0.15); margin-bottom: 15px;
             padding: 15px; position: relative; border-left: 3px solid #555;
         }
         
-        .diff-E { border-left-color: #888; }
-        .diff-D { border-left-color: var(--rank-c); }
-        .diff-C { border-left-color: var(--neon-blue); }
-        .diff-B { border-left-color: var(--rank-b); }
-        .diff-A { border-left-color: var(--rank-a); }
-        .diff-S { border-left-color: var(--rank-s); }
-
-        .btn {
-            background: rgba(0,0,0,0.5); border: 1px solid var(--neon-blue); color: var(--neon-blue);
-            padding: 12px; cursor: pointer; font-family: inherit; width: 100%; font-weight: bold;
-            text-transform: uppercase; margin-bottom: 10px;
-        }
-        .btn:hover { background: var(--neon-blue); color: #000; }
-        
-        .btn-sm { width: auto; padding: 4px 10px; font-size: 0.65rem; margin-left: 5px; }
-        .btn-abort { border-color: var(--danger); color: var(--danger); }
-
+        /* CORES DOS DIAS NA CRIAÇÃO (FIXED) */
         .day-label { 
             flex: 1; border: 1px solid #444; text-align: center; 
-            padding: 10px 0; cursor: pointer; transition: 0.2s; 
-            font-size: 0.8rem; color: #aaa; background: rgba(0,0,0,0.6);
+            padding: 12px 0; cursor: pointer; transition: 0.2s; 
+            font-size: 1rem; color: #666; background: rgba(0,0,0,0.8);
         }
-        .d-chk:checked + .day-label { border-color: var(--neon-blue); color: var(--neon-blue); background: rgba(0, 243, 255, 0.1); }
+        .d-chk:checked + .day-label { 
+            border-color: var(--neon-blue); 
+            color: var(--neon-blue); 
+            background: rgba(0, 243, 255, 0.25); 
+            box-shadow: inset 0 0 10px var(--neon-blue);
+            font-weight: bold;
+        }
 
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
-        .modal-content { background: #050510; border: 2px solid var(--neon-blue); padding: 20px; width: 100%; max-width: 400px; }
+        /* SEMI DIÁRIO MAIOR */
+        .semi-diario-input {
+            width: 100%; background: rgba(0,0,0,0.8); 
+            border: 1px solid var(--neon-purple); color: #fff; 
+            padding: 15px; font-family: inherit; margin-top: 10px;
+            font-size: 1rem; line-height: 1.4; min-height: 120px;
+        }
 
-        input[type="text"], textarea { width: 100%; background: rgba(0,0,0,0.8); border: 1px solid #444; color: #fff; padding: 12px; font-family: inherit; margin-bottom: 15px; }
+        .log-entry {
+            background: rgba(188, 19, 254, 0.05);
+            border: 1px solid rgba(188, 19, 254, 0.2);
+            padding: 15px; margin-bottom: 10px;
+            font-size: 0.95rem; line-height: 1.5;
+        }
+
+        .btn {
+            background: rgba(0,0,0,0.6); border: 1px solid var(--neon-blue); color: var(--neon-blue);
+            padding: 15px; cursor: pointer; font-family: inherit; width: 100%; font-weight: bold;
+            text-transform: uppercase; margin-bottom: 10px;
+        }
+        .btn:active { transform: scale(0.98); }
+        .btn-sm { width: auto; padding: 6px 12px; font-size: 0.7rem; margin-left: 5px; }
+
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+        .modal-content { background: #050510; border: 2px solid var(--neon-blue); padding: 20px; width: 100%; max-width: 450px; }
+
+        input[type="text"] { width: 100%; background: rgba(0,0,0,0.8); border: 1px solid #444; color: #fff; padding: 12px; font-family: inherit; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
-<div class="scanner-line"></div>
-
 <div class="container">
-    <div id="motive-banner" class="system-msg">ERGA-SE. O DESTINO AGUARDA.</div>
+    <div id="motive-banner" class="system-msg">AGUARDANDO ORDENS...</div>
 
     <div class="hud">
-        <div id="daily-tip" class="daily-tip">SISTEMA: Carregando diretrizes...</div>
-
+        <div id="daily-tip" class="daily-tip">SISTEMA: Carregando...</div>
         <div style="display:flex; justify-content:space-between">
-            <span style="font-size:0.6rem; color:var(--neon-blue); letter-spacing:1px">SYNC_PROGRESS</span>
+            <span style="font-size:0.6rem; color:var(--neon-blue)">SYNC_STATUS</span>
             <span id="sync-val" style="font-size:0.6rem; color:var(--neon-blue)">0%</span>
         </div>
         <div class="sync-bar-bg"><div id="sync-bar" class="sync-bar-fill"></div></div>
-
         <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px">
-            <span class="player-nick" onclick="changeNick()">PLAYER: <strong id="nick-txt">PESCOCILDO</strong></span>
+            <span class="player-nick" onclick="changeNick()">PLAYER: <strong id="nick-txt">...</strong></span>
             <span style="color:var(--neon-purple)">LVL <strong id="lvl-txt">1</strong></span>
         </div>
         <div class="xp-bg"><div id="xp-bar" class="xp-bar"></div></div>
-        
         <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-            <div style="text-align:center"><span id="gold-txt" style="color:var(--neon-blue); font-weight:bold">0</span><br><small style="font-size:0.5rem; color:#888">GOLD</small></div>
-            <div style="text-align:center"><span id="streak-txt" style="color:var(--neon-blue); font-weight:bold">0</span><br><small style="font-size:0.5rem; color:#888">STREAK</small></div>
-            <div style="text-align:center"><span id="rank-txt" style="color:var(--neon-blue); font-size:0.6rem">E-RANK</span><br><small style="font-size:0.5rem; color:#888">CLASS</small></div>
+            <div style="text-align:center"><span id="gold-txt" style="color:var(--neon-blue); font-weight:bold">0</span><br><small style="font-size:0.5rem">GOLD</small></div>
+            <div style="text-align:center"><span id="streak-txt" style="color:var(--neon-blue); font-weight:bold">0</span><br><small style="font-size:0.5rem">STREAK</small></div>
+            <div style="text-align:center"><span id="rank-txt" style="color:var(--neon-blue); font-size:0.6rem">E-RANK</span><br><small style="font-size:0.5rem">CLASS</small></div>
         </div>
     </div>
 
-    <button class="btn" onclick="openModal('quest')">[+] NEW DIRECTIVE</button>
+    <button class="btn" onclick="openModal('quest')">[+] REGISTER MISSION</button>
 
     <div id="todo-list"></div>
     <div id="done-list" style="opacity:0.4; margin-top:20px"></div>
 
-    <div style="margin-top:40px">
-        <div style="display:flex; justify-content:space-between; align-items:center">
-            <span style="font-size:0.7rem; color:var(--neon-blue); letter-spacing:2px">SYSTEM_SHOP</span>
-            <button class="btn-sm btn" style="margin:0; border-color:var(--neon-purple); color:var(--neon-purple)" onclick="addShopItem()">[+] ADD</button>
-        </div>
-        <div id="shop-list" style="margin-top:10px"></div>
-    </div>
-
-    <div style="margin-top:40px">
-        <div style="display:flex; justify-content:space-between; align-items:center">
-            <span style="font-size:0.7rem; color:var(--neon-purple); letter-spacing:2px">ARCHIVE_LOGS</span>
+    <div style="margin-top:50px">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid var(--neon-purple); padding-bottom: 10px;">
+            <span style="font-size:1rem; color:var(--neon-purple); letter-spacing:3px; font-weight:bold">SEMI DIÁRIO</span>
             <button class="btn-sm btn" style="margin:0; border-color:#555; color:#555" onclick="openModal('bg')">⚙️</button>
         </div>
-        <textarea id="log-input" placeholder="Mission details..." style="margin-top:10px; height:60px"></textarea>
-        <button class="btn" onclick="saveLog()">SAVE DATA</button>
-        <div id="logs-area" style="max-height: 200px; overflow-y: auto;"></div>
+        <textarea id="log-input" class="semi-diario-input" placeholder="Relate os detalhes da sua jornada hoje..."></textarea>
+        <button class="btn" style="border-color: var(--neon-purple); color: var(--neon-purple); margin-top: 10px;" onclick="saveLog()">ARQUIVAR RELATÓRIO</button>
+        <div id="logs-area" style="margin-top:20px"></div>
     </div>
 </div>
 
 <div id="modal-quest" class="modal">
     <div class="modal-content">
-        <p style="color:var(--neon-blue)">REGISTER MISSION</p>
-        <input type="text" id="q-title" placeholder="Objective name...">
+        <p style="color:var(--neon-blue); font-weight:bold">NOVA DIRETRIZ</p>
+        <input type="text" id="q-title" placeholder="Nome do objetivo...">
+        
+        <label style="font-size:0.7rem; color:#888">RANK DA MISSÃO:</label>
         <div style="display:grid; grid-template-columns: repeat(6, 1fr); gap:4px; margin:10px 0">
-            <label><input type="radio" name="diff" value="E" checked hidden><div class="diff-opt" style="border:1px solid #333; padding:5px; text-align:center; font-size:0.7rem; cursor:pointer">E</div></label>
-            <label><input type="radio" name="diff" value="D" hidden><div class="diff-opt" style="border:1px solid #333; padding:5px; text-align:center; font-size:0.7rem; cursor:pointer">D</div></label>
-            <label><input type="radio" name="diff" value="C" hidden><div class="diff-opt" style="border:1px solid #333; padding:5px; text-align:center; font-size:0.7rem; cursor:pointer">C</div></label>
-            <label><input type="radio" name="diff" value="B" hidden><div class="diff-opt" style="border:1px solid #333; padding:5px; text-align:center; font-size:0.7rem; cursor:pointer">B</div></label>
-            <label><input type="radio" name="diff" value="A" hidden><div class="diff-opt" style="border:1px solid #333; padding:5px; text-align:center; font-size:0.7rem; cursor:pointer">A</div></label>
-            <label><input type="radio" name="diff" value="S" hidden><div class="diff-opt" style="border:1px solid #333; padding:5px; text-align:center; font-size:0.7rem; cursor:pointer">S</div></label>
+            <label><input type="radio" name="diff" value="E" checked hidden><div class="day-label" style="font-size:0.7rem">E</div></label>
+            <label><input type="radio" name="diff" value="D" hidden><div class="day-label" style="font-size:0.7rem">D</div></label>
+            <label><input type="radio" name="diff" value="C" hidden><div class="day-label" style="font-size:0.7rem">C</div></label>
+            <label><input type="radio" name="diff" value="B" hidden><div class="day-label" style="font-size:0.7rem">B</div></label>
+            <label><input type="radio" name="diff" value="A" hidden><div class="day-label" style="font-size:0.7rem">A</div></label>
+            <label><input type="radio" name="diff" value="S" hidden><div class="day-label" style="font-size:0.7rem">S</div></label>
         </div>
+
+        <label style="font-size:0.7rem; color:#888">DIAS DE ATIVAÇÃO:</label>
         <div style="display:flex; gap:4px; margin:10px 0;" id="day-selector"></div>
-        <button class="btn" onclick="saveQuest()">INITIALIZE</button>
-        <button class="btn btn-abort" onclick="closeModal('quest')">CANCEL</button>
+        
+        <button class="btn" onclick="saveQuest()">INICIAR</button>
+        <button class="btn" style="border-color:var(--danger); color:var(--danger)" onclick="closeModal('quest')">VOLTAR</button>
     </div>
 </div>
 
 <div id="modal-bg" class="modal">
     <div class="modal-content">
-        <p style="color:var(--neon-blue)">CONFIG</p>
-        <input type="text" id="bg-url-input" placeholder="Wallpaper link...">
-        <button class="btn" onclick="applyBg()">SET BG</button>
-        <button class="btn btn-abort" onclick="purgeQuests()">PURGE ALL DATA</button>
-        <button class="btn" onclick="closeModal('bg')" style="border-color:#555">CLOSE</button>
+        <p style="color:var(--neon-blue)">SISTEMA</p>
+        <input type="text" id="bg-url-input" placeholder="Link do Wallpaper...">
+        <button class="btn" onclick="applyBg()">APLICAR</button>
+        <button class="btn" style="border-color:var(--danger); color:var(--danger)" onclick="purgeQuests()">DELETAR TUDO</button>
+        <button class="btn" onclick="closeModal('bg')" style="border-color:#555">FECHAR</button>
     </div>
 </div>
 
 <script>
-    const phrases = ["ERGA-SE.", "LIMITES SÃO ILUSÕES.", "SÓ OS QUE TENTAM O ABSURDO CONQUISTAM O IMPOSSÍVEL.", "NÃO PARE ATÉ CONQUISTAR.", "A DOR É EVOLUÇÃO.", "SUPERE QUEM VOCÊ FOI ONTEM."];
-    const tips = ["SISTEMA: Missões Rank S garantem evolução acelerada.", "SISTEMA: Streak alto libera bônus de Gold ocultos.", "SISTEMA: Beba água. Um Hunter desidratado falha.", "SISTEMA: O sono é onde os stats são aplicados.", "SISTEMA: Revise seus logs para identificar padrões."];
+    const phrases = ["ERGA-SE.", "NÃO PARE.", "A EVOLUÇÃO É CONSTANTE.", "SUPERE SEUS LIMITES.", "O SISTEMA ESTÁ DE OLHO."];
+    const tips = ["SISTEMA: O descanso é parte do treino.", "SISTEMA: Missões Rank S exigem foco total.", "SISTEMA: O Semi Diário ajuda na clareza mental.", "SISTEMA: Mantenha o foco Hunter."];
 
-    let db = JSON.parse(localStorage.getItem('solo_v9_core')) || {
+    let db = JSON.parse(localStorage.getItem('solo_v10_core')) || {
         xp: 0, lvl: 1, gold: 0, streak: 0, tasks: [], logs: [], 
-        shop: [{id:1, title: "ENERGY DRINK", cost: 50}],
-        bg: "https://images.alphacoders.com/105/1053746.jpg",
-        nick: "PESCOCILDO"
+        bg: "https://images.alphacoders.com/105/1053746.jpg", nick: "HUNTER"
     };
 
     function render() {
-        const nextXp = db.lvl * 200;
         document.getElementById('lvl-txt').innerText = db.lvl;
         document.getElementById('gold-txt').innerText = db.gold;
         document.getElementById('streak-txt').innerText = db.streak;
         document.getElementById('nick-txt').innerText = db.nick;
-        document.getElementById('xp-bar').style.width = (db.xp / nextXp * 100) + "%";
         document.body.style.backgroundImage = `url('${db.bg}')`;
-        
-        const ranks = ["E-RANK", "D-RANK", "C-RANK", "B-RANK", "A-RANK", "S-RANK"];
-        document.getElementById('rank-txt').innerText = ranks[Math.min(Math.floor(db.lvl/5), 5)];
+        document.getElementById('xp-bar').style.width = (db.xp / (db.lvl * 200) * 100) + "%";
 
         const today = new Date().getDay();
         const dateKey = new Date().toLocaleDateString('pt-BR');
         const todoEl = document.getElementById('todo-list');
         const doneEl = document.getElementById('done-list');
-        let activeCount = 0, doneCount = 0;
+        let active = 0, done = 0;
         
         todoEl.innerHTML = ''; doneEl.innerHTML = '';
         db.tasks.forEach(t => {
             if(t.days.includes(today)) {
-                activeCount++;
+                active++;
                 const isDone = t.lastDone === dateKey;
-                if(isDone) doneCount++;
-                const html = `<div class="card diff-${t.difficulty || 'E'}"><div style="display:flex; justify-content:space-between; align-items:center"><div style="font-size:0.8rem; font-weight:bold">${t.title} <small style="color:#aaa">v${t.count || 0}</small></div><span style="color:var(--neon-blue); font-size:0.6rem">RANK_${t.difficulty || 'E'}</span></div><div style="display:flex; justify-content:flex-end; margin-top:12px">${!isDone ? `<button class="btn-sm btn" onclick="complete(${t.id})">DONE</button>` : '✔️'}<button class="btn-sm btn btn-abort" onclick="abort(${t.id})">X</button></div></div>`;
+                if(isDone) done++;
+                const html = `<div class="card" style="border-left-color:var(--rank-${t.difficulty.toLowerCase() || 'c'})">
+                    <div style="display:flex; justify-content:space-between">
+                        <b>${t.title}</b>
+                        <span style="color:var(--neon-blue); font-size:0.6rem">RANK_${t.difficulty}</span>
+                    </div>
+                    <div style="display:flex; justify-content:flex-end; margin-top:10px">
+                        ${!isDone ? `<button class="btn-sm btn" onclick="complete(${t.id})">CONCLUIR</button>` : '✔️'}
+                        <button class="btn-sm btn" style="border-color:var(--danger); color:var(--danger)" onclick="abort(${t.id})">X</button>
+                    </div>
+                </div>`;
                 isDone ? doneEl.innerHTML += html : todoEl.innerHTML += html;
             }
         });
 
-        document.getElementById('sync-bar').style.width = (activeCount > 0 ? (doneCount/activeCount*100) : 0) + "%";
-        document.getElementById('sync-val').innerText = (activeCount > 0 ? Math.round(doneCount/activeCount*100) : 0) + "%";
-        document.getElementById('shop-list').innerHTML = db.shop.map(i => `<div class="card" style="border-left:2px solid var(--neon-purple); display:flex; justify-content:space-between; align-items:center; padding:10px; background:rgba(0,0,0,0.6)"><span style="font-size:0.75rem">${i.title}</span><button class="btn-sm btn" onclick="buy(${i.id})">${i.cost}G</button></div>`).join('');
-        document.getElementById('logs-area').innerHTML = db.logs.map(l => `<div style="margin-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.05); font-size:0.75rem; padding-bottom:4px"><small style="color:var(--neon-purple)">[${l.date}]</small> ${l.text}</div>`).join('');
-        localStorage.setItem('solo_v9_core', JSON.stringify(db));
+        document.getElementById('sync-bar').style.width = (active > 0 ? (done/active*100) : 0) + "%";
+        document.getElementById('sync-val').innerText = (active > 0 ? Math.round(done/active*100) : 0) + "%";
+        
+        document.getElementById('logs-area').innerHTML = db.logs.map(l => `
+            <div class="log-entry">
+                <div style="color:var(--neon-purple); font-size:0.7rem; margin-bottom:5px">[${l.date}]</div>
+                <div>${l.text}</div>
+            </div>
+        `).join('');
+        
+        localStorage.setItem('solo_v10_core', JSON.stringify(db));
     }
 
     function changeNick() {
-        const newNick = prompt("INSIRA NOVO CODENOME:", db.nick);
-        if(newNick) { db.nick = newNick.toUpperCase(); render(); }
+        const n = prompt("NOME DO HUNTER:", db.nick);
+        if(n) { db.nick = n.toUpperCase(); render(); }
     }
 
     function openModal(id) { 
         document.getElementById('modal-' + id).style.display = 'flex'; 
         if(id==='quest') {
             const days = ['D','S','T','Q','Q','S','S'];
-            document.getElementById('day-selector').innerHTML = days.map((d, i) => `<input type="checkbox" id="d-${i}" class="d-chk" value="${i}" hidden><label for="d-${i}" class="day-label">${d}</label>`).join('');
+            document.getElementById('day-selector').innerHTML = days.map((d, i) => `
+                <input type="checkbox" id="d-${i}" class="d-chk" value="${i}" hidden>
+                <label for="d-${i}" class="day-label">${d}</label>
+            `).join('');
         }
     }
     function closeModal(id) { document.getElementById('modal-' + id).style.display = 'none'; }
-    function applyBg() { const url = document.getElementById('bg-url-input').value; if(url) { db.bg = url; closeModal('bg'); render(); } }
-    function purgeQuests() { if(confirm("APAGAR TUDO?")) { db.tasks = []; render(); closeModal('bg'); } }
-    
+    function applyBg() { const url = document.getElementById('bg-url-input').value; if(url) { db.bg = url; render(); closeModal('bg'); } }
+
     function saveQuest() {
         const title = document.getElementById('q-title').value.toUpperCase();
         const diff = document.querySelector('input[name="diff"]:checked').value;
         const days = Array.from(document.querySelectorAll('.d-chk:checked')).map(c => parseInt(c.value));
-        if(!title || days.length === 0) return alert("DADOS INCOMPLETOS");
-        db.tasks.push({id: Date.now(), title, difficulty: diff, days, lastDone: "", count: 0});
+        if(!title || days.length === 0) return alert("ERRO: DADOS INCOMPLETOS");
+        db.tasks.push({id: Date.now(), title, difficulty: diff, days, lastDone: ""});
         closeModal('quest'); render();
     }
 
     function complete(id) {
         const t = db.tasks.find(x => x.id === id);
         t.lastDone = new Date().toLocaleDateString('pt-BR');
-        t.count++;
-        const xp = {E:15,D:35,C:65,B:120,A:250,S:600}[t.difficulty];
+        const xp = {E:20,D:40,C:70,B:130,A:260,S:600}[t.difficulty];
         db.xp += xp; db.gold += Math.floor(xp/2); db.streak++;
         if(db.xp >= db.lvl * 200) { db.xp = 0; db.lvl++; alert("LEVEL UP!"); }
         render();
     }
 
     function abort(id) { if(db.gold >= 30 && confirm("ABORTAR? (-30G)")) { db.gold -= 30; db.tasks = db.tasks.filter(x => x.id !== id); render(); } }
+
     function saveLog() { 
         const txt = document.getElementById('log-input').value; 
-        if(txt) { db.logs.unshift({date: new Date().toLocaleDateString('pt-BR'), text: txt}); document.getElementById('log-input').value = ''; render(); } 
+        if(txt) { 
+            db.logs.unshift({date: new Date().toLocaleString('pt-BR'), text: txt}); 
+            document.getElementById('log-input').value = ''; 
+            render(); 
+        } 
     }
-    function addShopItem() { const t = prompt("ITEM:"), c = parseInt(prompt("GOLD:")); if(t&&c) { db.shop.push({id:Date.now(), title:t.toUpperCase(), cost:c}); render(); } }
-    function buy(id) { const i = db.shop.find(x => x.id === id); if(db.gold >= i.cost) { db.gold -= i.cost; alert("COMPRADO!"); render(); } }
+
+    function purgeQuests() { if(confirm("RESETAR TUDO?")) { db.tasks = []; db.logs = []; render(); } }
 
     document.getElementById('motive-banner').innerText = phrases[Math.floor(Math.random() * phrases.length)];
     document.getElementById('daily-tip').innerText = tips[Math.floor(Math.random() * tips.length)];
