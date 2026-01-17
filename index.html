@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Life RPG ⚔️ - Evolução Pessoal</title>
+    <style>
+        :root {
+            --bg: #0a0a12;
+            --card-bg: #1a1a2e;
+            --primary: #6c5ce7;
+            --accent: #00d2ff;
+            --danger: #ff4757;
+            --xp-bar: #2ed573;
+            --text: #ffffff;
+            --boss: #ffa502;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container { width: 100%; max-width: 800px; padding-bottom: 50px; }
+
+        /* HEADER FIXO DE STATUS */
+        .stats-header {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid var(--primary);
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 25px;
+        }
+
+        .lvl-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .rank-badge { background: var(--primary); padding: 3px 10px; border-radius: 10px; font-size: 0.7rem; font-weight: bold; }
+
+        .xp-container { background: #000; height: 12px; border-radius: 6px; overflow: hidden; margin: 5px 0; }
+        .xp-fill { background: var(--xp-bar); height: 100%; width: 0%; transition: 1s cubic-bezier(0.17, 0.67, 0.83, 0.67); box-shadow: 0 0 10px var(--xp-bar); }
+
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px; }
+        .stat-card { background: rgba(255,255,255,0.05); padding: 8px; border-radius: 12px; text-align: center; }
+        .stat-label { font-size: 0.6rem; opacity: 0.7; display: block; }
+        .stat-val { font-size: 1rem; font-weight: bold; color: var(--accent); }
+
+        /* CARDS E SEÇÕES */
+        h2 { font-size: 1.2rem; margin: 20px 0 10px 5px; display: flex; align-items: center; gap: 8px; }
+        .card { background: var(--card-bg); padding: 15px; border-radius: 20px; margin-bottom: 15px; }
+
+        input, textarea, button { 
+            width: 100%; padding: 14px; margin: 8px 0; border-radius: 12px; border: none; 
+            background: #252545; color: white; font-size: 1rem;
+        }
+
+        button { background: var(--primary); font-weight: bold; cursor: pointer; transition: 0.2s; }
+        button:active { transform: scale(0.95); }
+        .btn-boss { background: var(--boss); color: #000; }
+        .btn-danger { background: var(--danger); font-size: 0.8rem; margin-top: 5px; padding: 8px; }
+
+        /* LISTAS */
+        .item-row { 
+            background: #252545; padding: 12px; border-radius: 15px; margin-bottom: 8px;
+            display: flex; justify-content: space-between; align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .journal-item { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 15px; margin-bottom: 10px; border-left: 3px solid var(--accent); }
+        .journal-date { font-size: 0.7rem; color: var(--accent); }
+
+        .streak-anim { color: #ffa502; text-shadow: 0 0 5px orange; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 0.7; } 50% { opacity: 1; } 100% { opacity: 0.7; } }
+
+        /* RESPONSIVIDADE */
+        @media (min-width: 600px) {
+            .desktop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="stats-header">
+        <div class="lvl-row">
+            <span>Nível <strong id="lvl-display">1</strong></span>
+            <div id="rank-display" class="rank-badge">Bronze</div>
+        </div>
+        <div class="xp-container"><div id="xp-fill" class="xp-fill"></div></div>
+        <div style="text-align: right; font-size: 0.7rem; margin-top: 2px;">
+            XP: <span id="xp-current">0</span> / <span id="xp-needed">100</span>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card"><span class="stat-label">MOEDAS</span><span id="coins-display" class="stat-val">0</span></div>
+            <div class="stat-card"><span class="stat-label">COMBO</span><span id="streak-display" class="stat-val streak-anim">🔥 0</span></div>
+            <div class="stat-card"><span class="stat-label">BÔNUS</span><span id="bonus-display" class="stat-val">+0%</span></div>
+        </div>
+        <button class="btn-danger" onclick="failStreak()">⚠ REGISTRAR FALHA (RESET COMBO)</button>
+    </div>
+
+    <div class="desktop-grid">
+        <div>
+            <h2>⚔️ Chefões (Bosses)</h2>
+            <div class="card" style="border: 1px dashed var(--boss);">
+                <input type="text" id="bossTitle" placeholder="Nome do Grande Desafio...">
+                <button class="btn-boss" onclick="createBoss()">CONVOCAR BOSS</button>
+                <div id="bossList"></div>
+            </div>
+
+            <h2>📜 Missões Diárias</h2>
+            <div class="card">
+                <input type="text" id="taskTitle" placeholder="O que vai fazer hoje?">
+                <button onclick="createTask()">ADICIONAR MISSÃO</button>
+                <div id="taskList"></div>
+            </div>
+        </div>
+
+        <div>
+            <h2>📔 Diário e Reflexões</h2>
+            <div class="card">
+                <textarea id="journalInput" placeholder="Como foi o dia? O que aprendeu?"></textarea>
+                <button onclick="saveJournal()" style="background: var(--accent); color: #000;">SALVAR NO DIÁRIO</button>
+                <div id="journalList" style="max-height: 250px; overflow-y: auto; margin-top: 10px;"></div>
+            </div>
+
+            <h2>🛒 Loja de Itens</h2>
+            <div class="card" id="shopItems"></div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; opacity: 0.3;">
+        <small onclick="exportData()">ID de Backup (Clique para Copiar)</small>
+    </div>
+</div>
+
+<script>
+    // BANCO DE DADOS LOCAL
+    let db = JSON.parse(localStorage.getItem('life_rpg_data')) || {
+        xp: 0, level: 1, coins: 0, streak: 0,
+        tasks: [], bosses: [], journal: [],
+        rewards: [
+            {name: "Folga Total", cost: 100},
+            {name: "Shopping / Lanche", cost: 300},
+            {name: "Atrasar Task em 1 dia", cost: 50}
+        ]
+    };
+
+    // CÁLCULO DE NÍVEL (Curva Exponencial)
+    function getXpNeeded(l) { return Math.floor(100 * Math.pow(l, 1.6)); }
+
+    function updateUI() {
+        const nextXp = getXpNeeded(db.level);
+        const prevXp = db.level > 1 ? getXpNeeded(db.level - 1) : 0;
+        const progress = ((db.xp - prevXp) / (nextXp - prevXp)) * 100;
+
+        document.getElementById('lvl-display').innerText = db.level;
+        document.getElementById('xp-current').innerText = db.xp;
+        document.getElementById('xp-needed').innerText = nextXp;
+        document.getElementById('xp-fill').style.width = Math.min(progress, 100) + "%";
+        document.getElementById('coins-display').innerText = `💰 ${db.coins}`;
+        document.getElementById('streak-display').innerText = `🔥 ${db.streak}`;
+        document.getElementById('bonus-display').innerText = `+${db.streak * 5}%`;
+        
+        // Ranks
+        const rank = document.getElementById('rank-display');
+        if(db.level < 5) { rank.innerText="Bronze"; rank.style.background="#cd7f32"; }
+        else if(db.level < 15) { rank.innerText="Prata"; rank.style.background="#c0c0c0"; rank.style.color="#000"; }
+        else { rank.innerText="Ouro"; rank.style.background="#ffd700"; rank.style.color="#000"; }
+
+        renderTasks();
+        renderBosses();
+        renderJournal();
+        renderShop();
+        localStorage.setItem('life_rpg_data', JSON.stringify(db));
+    }
+
+    // AÇÕES
+    function createTask() {
+        const val = document.getElementById('taskTitle').value;
+        if(!val) return;
+        db.tasks.push({id: Date.now(), title: val});
+        document.getElementById('taskTitle').value = '';
+        updateUI();
+    }
+
+    function completeTask(id) {
+        const bonus = Math.floor(50 * (db.streak * 0.05));
+        db.xp += (50 + bonus);
+        db.coins += 10;
+        db.streak += 1;
+        db.tasks = db.tasks.filter(t => t.id !== id);
+        checkLevelUp();
+        updateUI();
+    }
+
+    function createBoss() {
+        const val = document.getElementById('bossTitle').value;
+        if(!val) return;
+        db.bosses.push({id: Date.now(), title: val});
+        document.getElementById('bossTitle').value = '';
+        updateUI();
+    }
+
+    function defeatBoss(id) {
+        db.xp += 300;
+        db.coins += 100;
+        db.streak += 2;
+        db.bosses = db.bosses.filter(b => b.id !== id);
+        alert("⚔️ VITÓRIA ÉPICA! +300 XP");
+        checkLevelUp();
+        updateUI();
+    }
+
+    function failStreak() {
+        if(confirm("Reiniciar seu combo de XP?")) {
+            db.streak = 0;
+            updateUI();
+        }
+    }
+
+    function saveJournal() {
+        const val = document.getElementById('journalInput').value;
+        if(!val) return;
+        db.journal.unshift({date: new Date().toLocaleDateString('pt-BR'), text: val});
+        document.getElementById('journalInput').value = '';
+        updateUI();
+    }
+
+    function checkLevelUp() {
+        while(db.xp >= getXpNeeded(db.level)) {
+            db.level++;
+            alert(`🎊 NÍVEL UP! Você alcançou o nível ${db.level}!`);
+        }
+    }
+
+    function buy(cost) {
+        if(db.coins >= cost) {
+            db.coins -= cost;
+            alert("🛒 Recompensa resgatada!");
+            updateUI();
+        } else { alert("Moedas insuficientes!"); }
+    }
+
+    // RENDERIZADORES
+    function renderTasks() {
+        document.getElementById('taskList').innerHTML = db.tasks.map(t => `
+            <div class="item-row">
+                <span>${t.title}</span>
+                <button onclick="completeTask(${t.id})" style="width:50px; background:var(--xp-bar)">✅</button>
+            </div>
+        `).join('');
+    }
+
+    function renderBosses() {
+        document.getElementById('bossList').innerHTML = db.bosses.map(b => `
+            <div class="item-row" style="border: 1px solid var(--boss)">
+                <strong>👾 ${b.title}</strong>
+                <button onclick="defeatBoss(${b.id})" style="width:100px; background:var(--boss); color:black">DERROTAR</button>
+            </div>
+        `).join('');
+    }
+
+    function renderJournal() {
+        document.getElementById('journalList').innerHTML = db.journal.map(j => `
+            <div class="journal-item">
+                <span class="journal-date">${j.date}</span><br>${j.text}
+            </div>
+        `).join('');
+    }
+
+    function renderShop() {
+        document.getElementById('shopItems').innerHTML = db.rewards.map(r => `
+            <div class="item-row" style="background:rgba(255,165,2,0.1)">
+                <span>${r.name}</span>
+                <button onclick="buy(${r.cost})" style="width:80px; background:var(--boss); color:black">💰 ${r.cost}</button>
+            </div>
+        `).join('');
+    }
+
+    function exportData() {
+        const dataStr = btoa(JSON.stringify(db));
+        navigator.clipboard.writeText(dataStr);
+        alert("Backup copiado! Guarde esse código se quiser restaurar seus dados depois.");
+    }
+
+    updateUI();
+</script>
+</body>
+</html>
