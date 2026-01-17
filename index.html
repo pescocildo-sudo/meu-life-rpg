@@ -16,7 +16,6 @@
             --rank-a: #ff4400;
             --rank-b: #cc00ff;
             --rank-c: #00ff88;
-            --panel-alpha: rgba(10, 10, 30, 0.85); /* Container principal levemente transparente */
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -31,9 +30,10 @@
             transition: background-image 0.8s ease;
         }
 
+        /* CAMADA DE ESCURECIMENTO ULTRA LEVE */
         body::before {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.8) 100%);
+            background: rgba(0,0,0,0.5); /* Reduzi de 0.8 para 0.5 */
             z-index: -1;
         }
 
@@ -49,27 +49,30 @@
         .container { 
             width: 100%; max-width: 600px; margin: 0 auto; 
             padding: 20px; min-height: 100vh;
-            background: var(--panel-alpha);
+            /* REMOVIDO FUNDO SÓLIDO: Agora o wallpaper passa por aqui livremente */
+            background: rgba(0, 0, 0, 0.2); 
             border-left: 1px solid rgba(0, 243, 255, 0.1);
             border-right: 1px solid rgba(0, 243, 255, 0.1);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(4px); /* Blur suave para ler o texto */
         }
 
         .hud {
             border: 1px solid var(--neon-blue); padding: 20px; margin-bottom: 25px;
-            position: sticky; top: 10px; z-index: 100; background: rgba(5, 5, 20, 0.95);
-            box-shadow: 0 0 25px rgba(0, 243, 255, 0.2);
+            position: sticky; top: 10px; z-index: 100; 
+            background: rgba(5, 5, 20, 0.7); /* HUD mais transparente */
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+            backdrop-filter: blur(8px);
         }
 
-        .sync-bar-bg { background: rgba(255,255,255,0.05); height: 4px; margin-top: 5px; }
+        .sync-bar-bg { background: rgba(255,255,255,0.1); height: 4px; margin-top: 5px; }
         .sync-bar-fill { background: var(--neon-blue); height: 100%; width: 0%; transition: 1s; box-shadow: 0 0 10px var(--neon-blue); }
 
-        .xp-bg { background: #000; height: 10px; border: 1px solid #222; margin: 15px 0; }
+        .xp-bg { background: rgba(0,0,0,0.5); height: 10px; border: 1px solid #333; margin: 15px 0; }
         .xp-bar { background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); height: 100%; width: 0%; transition: 1s; }
 
-        /* QUEST CARDS TRANSPARENTES */
+        /* QUEST CARDS "GHOST" */
         .card {
-            background: rgba(0,0,0,0.25); /* Bem transparente para ver o wallpaper */
+            background: rgba(0,0,0,0.3); /* Ultra transparente */
             border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;
             padding: 15px; position: relative; border-left: 3px solid #555;
             transition: 0.2s; backdrop-filter: blur(2px);
@@ -80,38 +83,39 @@
         .diff-C { border-left-color: var(--neon-blue); }
         .diff-B { border-left-color: var(--rank-b); }
         .diff-A { border-left-color: var(--rank-a); }
-        .diff-S { border-left-color: var(--rank-s); box-shadow: 0 0 15px rgba(255,170,0,0.1); }
+        .diff-S { border-left-color: var(--rank-s); box-shadow: 0 0 10px rgba(255,170,0,0.2); }
 
         .btn {
-            background: rgba(0,0,0,0.3); border: 1px solid var(--neon-blue); color: var(--neon-blue);
+            background: rgba(0,0,0,0.4); border: 1px solid var(--neon-blue); color: var(--neon-blue);
             padding: 12px; cursor: pointer; font-family: inherit; width: 100%; font-weight: bold;
-            text-transform: uppercase; margin-bottom: 10px;
+            text-transform: uppercase; margin-bottom: 10px; transition: 0.2s;
         }
-        .btn:hover { background: var(--neon-blue); color: #000; }
+        .btn:hover { background: rgba(0, 243, 255, 0.2); box-shadow: 0 0 10px var(--neon-blue); }
         
         .btn-sm { width: auto; padding: 5px 10px; font-size: 0.65rem; margin-left: 5px; margin-bottom: 0; }
         .btn-abort { border-color: var(--danger); color: var(--danger); }
 
-        /* DIAS DA SEMANA - CORREÇÃO VISUAL */
+        /* DIAS DA SEMANA NEON */
         .day-label { 
-            flex: 1; border: 1px solid #333; text-align: center; 
+            flex: 1; border: 1px solid #444; text-align: center; 
             padding: 10px 0; cursor: pointer; transition: 0.3s; 
-            font-size: 0.8rem; color: #555;
+            font-size: 0.8rem; color: #888; background: rgba(0,0,0,0.5);
         }
         .d-chk:checked + .day-label { 
             border-color: var(--neon-blue); 
             color: var(--neon-blue); 
-            background: rgba(0, 243, 255, 0.15); 
-            box-shadow: 0 0 10px var(--neon-blue); 
+            background: rgba(0, 243, 255, 0.2); 
+            box-shadow: 0 0 15px var(--neon-blue); 
+            text-shadow: 0 0 5px var(--neon-blue);
         }
 
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
-        .modal-content { background: #050510; border: 1px solid var(--neon-blue); padding: 20px; width: 100%; max-width: 400px; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+        .modal-content { background: rgba(5, 5, 15, 0.95); border: 1px solid var(--neon-blue); padding: 20px; width: 100%; max-width: 400px; backdrop-filter: blur(10px); }
 
-        .diff-opt { border: 1px solid #333; padding: 8px; font-size: 0.7rem; text-align: center; cursor: pointer; }
-        input[name="diff"]:checked + .diff-opt { border-color: var(--neon-blue); background: rgba(0,243,255,0.1); color: var(--neon-blue); }
+        .diff-opt { border: 1px solid #333; padding: 8px; font-size: 0.7rem; text-align: center; cursor: pointer; background: rgba(0,0,0,0.5); }
+        input[name="diff"]:checked + .diff-opt { border-color: var(--neon-blue); background: rgba(0,243,255,0.2); color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); }
 
-        input[type="text"], textarea { width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; font-family: inherit; margin-bottom: 15px; }
+        input[type="text"], textarea { width: 100%; background: rgba(0,0,0,0.6); border: 1px solid #444; color: #fff; padding: 12px; font-family: inherit; margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -133,9 +137,9 @@
         <div class="xp-bg"><div id="xp-bar" class="xp-bar"></div></div>
         
         <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-            <div style="text-align:center"><span id="gold-txt" style="color:var(--neon-blue); font-weight:bold">0</span><br><small style="font-size:0.5rem; color:#666">GOLD</small></div>
-            <div style="text-align:center"><span id="streak-txt" style="color:var(--neon-blue); font-weight:bold">0</span><br><small style="font-size:0.5rem; color:#666">STREAK</small></div>
-            <div style="text-align:center"><span id="rank-txt" style="color:var(--neon-blue); font-size:0.6rem">E-RANK</span><br><small style="font-size:0.5rem; color:#666">CLASS</small></div>
+            <div style="text-align:center"><span id="gold-txt" style="color:var(--neon-blue); font-weight:bold">0</span><br><small style="font-size:0.5rem; color:#888">GOLD</small></div>
+            <div style="text-align:center"><span id="streak-txt" style="color:var(--neon-blue); font-weight:bold">0</span><br><small style="font-size:0.5rem; color:#888">STREAK</small></div>
+            <div style="text-align:center"><span id="rank-txt" style="color:var(--neon-blue); font-size:0.6rem">E-RANK</span><br><small style="font-size:0.5rem; color:#888">CLASS</small></div>
         </div>
     </div>
 
@@ -159,7 +163,7 @@
         </div>
         <textarea id="log-input" placeholder="Mission report..." style="margin-top:10px; height:60px"></textarea>
         <button class="btn" onclick="saveLog()">ARCHIVE</button>
-        <div id="logs-area"></div>
+        <div id="logs-area" style="max-height: 200px; overflow-y: auto;"></div>
     </div>
 </div>
 
@@ -169,7 +173,7 @@
         <input type="text" id="q-title" placeholder="Objective name...">
         
         <label style="font-size:0.6rem; color:#888">RANK:</label>
-        <div class="diff-selector" style="display:grid; grid-template-columns: repeat(6, 1fr); gap:4px; margin:10px 0">
+        <div style="display:grid; grid-template-columns: repeat(6, 1fr); gap:4px; margin:10px 0">
             <label><input type="radio" name="diff" value="E" checked hidden><div class="diff-opt">E</div></label>
             <label><input type="radio" name="diff" value="D" hidden><div class="diff-opt">D</div></label>
             <label><input type="radio" name="diff" value="C" hidden><div class="diff-opt">C</div></label>
@@ -236,7 +240,7 @@
                 const html = `
                     <div class="card diff-${t.difficulty || 'E'}">
                         <div style="display:flex; justify-content:space-between; align-items:center">
-                            <div style="font-size:0.8rem; font-weight:bold">${t.title} <small style="color:#555; font-weight:normal">LVL ${t.count || 0}</small></div>
+                            <div style="font-size:0.8rem; font-weight:bold">${t.title} <small style="color:#aaa; font-weight:normal">LVL ${t.count || 0}</small></div>
                             <span style="color:var(--neon-blue); font-size:0.6rem">RANK ${t.difficulty || 'E'}</span>
                         </div>
                         <div style="display:flex; justify-content:flex-end; margin-top:10px">
@@ -260,7 +264,7 @@
             </div>
         `).join('');
 
-        document.getElementById('logs-area').innerHTML = db.logs.map(l => `<div style="margin-bottom:8px; border-bottom:1px solid #222; font-size:0.75rem;"><small style="color:var(--neon-purple)">${l.date}</small> ${l.text}</div>`).join('');
+        document.getElementById('logs-area').innerHTML = db.logs.map(l => `<div style="margin-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.1); font-size:0.75rem;"><small style="color:var(--neon-purple)">${l.date}</small> ${l.text}</div>`).join('');
         localStorage.setItem('solo_v9_core', JSON.stringify(db));
     }
 
