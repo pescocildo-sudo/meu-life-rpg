@@ -3,164 +3,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM - PLAYER INTERFACE</title>
+    <title>SYSTEM - MONARCH INTERFACE</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
         :root {
-            --bg: #02020a;
+            --bg-dark: #02020a;
             --neon-blue: #00f3ff;
             --neon-purple: #bc13fe;
             --danger: #ff003c;
-            --panel: rgba(10, 10, 30, 0.95);
+            --rank-s: #ffaa00;
+            --rank-a: #ff4400;
+            --rank-b: #cc00ff;
+            --rank-c: #00ff88;
+            --panel-alpha: rgba(10, 10, 30, 0.9);
         }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body { 
             font-family: 'Share Tech Mono', monospace; 
-            background: var(--bg); color: #fff; margin: 0; padding: 15px;
-            background-image: radial-gradient(circle, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
-            background-size: 30px 30px;
-            overflow-x: hidden;
+            background: var(--bg-dark);
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            color: #fff; margin: 0; padding: 0;
+            transition: background-image 0.8s ease;
         }
 
-        .container { width: 100%; max-width: 550px; margin: 0 auto; padding-bottom: 80px; }
+        /* OVERLAY PARA CONTRASTE */
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.9) 100%);
+            z-index: -1;
+        }
 
+        /* LINHA DE SCANNER CYBERPUNK */
+        .scanner-line {
+            position: fixed; top: 0; left: 0; width: 100%; height: 2px;
+            background: rgba(0, 243, 255, 0.2);
+            box-shadow: 0 0 15px var(--neon-blue);
+            z-index: 999; pointer-events: none;
+            animation: scanMove 8s linear infinite;
+        }
+        @keyframes scanMove { 0% { top: -10%; } 100% { top: 110%; } }
+
+        .container { 
+            width: 100%; max-width: 600px; margin: 0 auto; 
+            padding: 20px; min-height: 100vh;
+            background: var(--panel-alpha);
+            border-left: 1px solid rgba(0, 243, 255, 0.1);
+            border-right: 1px solid rgba(0, 243, 255, 0.1);
+            backdrop-filter: blur(15px);
+        }
+
+        /* HUD & SINCRONIZAÇÃO */
         .hud {
-            background: var(--panel); border: 1px solid var(--neon-blue);
-            padding: 15px; border-radius: 2px; position: sticky; top: 10px; z-index: 100;
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2); margin-bottom: 20px;
-            backdrop-filter: blur(10px);
+            border: 1px solid var(--neon-blue); padding: 20px; margin-bottom: 25px;
+            position: sticky; top: 10px; z-index: 100; background: rgba(5, 5, 20, 0.95);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.15);
         }
 
-        .xp-bg { background: #000; height: 6px; border: 1px solid #222; margin: 10px 0; }
-        .xp-bar { background: var(--neon-blue); height: 100%; width: 0%; box-shadow: 0 0 10px var(--neon-blue); transition: 1s; }
+        .sync-container { margin-bottom: 15px; }
+        .sync-label { font-size: 0.6rem; color: var(--neon-blue); letter-spacing: 2px; }
+        .sync-bar-bg { background: rgba(255,255,255,0.05); height: 4px; margin-top: 5px; }
+        .sync-bar-fill { background: var(--neon-blue); height: 100%; width: 0%; transition: 1s; box-shadow: 0 0 10px var(--neon-blue); }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; }
+        .xp-bg { background: #000; height: 10px; border: 1px solid #222; margin: 15px 0; }
+        .xp-bar { background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); height: 100%; width: 0%; transition: 1s; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .stat-box { text-align: center; border: 1px solid rgba(255,255,255,0.05); padding: 10px 5px; background: rgba(0,0,0,0.3); }
         .stat-val { color: var(--neon-blue); font-size: 1.1rem; font-weight: bold; }
         .stat-lbl { font-size: 0.6rem; color: #666; display: block; }
 
-        .system-msg-box {
-            background: rgba(188, 19, 254, 0.1); border: 1px solid var(--neon-purple);
-            padding: 12px; margin-bottom: 20px; font-size: 0.8rem; line-height: 1.4;
-            animation: flicker 2s infinite;
-        }
-
-        @keyframes flicker { 0% { opacity: 0.9; } 50% { opacity: 1; } 100% { opacity: 0.9; } }
-
-        .section-title { 
-            color: var(--neon-purple); font-size: 0.8rem; letter-spacing: 2px;
-            border-bottom: 1px solid var(--neon-purple); padding-bottom: 5px; margin: 25px 0 15px;
-            text-transform: uppercase;
-        }
-
+        /* CARDS E DIFICULDADES */
         .card {
-            background: rgba(255,255,255,0.03); border: 1px solid #222; 
-            padding: 12px; margin-bottom: 10px; border-left: 3px solid var(--neon-blue);
-            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.5); border: 1px solid #222; margin-bottom: 15px;
+            padding: 15px; position: relative; border-left: 3px solid #555;
+            transition: 0.2s;
         }
+        .card:active { transform: scale(0.98); }
+        
+        /* CORES DE DIFICULDADE */
+        .diff-E { border-left-color: #888; }
+        .diff-D { border-left-color: var(--rank-c); }
+        .diff-C { border-left-color: var(--neon-blue); }
+        .diff-B { border-left-color: var(--rank-b); }
+        .diff-A { border-left-color: var(--rank-a); }
+        .diff-S { border-left-color: var(--rank-s); box-shadow: inset 0 0 10px rgba(255,170,0,0.2); }
+
+        .quest-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .quest-rank-badge { font-size: 0.6rem; padding: 2px 6px; background: #222; color: #fff; }
 
         .btn {
-            width: 100%; background: rgba(0, 243, 255, 0.05); border: 1px solid var(--neon-blue);
-            color: var(--neon-blue); font-family: inherit; padding: 12px;
-            box-sizing: border-box; margin-bottom: 10px; cursor: pointer; font-weight: bold;
+            background: transparent; border: 1px solid var(--neon-blue); color: var(--neon-blue);
+            padding: 12px; cursor: pointer; font-family: inherit; width: 100%; font-weight: bold;
+            text-transform: uppercase; margin-bottom: 10px;
         }
-        .btn:hover { background: var(--neon-blue); color: #000; }
-
-        .btn-sm { padding: 5px 8px; width: auto; font-size: 0.65rem; margin-left: 5px; margin-bottom: 0; }
+        .btn:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 15px var(--neon-blue); }
+        
+        .btn-sm { width: auto; padding: 5px 10px; font-size: 0.65rem; margin-left: 5px; }
         .btn-abort { border-color: var(--danger); color: var(--danger); }
 
-        .modal { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 1000;
-        }
-        .modal-content { background: #050510; border: 2px solid var(--neon-blue); padding: 20px; width: 90%; max-width: 350px; }
+        /* MODAIS */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+        .modal-content { background: #050510; border: 1px solid var(--neon-blue); padding: 20px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
 
-        .day-grid { display: flex; justify-content: space-between; gap: 4px; margin: 15px 0; }
-        .day-chk { display: none; }
-        .day-label { flex: 1; border: 1px solid #333; text-align: center; padding: 8px 0; font-size: 0.7rem; cursor: pointer; }
-        .day-chk:checked + .day-label { border-color: var(--neon-blue); color: var(--neon-blue); background: rgba(0,243,255,0.1); }
+        .diff-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin: 10px 0; }
+        .diff-opt { border: 1px solid #333; padding: 8px; font-size: 0.7rem; text-align: center; cursor: pointer; }
+        input[name="diff"]:checked + .diff-opt { border-color: var(--neon-blue); background: rgba(0,243,255,0.1); color: var(--neon-blue); }
 
-        textarea, input[type="text"] {
-            width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 10px;
-            font-family: inherit; box-sizing: border-box; margin-bottom: 10px;
-        }
+        input[type="text"], textarea { width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; font-family: inherit; margin-bottom: 15px; }
+        
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: var(--neon-blue); }
     </style>
 </head>
 <body>
 
+<div class="scanner-line"></div>
+
 <div class="container">
     <div class="hud">
-        <div style="display:flex; justify-content:space-between;">
-            <span style="color:var(--neon-blue)">SYSTEM_PLAYER: PESCOCILDO</span>
+        <div class="sync-container">
+            <div style="display:flex; justify-content:space-between">
+                <span class="sync-label">SYSTEM_SYNC_STATUS</span>
+                <span id="sync-val" style="font-size:0.6rem; color:var(--neon-blue)">0%</span>
+            </div>
+            <div class="sync-bar-bg"><div id="sync-bar" class="sync-bar-fill"></div></div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="color:var(--neon-blue); letter-spacing:2px; font-size:0.8rem">PLAYER: PESCOCILDO</span>
             <span style="color:var(--neon-purple)">LVL <strong id="lvl-txt">1</strong></span>
         </div>
         <div class="xp-bg"><div id="xp-bar" class="xp-bar"></div></div>
+        
         <div class="stats-grid">
             <div class="stat-box"><span id="gold-txt" class="stat-val">0</span><span class="stat-lbl">GOLD</span></div>
             <div class="stat-box"><span id="streak-txt" class="stat-val">0</span><span class="stat-lbl">STREAK</span></div>
-            <div class="stat-box"><span id="rank-txt" class="stat-val" style="font-size:0.75rem">E-RANK</span><span class="stat-lbl">CLASS</span></div>
+            <div class="stat-box"><span id="rank-txt" class="stat-val" style="font-size:0.7rem">E-RANK</span><span class="stat-lbl">CLASS</span></div>
         </div>
     </div>
 
-    <div class="system-msg-box" id="daily-msg"></div>
+    <button class="btn" onclick="openModal('quest')">[+] REGISTER NEW DIRECTIVE</button>
 
-    <button class="btn" onclick="openModal()">[+] REGISTER NEW QUEST</button>
-
-    <div class="section-title">Active Quests</div>
     <div id="todo-list"></div>
 
-    <div class="section-title">Completed Today</div>
-    <div id="done-list" style="opacity:0.5"></div>
+    <div style="margin-top:40px; border-top:1px solid #222; padding-top:20px;">
+        <span style="font-size:0.7rem; color:var(--neon-purple); letter-spacing:2px">COMPLETED_LOGS</span>
+        <div id="done-list" style="opacity:0.4; margin-top:15px"></div>
+    </div>
 
-    <div class="section-title">System Shop</div>
-    <div id="shop-list"></div>
-    <button class="btn" style="font-size:0.7rem; border-color:var(--neon-purple); color:var(--neon-purple)" onclick="addShopItem()">[+] ADD CUSTOM REWARD</button>
+    <div style="margin-top:40px">
+        <div style="display:flex; justify-content:space-between; align-items:center">
+            <span style="font-size:0.7rem; color:var(--neon-blue); letter-spacing:2px">SYSTEM_SHOP</span>
+            <button class="btn-sm btn" style="margin:0" onclick="addShopItem()">[+] ADD ITEM</button>
+        </div>
+        <div id="shop-list" style="margin-top:15px"></div>
+    </div>
 
-    <div class="section-title">Hunter's Log</div>
-    <textarea id="log-input" placeholder="Enter report..."></textarea>
-    <button class="btn" onclick="saveLog()">ARCHIVE LOG</button>
-    <div id="logs-area" style="max-height: 200px; overflow-y: auto; font-size: 0.8rem;"></div>
+    <div style="margin-top:40px">
+        <div style="display:flex; justify-content:space-between; align-items:center">
+            <span style="font-size:0.7rem; color:var(--neon-purple); letter-spacing:2px">HUNTER_LOGS</span>
+            <button class="btn-sm btn" style="margin:0; border-color:#555; color:#555" onclick="openModal('bg')">⚙️ BG</button>
+        </div>
+        <textarea id="log-input" placeholder="Enter session report..." style="margin-top:15px; height:80px"></textarea>
+        <button class="btn" onclick="saveLog()">ARCHIVE DATA</button>
+        <div id="logs-area"></div>
+    </div>
 </div>
 
-<div id="modal" class="modal">
+<div id="modal-quest" class="modal">
     <div class="modal-content">
-        <p style="color:var(--neon-blue); margin-top:0;">DEFINE QUEST PARAMETERS</p>
-        <input type="text" id="q-title" placeholder="Quest name...">
-        <div class="day-grid">
-            <label><input type="checkbox" class="day-chk" value="0"><div class="day-label">D</div></label>
-            <label><input type="checkbox" class="day-chk" value="1"><div class="day-label">S</div></label>
-            <label><input type="checkbox" class="day-chk" value="2"><div class="day-label">T</div></label>
-            <label><input type="checkbox" class="day-chk" value="3"><div class="day-label">Q</div></label>
-            <label><input type="checkbox" class="day-chk" value="4"><div class="day-label">Q</div></label>
-            <label><input type="checkbox" class="day-chk" value="5"><div class="day-label">S</div></label>
-            <label><input type="checkbox" class="day-chk" value="6"><div class="day-label">S</div></label>
+        <p style="color:var(--neon-blue); border-bottom:1px solid var(--neon-blue); padding-bottom:5px">NEW DIRECTIVE SETUP</p>
+        <input type="text" id="q-title" placeholder="Objective name...">
+        
+        <label style="font-size:0.6rem; color:#888">DIFFICULTY RANK:</label>
+        <div class="diff-selector">
+            <label><input type="radio" name="diff" value="E" checked hidden><div class="diff-opt">E</div></label>
+            <label><input type="radio" name="diff" value="D" hidden><div class="diff-opt">D</div></label>
+            <label><input type="radio" name="diff" value="C" hidden><div class="diff-opt">C</div></label>
+            <label><input type="radio" name="diff" value="B" hidden><div class="diff-opt">B</div></label>
+            <label><input type="radio" name="diff" value="A" hidden><div class="diff-opt">A</div></label>
+            <label><input type="radio" name="diff" value="S" hidden><div class="diff-opt">S</div></label>
         </div>
-        <button class="btn" onclick="saveQuest()">CONFIRM</button>
-        <button class="btn btn-abort" onclick="closeModal()">BACK</button>
+
+        <label style="font-size:0.6rem; color:#888">RECURRENCE:</label>
+        <div style="display:flex; gap:4px; margin:10px 0;" id="day-selector"></div>
+        
+        <button class="btn" onclick="saveQuest()">INITIALIZE</button>
+        <button class="btn btn-abort" onclick="closeModal('quest')">CANCEL</button>
+    </div>
+</div>
+
+<div id="modal-bg" class="modal">
+    <div class="modal-content">
+        <p style="color:var(--neon-blue)">OVERRIDE BACKGROUND</p>
+        <input type="text" id="bg-url-input" placeholder="Paste image URL...">
+        <button class="btn" onclick="applyBg()">APPLY CHANGES</button>
+        <button class="btn btn-abort" onclick="closeModal('bg')">CLOSE</button>
     </div>
 </div>
 
 <script>
-    const quotes = ["A dor é temporária, o rank é para sempre.", "Desperte o monarca que existe em você.", "Limites foram feitos para serem quebrados.", "Sua única competição é quem você foi ontem."];
-    const goals = ["Beber 2L de água.", "Fazer 15 minutos de leitura.", "Organizar o ambiente de trabalho.", "Evitar açúcar processado.", "Treinar por 20 minutos."];
-
-    let db = JSON.parse(localStorage.getItem('solo_v6_final')) || {
-        xp: 0, lvl: 1, gold: 0, streak: 0, tasks: [], logs: [], shop: [{id:1, title: "DESCANSO (30 MIN)", cost: 50}]
+    // AUDIO ENGINE (Opcional - bipes simulados)
+    const playSound = (type) => {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        
+        if(type === 'success') {
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+        } else {
+            osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+        }
+        
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.2);
     };
 
-    function init() {
-        const d = new Date();
-        const seed = d.getDate() + d.getMonth();
-        document.getElementById('daily-msg').innerHTML = `<strong>[SYSTEM]:</strong> "${quotes[seed % quotes.length]}"<br><strong>[EXTRA]:</strong> ${goals[seed % goals.length]}`;
-        render();
-    }
+    let db = JSON.parse(localStorage.getItem('solo_v9_core')) || {
+        xp: 0, lvl: 1, gold: 0, streak: 0, tasks: [], logs: [], 
+        shop: [{id:1, title: "ENERGY DRINK (BREAK)", cost: 50}],
+        bg: "https://images.alphacoders.com/105/1053746.jpg"
+    };
 
     function render() {
-        const nextXp = db.lvl * 100;
+        const nextXp = db.lvl * 200;
         document.getElementById('lvl-txt').innerText = db.lvl;
         document.getElementById('gold-txt').innerText = db.gold;
         document.getElementById('streak-txt').innerText = db.streak;
         document.getElementById('xp-bar').style.width = (db.xp / nextXp * 100) + "%";
+        document.body.style.backgroundImage = `url('${db.bg}')`;
         
         const ranks = ["E-RANK", "D-RANK", "C-RANK", "B-RANK", "A-RANK", "S-RANK"];
         document.getElementById('rank-txt').innerText = ranks[Math.min(Math.floor(db.lvl/5), 5)];
@@ -170,17 +251,28 @@
         
         const todoEl = document.getElementById('todo-list');
         const doneEl = document.getElementById('done-list');
+        let activeCount = 0, doneCount = 0;
+        
         todoEl.innerHTML = ''; doneEl.innerHTML = '';
 
         db.tasks.forEach(t => {
             if(t.days.includes(today)) {
+                activeCount++;
                 const isDone = t.lastDone === dateKey;
+                if(isDone) doneCount++;
+                
                 const html = `
-                    <div class="card">
-                        <span>${t.title}</span>
-                        <div>
-                            ${!isDone ? `<button class="btn-sm" onclick="complete(${t.id})">DONE</button>` : '✔️'}
-                            <button class="btn-sm btn-abort" onclick="abort(${t.id})">ABORT</button>
+                    <div class="card diff-${t.difficulty || 'E'}">
+                        <div class="quest-header">
+                            <div>
+                                <span class="quest-rank-badge">LVL ${t.count || 0}</span>
+                                <div style="margin-top:5px; font-weight:bold">${t.title}</div>
+                            </div>
+                            <span style="color:var(--neon-blue); font-size:0.7rem">RANK ${t.difficulty || 'E'}</span>
+                        </div>
+                        <div style="display:flex; justify-content:flex-end">
+                            ${!isDone ? `<button class="btn-sm btn" onclick="complete(${t.id})">COMPLETE</button>` : '✔️'}
+                            <button class="btn-sm btn btn-abort" onclick="abort(${t.id})">ABORT</button>
                         </div>
                     </div>
                 `;
@@ -188,48 +280,76 @@
             }
         });
 
+        // Sync Bar Calculation
+        const syncPct = activeCount > 0 ? Math.round((doneCount / activeCount) * 100) : 0;
+        document.getElementById('sync-bar').style.width = syncPct + "%";
+        document.getElementById('sync-val').innerText = syncPct + "%";
+
         document.getElementById('shop-list').innerHTML = db.shop.map(i => `
-            <div class="card" style="border-left-color:var(--neon-purple)">
+            <div class="card" style="border-left: 2px solid var(--neon-purple); display:flex; justify-content:space-between; align-items:center">
                 <span>${i.title}</span>
-                <button class="btn-sm" onclick="buy(${i.id})">${i.cost}G</button>
+                <button class="btn-sm btn" onclick="buy(${i.id})">${i.cost}G</button>
             </div>
         `).join('');
 
-        document.getElementById('logs-area').innerHTML = db.logs.map(l => `<div style="margin-bottom:10px; border-bottom:1px solid #222; padding-bottom:5px;"><small style="color:var(--neon-purple)">${l.date}</small><br>${l.text}</div>`).join('');
+        document.getElementById('logs-area').innerHTML = db.logs.map(l => `<div style="margin-bottom:10px; border-bottom:1px solid #222; padding-bottom:5px; font-size:0.8rem;"><small style="color:var(--neon-purple)">${l.date}</small><br>${l.text}</div>`).join('');
         
-        localStorage.setItem('solo_v6_final', JSON.stringify(db));
+        localStorage.setItem('solo_v9_core', JSON.stringify(db));
     }
 
-    function openModal() { document.getElementById('modal').style.display = 'flex'; }
-    function closeModal() { document.getElementById('modal').style.display = 'none'; }
+    function openModal(id) { 
+        document.getElementById('modal-' + id).style.display = 'flex'; 
+        if(id==='quest') {
+            const days = ['D','S','T','Q','Q','S','S'];
+            document.getElementById('day-selector').innerHTML = days.map((d, i) => `
+                <input type="checkbox" id="d-${i}" class="d-chk" value="${i}" hidden>
+                <label for="d-${i}" class="diff-opt" style="flex:1">${d}</label>
+            `).join('');
+        }
+    }
+    function closeModal(id) { document.getElementById('modal-' + id).style.display = 'none'; }
+
+    function applyBg() {
+        const url = document.getElementById('bg-url-input').value;
+        if(url) { db.bg = url; closeModal('bg'); render(); }
+    }
 
     function saveQuest() {
         const title = document.getElementById('q-title').value.toUpperCase();
-        const days = Array.from(document.querySelectorAll('.day-chk:checked')).map(c => parseInt(c.value));
-        if(!title || days.length === 0) return alert("DATA ERROR");
-        db.tasks.push({id: Date.now(), title, days, lastDone: ""});
-        document.getElementById('q-title').value = '';
-        document.querySelectorAll('.day-chk').forEach(c => c.checked = false);
-        closeModal(); render();
+        const diff = document.querySelector('input[name="diff"]:checked').value;
+        const days = Array.from(document.querySelectorAll('.d-chk:checked')).map(c => parseInt(c.value));
+        if(!title || days.length === 0) return alert("SYSTEM ERROR: INCOMPLETE DATA");
+        db.tasks.push({id: Date.now(), title, difficulty: diff, days, lastDone: "", count: 0});
+        closeModal('quest'); render();
     }
 
     function complete(id) {
         const t = db.tasks.find(x => x.id === id);
         t.lastDone = new Date().toLocaleDateString('pt-BR');
-        db.xp += 50; db.gold += 15; db.streak++;
-        if(db.xp >= db.lvl * 100) { db.xp = 0; db.lvl++; alert("LEVEL UP!"); }
+        t.count = (t.count || 0) + 1;
+        
+        // Reward based on Difficulty
+        const rewards = { E: 10, D: 25, C: 50, B: 100, A: 200, S: 500 };
+        const xpGain = rewards[t.difficulty] || 10;
+        
+        db.xp += xpGain; 
+        db.gold += Math.floor(xpGain/2); 
+        db.streak++;
+        
+        if(db.xp >= db.lvl * 200) { db.xp = 0; db.lvl++; alert("SYSTEM: LEVEL UP!"); }
+        playSound('success');
         render();
     }
 
     function abort(id) {
-        if(db.gold < 30) return alert("NEED 30 GOLD");
-        if(confirm("ABORT? -30G")) { db.gold -= 30; db.tasks = db.tasks.filter(x => x.id !== id); render(); }
+        if(db.gold < 30) return alert("INSUFFICIENT GOLD");
+        if(confirm("ABORT DIRECTIVE? (-30G)")) { db.gold -= 30; db.tasks = db.tasks.filter(x => x.id !== id); render(); }
     }
 
     function saveLog() {
         const txt = document.getElementById('log-input').value;
         if(!txt) return;
-        db.logs.unshift({date: new Date().toLocaleString(), text: txt});
+        db.logs.unshift({date: new Date().toLocaleString('pt-BR'), text: txt});
         document.getElementById('log-input').value = ''; render();
     }
 
@@ -241,11 +361,11 @@
 
     function buy(id) {
         const i = db.shop.find(x => x.id === id);
-        if(db.gold >= i.cost) { db.gold -= i.cost; alert("PURCHASED!"); render(); }
-        else alert("LOW GOLD");
+        if(db.gold >= i.cost) { db.gold -= i.cost; alert("SYSTEM: ITEM ACQUIRED"); render(); }
+        else alert("INSUFFICIENT GOLD");
     }
 
-    init();
+    render();
 </script>
 </body>
 </html>
