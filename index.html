@@ -22,60 +22,70 @@
 
         body { 
             font-family: 'Share Tech Mono', monospace; 
-            background: var(--bg-dark);
+            background-color: var(--bg-dark);
             background-attachment: fixed;
             background-size: cover;
             background-position: center;
             color: #fff; margin: 0; padding: 0;
-            transition: background-image 0.8s ease;
+            transition: background-image 0.5s ease;
         }
 
-        /* CAMADA DE ESCURECIMENTO ULTRA LEVE */
         body::before {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); /* Reduzi de 0.8 para 0.5 */
-            z-index: -1;
+            background: rgba(0,0,0,0.3); z-index: -1;
         }
 
         .scanner-line {
             position: fixed; top: 0; left: 0; width: 100%; height: 2px;
-            background: rgba(0, 243, 255, 0.15);
-            box-shadow: 0 0 15px var(--neon-blue);
+            background: rgba(0, 243, 255, 0.3);
+            box-shadow: 0 0 10px var(--neon-blue);
             z-index: 999; pointer-events: none;
-            animation: scanMove 10s linear infinite;
+            animation: scanMove 12s linear infinite;
         }
-        @keyframes scanMove { 0% { top: -10%; } 100% { top: 110%; } }
+        @keyframes scanMove { 0% { top: -5%; } 100% { top: 105%; } }
 
         .container { 
             width: 100%; max-width: 600px; margin: 0 auto; 
             padding: 20px; min-height: 100vh;
-            /* REMOVIDO FUNDO SÓLIDO: Agora o wallpaper passa por aqui livremente */
-            background: rgba(0, 0, 0, 0.2); 
-            border-left: 1px solid rgba(0, 243, 255, 0.1);
-            border-right: 1px solid rgba(0, 243, 255, 0.1);
-            backdrop-filter: blur(4px); /* Blur suave para ler o texto */
+            background: transparent; 
+            border-left: 1px solid rgba(0, 243, 255, 0.15);
+            border-right: 1px solid rgba(0, 243, 255, 0.15);
         }
 
+        /* BANNER MOTIVACIONAL */
+        .system-msg {
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            padding: 10px; margin-bottom: 20px;
+            text-align: center; font-size: 0.75rem;
+            color: var(--neon-blue); text-transform: uppercase;
+            letter-spacing: 1px; animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 0.7; } 50% { opacity: 1; } 100% { opacity: 0.7; } }
+
         .hud {
-            border: 1px solid var(--neon-blue); padding: 20px; margin-bottom: 25px;
+            border: 1px solid var(--neon-blue); padding: 18px; margin-bottom: 25px;
             position: sticky; top: 10px; z-index: 100; 
-            background: rgba(5, 5, 20, 0.7); /* HUD mais transparente */
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 15, 0.7);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        .daily-tip {
+            font-size: 0.6rem; color: #aaa; margin-bottom: 15px;
+            border-left: 2px solid var(--neon-purple); padding-left: 8px;
+            font-style: italic;
         }
 
         .sync-bar-bg { background: rgba(255,255,255,0.1); height: 4px; margin-top: 5px; }
-        .sync-bar-fill { background: var(--neon-blue); height: 100%; width: 0%; transition: 1s; box-shadow: 0 0 10px var(--neon-blue); }
+        .sync-bar-fill { background: var(--neon-blue); height: 100%; width: 0%; transition: 1s; box-shadow: 0 0 8px var(--neon-blue); }
 
-        .xp-bg { background: rgba(0,0,0,0.5); height: 10px; border: 1px solid #333; margin: 15px 0; }
+        .xp-bg { background: rgba(0,0,0,0.6); height: 8px; border: 1px solid #333; margin: 12px 0; }
         .xp-bar { background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); height: 100%; width: 0%; transition: 1s; }
 
-        /* QUEST CARDS "GHOST" */
         .card {
-            background: rgba(0,0,0,0.3); /* Ultra transparente */
-            border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;
+            background: rgba(0,0,0,0.4); 
+            border: 1px solid rgba(255,255,255,0.15); margin-bottom: 15px;
             padding: 15px; position: relative; border-left: 3px solid #555;
-            transition: 0.2s; backdrop-filter: blur(2px);
         }
         
         .diff-E { border-left-color: #888; }
@@ -83,39 +93,29 @@
         .diff-C { border-left-color: var(--neon-blue); }
         .diff-B { border-left-color: var(--rank-b); }
         .diff-A { border-left-color: var(--rank-a); }
-        .diff-S { border-left-color: var(--rank-s); box-shadow: 0 0 10px rgba(255,170,0,0.2); }
+        .diff-S { border-left-color: var(--rank-s); }
 
         .btn {
-            background: rgba(0,0,0,0.4); border: 1px solid var(--neon-blue); color: var(--neon-blue);
+            background: rgba(0,0,0,0.5); border: 1px solid var(--neon-blue); color: var(--neon-blue);
             padding: 12px; cursor: pointer; font-family: inherit; width: 100%; font-weight: bold;
-            text-transform: uppercase; margin-bottom: 10px; transition: 0.2s;
+            text-transform: uppercase; margin-bottom: 10px;
         }
-        .btn:hover { background: rgba(0, 243, 255, 0.2); box-shadow: 0 0 10px var(--neon-blue); }
+        .btn:hover { background: var(--neon-blue); color: #000; }
         
-        .btn-sm { width: auto; padding: 5px 10px; font-size: 0.65rem; margin-left: 5px; margin-bottom: 0; }
+        .btn-sm { width: auto; padding: 4px 10px; font-size: 0.65rem; margin-left: 5px; }
         .btn-abort { border-color: var(--danger); color: var(--danger); }
 
-        /* DIAS DA SEMANA NEON */
         .day-label { 
             flex: 1; border: 1px solid #444; text-align: center; 
-            padding: 10px 0; cursor: pointer; transition: 0.3s; 
-            font-size: 0.8rem; color: #888; background: rgba(0,0,0,0.5);
+            padding: 10px 0; cursor: pointer; transition: 0.2s; 
+            font-size: 0.8rem; color: #aaa; background: rgba(0,0,0,0.6);
         }
-        .d-chk:checked + .day-label { 
-            border-color: var(--neon-blue); 
-            color: var(--neon-blue); 
-            background: rgba(0, 243, 255, 0.2); 
-            box-shadow: 0 0 15px var(--neon-blue); 
-            text-shadow: 0 0 5px var(--neon-blue);
-        }
+        .d-chk:checked + .day-label { border-color: var(--neon-blue); color: var(--neon-blue); background: rgba(0, 243, 255, 0.1); }
 
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
-        .modal-content { background: rgba(5, 5, 15, 0.95); border: 1px solid var(--neon-blue); padding: 20px; width: 100%; max-width: 400px; backdrop-filter: blur(10px); }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+        .modal-content { background: #050510; border: 2px solid var(--neon-blue); padding: 20px; width: 100%; max-width: 400px; }
 
-        .diff-opt { border: 1px solid #333; padding: 8px; font-size: 0.7rem; text-align: center; cursor: pointer; background: rgba(0,0,0,0.5); }
-        input[name="diff"]:checked + .diff-opt { border-color: var(--neon-blue); background: rgba(0,243,255,0.2); color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); }
-
-        input[type="text"], textarea { width: 100%; background: rgba(0,0,0,0.6); border: 1px solid #444; color: #fff; padding: 12px; font-family: inherit; margin-bottom: 15px; }
+        input[type="text"], textarea { width: 100%; background: rgba(0,0,0,0.8); border: 1px solid #444; color: #fff; padding: 12px; font-family: inherit; margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -123,15 +123,19 @@
 <div class="scanner-line"></div>
 
 <div class="container">
+    <div id="motive-banner" class="system-msg">AQUECENDO MOTORES...</div>
+
     <div class="hud">
+        <div id="daily-tip" class="daily-tip">SISTEMA: Analisando condições do Hunter...</div>
+
         <div style="display:flex; justify-content:space-between">
-            <span style="font-size:0.6rem; color:var(--neon-blue)">SYNC_STATUS</span>
+            <span style="font-size:0.6rem; color:var(--neon-blue); letter-spacing:1px">SYNC_PROGRESS</span>
             <span id="sync-val" style="font-size:0.6rem; color:var(--neon-blue)">0%</span>
         </div>
         <div class="sync-bar-bg"><div id="sync-bar" class="sync-bar-fill"></div></div>
 
         <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px">
-            <span style="color:var(--neon-blue); letter-spacing:2px; font-size:0.8rem">SYSTEM_USER</span>
+            <span style="color:var(--neon-blue); letter-spacing:2px; font-size:0.8rem">PLAYER: PESCOCILDO</span>
             <span style="color:var(--neon-purple)">LVL <strong id="lvl-txt">1</strong></span>
         </div>
         <div class="xp-bg"><div id="xp-bar" class="xp-bar"></div></div>
@@ -143,69 +147,76 @@
         </div>
     </div>
 
-    <button class="btn" onclick="openModal('quest')">[+] REGISTER DIRECTIVE</button>
+    <button class="btn" onclick="openModal('quest')">[+] NEW DIRECTIVE</button>
 
     <div id="todo-list"></div>
     <div id="done-list" style="opacity:0.4; margin-top:20px"></div>
 
     <div style="margin-top:40px">
         <div style="display:flex; justify-content:space-between; align-items:center">
-            <span style="font-size:0.7rem; color:var(--neon-blue); letter-spacing:2px">SHOP</span>
-            <button class="btn-sm btn" style="margin:0" onclick="addShopItem()">[+] ITEM</button>
+            <span style="font-size:0.7rem; color:var(--neon-blue); letter-spacing:2px">SYSTEM_SHOP</span>
+            <button class="btn-sm btn" style="margin:0; border-color:var(--neon-purple); color:var(--neon-purple)" onclick="addShopItem()">[+] ADD</button>
         </div>
         <div id="shop-list" style="margin-top:10px"></div>
     </div>
 
     <div style="margin-top:40px">
         <div style="display:flex; justify-content:space-between; align-items:center">
-            <span style="font-size:0.7rem; color:var(--neon-purple); letter-spacing:2px">LOGS</span>
+            <span style="font-size:0.7rem; color:var(--neon-purple); letter-spacing:2px">ARCHIVE_LOGS</span>
             <button class="btn-sm btn" style="margin:0; border-color:#555; color:#555" onclick="openModal('bg')">⚙️</button>
         </div>
-        <textarea id="log-input" placeholder="Mission report..." style="margin-top:10px; height:60px"></textarea>
-        <button class="btn" onclick="saveLog()">ARCHIVE</button>
+        <textarea id="log-input" placeholder="Mission details..." style="margin-top:10px; height:60px"></textarea>
+        <button class="btn" onclick="saveLog()">SAVE DATA</button>
         <div id="logs-area" style="max-height: 200px; overflow-y: auto;"></div>
     </div>
 </div>
 
 <div id="modal-quest" class="modal">
     <div class="modal-content">
-        <p style="color:var(--neon-blue)">NEW DIRECTIVE</p>
+        <p style="color:var(--neon-blue)">REGISTER MISSION</p>
         <input type="text" id="q-title" placeholder="Objective name...">
-        
-        <label style="font-size:0.6rem; color:#888">RANK:</label>
         <div style="display:grid; grid-template-columns: repeat(6, 1fr); gap:4px; margin:10px 0">
-            <label><input type="radio" name="diff" value="E" checked hidden><div class="diff-opt">E</div></label>
-            <label><input type="radio" name="diff" value="D" hidden><div class="diff-opt">D</div></label>
-            <label><input type="radio" name="diff" value="C" hidden><div class="diff-opt">C</div></label>
-            <label><input type="radio" name="diff" value="B" hidden><div class="diff-opt">B</div></label>
-            <label><input type="radio" name="diff" value="A" hidden><div class="diff-opt">A</div></label>
-            <label><input type="radio" name="diff" value="S" hidden><div class="diff-opt">S</div></label>
+            <label><input type="radio" name="diff" value="E" checked hidden><div class="diff-opt" style="border:1px solid #333; padding:5px; text-align:center; font-size:0.7rem; cursor:pointer">E</div></label>
+            <label><input type="radio" name="diff" value="D" hidden><div class="diff-opt" style="border:1px solid #333; padding:5px; text-align:center; font-size:0.7rem; cursor:pointer">D</div></label>
+            <label><input type="radio" name="diff" value="C" hidden><div class="diff-opt" style="border:1px solid #333; padding:5px; text-align:center; font-size:0.7rem; cursor:pointer">C</div></label>
+            <label><input type="radio" name="diff" value="B" hidden><div class="diff-opt" style="border:1px solid #333; padding:5px; text-align:center; font-size:0.7rem; cursor:pointer">B</div></label>
+            <label><input type="radio" name="diff" value="A" hidden><div class="diff-opt" style="border:1px solid #333; padding:5px; text-align:center; font-size:0.7rem; cursor:pointer">A</div></label>
+            <label><input type="radio" name="diff" value="S" hidden><div class="diff-opt" style="border:1px solid #333; padding:5px; text-align:center; font-size:0.7rem; cursor:pointer">S</div></label>
         </div>
-
-        <label style="font-size:0.6rem; color:#888">DAYS:</label>
         <div style="display:flex; gap:4px; margin:10px 0;" id="day-selector"></div>
-        
         <button class="btn" onclick="saveQuest()">INITIALIZE</button>
-        <button class="btn btn-abort" onclick="closeModal('quest')">BACK</button>
+        <button class="btn btn-abort" onclick="closeModal('quest')">CANCEL</button>
     </div>
 </div>
 
 <div id="modal-bg" class="modal">
     <div class="modal-content">
-        <p style="color:var(--neon-blue)">SYSTEM SETTINGS</p>
-        <label style="font-size:0.6rem; color:#888">WALLPAPER URL:</label>
-        <input type="text" id="bg-url-input" placeholder="Image link...">
-        <button class="btn" onclick="applyBg()">APPLY BG</button>
-        
-        <div style="margin-top:20px; border-top:1px solid #333; padding-top:20px">
-            <p style="color:var(--danger); font-size:0.6rem">DANGER ZONE:</p>
-            <button class="btn btn-abort" onclick="purgeQuests()">PURGE ALL QUESTS</button>
-        </div>
-        <button class="btn" onclick="closeModal('bg')" style="margin-top:15px; border-color:#555">CLOSE</button>
+        <p style="color:var(--neon-blue)">CONFIG</p>
+        <input type="text" id="bg-url-input" placeholder="Wallpaper link...">
+        <button class="btn" onclick="applyBg()">SET BG</button>
+        <button class="btn btn-abort" onclick="purgeQuests()">PURGE ALL DATA</button>
+        <button class="btn" onclick="closeModal('bg')" style="border-color:#555">CLOSE</button>
     </div>
 </div>
 
 <script>
+    const phrases = [
+        "ERGA-SE. O DESTINO AGUARDA.",
+        "LIMITES FORAM FEITOS PARA SEREM QUEBRADOS.",
+        "SÓ OS QUE TENTAM O ABSURDO CONQUISTAM O IMPOSSÍVEL.",
+        "NÃO PARE ATÉ QUE O MUNDO SAIBA SEU NOME.",
+        "A DOR É O COMBUSTÍVEL DA EVOLUÇÃO.",
+        "CADA DIA É UMA CHANCE DE SUPERAR QUEM VOCÊ FOI ONTEM."
+    ];
+
+    const tips = [
+        "DICA: Missões Rank S garantem evolução acelerada.",
+        "DICA: Mantenha o Streak alto para bônus ocultos.",
+        "DICA: O diário de Logs ajuda a mapear seu progresso real.",
+        "DICA: Beba água. Um Hunter desidratado falha na missão.",
+        "DICA: Descanse. O sono é onde os stats são aplicados."
+    ];
+
     let db = JSON.parse(localStorage.getItem('solo_v9_core')) || {
         xp: 0, lvl: 1, gold: 0, streak: 0, tasks: [], logs: [], 
         shop: [{id:1, title: "ENERGY DRINK", cost: 50}],
@@ -230,41 +241,36 @@
         let activeCount = 0, doneCount = 0;
         
         todoEl.innerHTML = ''; doneEl.innerHTML = '';
-
         db.tasks.forEach(t => {
             if(t.days.includes(today)) {
                 activeCount++;
                 const isDone = t.lastDone === dateKey;
                 if(isDone) doneCount++;
-                
                 const html = `
                     <div class="card diff-${t.difficulty || 'E'}">
                         <div style="display:flex; justify-content:space-between; align-items:center">
-                            <div style="font-size:0.8rem; font-weight:bold">${t.title} <small style="color:#aaa; font-weight:normal">LVL ${t.count || 0}</small></div>
-                            <span style="color:var(--neon-blue); font-size:0.6rem">RANK ${t.difficulty || 'E'}</span>
+                            <div style="font-size:0.8rem; font-weight:bold">${t.title} <small style="color:#aaa">v${t.count || 0}</small></div>
+                            <span style="color:var(--neon-blue); font-size:0.6rem">RANK_${t.difficulty || 'E'}</span>
                         </div>
-                        <div style="display:flex; justify-content:flex-end; margin-top:10px">
+                        <div style="display:flex; justify-content:flex-end; margin-top:12px">
                             ${!isDone ? `<button class="btn-sm btn" onclick="complete(${t.id})">DONE</button>` : '✔️'}
                             <button class="btn-sm btn btn-abort" onclick="abort(${t.id})">X</button>
                         </div>
-                    </div>
-                `;
+                    </div>`;
                 isDone ? doneEl.innerHTML += html : todoEl.innerHTML += html;
             }
         });
 
-        const syncPct = activeCount > 0 ? Math.round((doneCount / activeCount) * 100) : 0;
-        document.getElementById('sync-bar').style.width = syncPct + "%";
-        document.getElementById('sync-val').innerText = syncPct + "%";
+        document.getElementById('sync-bar').style.width = (activeCount > 0 ? (doneCount/activeCount*100) : 0) + "%";
+        document.getElementById('sync-val').innerText = (activeCount > 0 ? Math.round(doneCount/activeCount*100) : 0) + "%";
 
         document.getElementById('shop-list').innerHTML = db.shop.map(i => `
-            <div class="card" style="border-left: 2px solid var(--neon-purple); display:flex; justify-content:space-between; align-items:center; padding:10px">
-                <span style="font-size:0.8rem">${i.title}</span>
+            <div class="card" style="border-left:2px solid var(--neon-purple); display:flex; justify-content:space-between; align-items:center; padding:10px; background:rgba(0,0,0,0.6)">
+                <span style="font-size:0.75rem">${i.title}</span>
                 <button class="btn-sm btn" onclick="buy(${i.id})">${i.cost}G</button>
-            </div>
-        `).join('');
+            </div>`).join('');
 
-        document.getElementById('logs-area').innerHTML = db.logs.map(l => `<div style="margin-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.1); font-size:0.75rem;"><small style="color:var(--neon-purple)">${l.date}</small> ${l.text}</div>`).join('');
+        document.getElementById('logs-area').innerHTML = db.logs.map(l => `<div style="margin-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.05); font-size:0.75rem; padding-bottom:4px"><small style="color:var(--neon-purple)">[${l.date}]</small> ${l.text}</div>`).join('');
         localStorage.setItem('solo_v9_core', JSON.stringify(db));
     }
 
@@ -274,26 +280,18 @@
             const days = ['D','S','T','Q','Q','S','S'];
             document.getElementById('day-selector').innerHTML = days.map((d, i) => `
                 <input type="checkbox" id="d-${i}" class="d-chk" value="${i}" hidden>
-                <label for="d-${i}" class="day-label">${d}</label>
-            `).join('');
+                <label for="d-${i}" class="day-label">${d}</label>`).join('');
         }
     }
     function closeModal(id) { document.getElementById('modal-' + id).style.display = 'none'; }
-
-    function applyBg() {
-        const url = document.getElementById('bg-url-input').value;
-        if(url) { db.bg = url; closeModal('bg'); render(); }
-    }
-
-    function purgeQuests() {
-        if(confirm("DELETE ALL QUESTS?")) { db.tasks = []; render(); closeModal('bg'); }
-    }
-
+    function applyBg() { const url = document.getElementById('bg-url-input').value; if(url) { db.bg = url; closeModal('bg'); render(); } }
+    function purgeQuests() { if(confirm("APAGAR TUDO?")) { db.tasks = []; render(); closeModal('bg'); } }
+    
     function saveQuest() {
         const title = document.getElementById('q-title').value.toUpperCase();
         const diff = document.querySelector('input[name="diff"]:checked').value;
         const days = Array.from(document.querySelectorAll('.d-chk:checked')).map(c => parseInt(c.value));
-        if(!title || days.length === 0) return alert("INCOMPLETE DATA");
+        if(!title || days.length === 0) return alert("ERRO");
         db.tasks.push({id: Date.now(), title, difficulty: diff, days, lastDone: "", count: 0});
         closeModal('quest'); render();
     }
@@ -301,37 +299,27 @@
     function complete(id) {
         const t = db.tasks.find(x => x.id === id);
         t.lastDone = new Date().toLocaleDateString('pt-BR');
-        t.count = (t.count || 0) + 1;
-        const xpGain = { E: 10, D: 25, C: 50, B: 100, A: 200, S: 500 }[t.difficulty] || 10;
-        db.xp += xpGain; db.gold += Math.floor(xpGain/2); db.streak++;
+        t.count++;
+        const xp = {E:15,D:35,C:65,B:120,A:250,S:600}[t.difficulty];
+        db.xp += xp; db.gold += Math.floor(xp/2); db.streak++;
         if(db.xp >= db.lvl * 200) { db.xp = 0; db.lvl++; alert("LEVEL UP!"); }
         render();
     }
 
-    function abort(id) {
-        if(db.gold < 30) return alert("NEED 30 GOLD");
-        if(confirm("ABORT? (-30G)")) { db.gold -= 30; db.tasks = db.tasks.filter(x => x.id !== id); render(); }
+    function abort(id) { if(db.gold >= 30 && confirm("ABORTAR?")) { db.gold -= 30; db.tasks = db.tasks.filter(x => x.id !== id); render(); } }
+    function saveLog() { 
+        const txt = document.getElementById('log-input').value; 
+        if(txt) { db.logs.unshift({date: new Date().toLocaleDateString('pt-BR'), text: txt}); document.getElementById('log-input').value = ''; render(); } 
+    }
+    function addShopItem() { const t = prompt("NOME:"), c = parseInt(prompt("G:")); if(t&&c) { db.shop.push({id:Date.now(), title:t.toUpperCase(), cost:c}); render(); } }
+    function buy(id) { 
+        const i = db.shop.find(x => x.id === id); 
+        if(db.gold >= i.cost) { db.gold -= i.cost; alert("OK!"); render(); } 
     }
 
-    function saveLog() {
-        const txt = document.getElementById('log-input').value;
-        if(!txt) return;
-        db.logs.unshift({date: new Date().toLocaleDateString('pt-BR'), text: txt});
-        document.getElementById('log-input').value = ''; render();
-    }
-
-    function addShopItem() {
-        const t = prompt("NAME:");
-        const c = parseInt(prompt("COST:"));
-        if(t && c) { db.shop.push({id: Date.now(), title: t.toUpperCase(), cost: c}); render(); }
-    }
-
-    function buy(id) {
-        const i = db.shop.find(x => x.id === id);
-        if(db.gold >= i.cost) { db.gold -= i.cost; alert("ACQUIRED!"); render(); }
-        else alert("LOW GOLD");
-    }
-
+    // INITIAL SYSTEM LOAD
+    document.getElementById('motive-banner').innerText = phrases[Math.floor(Math.random() * phrases.length)];
+    document.getElementById('daily-tip').innerText = tips[Math.floor(Math.random() * tips.length)];
     render();
 </script>
 </body>
