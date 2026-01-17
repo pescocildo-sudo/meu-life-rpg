@@ -3,138 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM - SOLO LEVELING</title>
+    <title>SYSTEM - PLAYER INTERFACE</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
         :root {
-            --bg: #050510;
+            --bg: #02020a;
             --neon-blue: #00f3ff;
             --neon-purple: #bc13fe;
             --danger: #ff003c;
-            --panel: rgba(15, 15, 35, 0.95);
+            --panel: rgba(10, 10, 30, 0.95);
         }
 
         body { 
             font-family: 'Share Tech Mono', monospace; 
             background: var(--bg); color: #fff; margin: 0; padding: 15px;
-            background-image: linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
+            background-image: radial-gradient(circle, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            overflow-x: hidden;
         }
 
-        .container { width: 100%; max-width: 500px; margin: 0 auto; padding-bottom: 50px; }
+        .container { width: 100%; max-width: 550px; margin: 0 auto; padding-bottom: 80px; }
 
-        /* HUD */
         .hud {
             background: var(--panel); border: 1px solid var(--neon-blue);
-            padding: 15px; border-radius: 5px; position: sticky; top: 10px; z-index: 100;
+            padding: 15px; border-radius: 2px; position: sticky; top: 10px; z-index: 100;
             box-shadow: 0 0 15px rgba(0, 243, 255, 0.2); margin-bottom: 20px;
+            backdrop-filter: blur(10px);
         }
 
-        .xp-bg { background: #000; height: 10px; border: 1px solid #333; margin: 10px 0; }
-        .xp-bar { background: var(--neon-blue); height: 100%; width: 0%; box-shadow: 0 0 10px var(--neon-blue); transition: 0.5s; }
+        .xp-bg { background: #000; height: 6px; border: 1px solid #222; margin: 10px 0; }
+        .xp-bar { background: var(--neon-blue); height: 100%; width: 0%; box-shadow: 0 0 10px var(--neon-blue); transition: 1s; }
 
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; }
-        .stat-val { color: var(--neon-blue); font-size: 1.1rem; display: block; font-weight: bold; }
-        .stat-lbl { font-size: 0.6rem; color: #888; }
+        .stat-val { color: var(--neon-blue); font-size: 1.1rem; font-weight: bold; }
+        .stat-lbl { font-size: 0.6rem; color: #666; display: block; }
 
-        /* BOTÃO PRINCIPAL */
-        .btn-create {
-            width: 100%; background: rgba(0, 243, 255, 0.1); border: 1px solid var(--neon-blue);
-            color: var(--neon-blue); padding: 15px; font-family: inherit; font-size: 1rem;
-            cursor: pointer; margin-bottom: 25px; box-shadow: 0 0 5px var(--neon-blue);
+        .system-msg-box {
+            background: rgba(188, 19, 254, 0.1); border: 1px solid var(--neon-purple);
+            padding: 12px; margin-bottom: 20px; font-size: 0.8rem; line-height: 1.4;
+            animation: flicker 2s infinite;
         }
 
-        /* QUESTS */
-        h3 { color: var(--neon-purple); font-size: 0.9rem; border-left: 3px solid var(--neon-purple); padding-left: 10px; }
-        
-        .quest-card {
-            background: rgba(0,0,0,0.8); border: 1px solid #222; border-left: 3px solid var(--neon-blue);
-            padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
-        }
-        .quest-card.done { border-left-color: #444; opacity: 0.5; filter: grayscale(1); }
+        @keyframes flicker { 0% { opacity: 0.9; } 50% { opacity: 1; } 100% { opacity: 0.9; } }
 
-        .btn-small { 
-            background: transparent; border: 1px solid var(--neon-blue); color: var(--neon-blue);
-            padding: 5px 10px; cursor: pointer; font-family: inherit; font-size: 0.7rem; margin-left: 5px;
+        .section-title { 
+            color: var(--neon-purple); font-size: 0.8rem; letter-spacing: 2px;
+            border-bottom: 1px solid var(--neon-purple); padding-bottom: 5px; margin: 25px 0 15px;
+            text-transform: uppercase;
         }
+
+        .card {
+            background: rgba(255,255,255,0.03); border: 1px solid #222; 
+            padding: 12px; margin-bottom: 10px; border-left: 3px solid var(--neon-blue);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .btn {
+            width: 100%; background: rgba(0, 243, 255, 0.05); border: 1px solid var(--neon-blue);
+            color: var(--neon-blue); font-family: inherit; padding: 12px;
+            box-sizing: border-box; margin-bottom: 10px; cursor: pointer; font-weight: bold;
+        }
+        .btn:hover { background: var(--neon-blue); color: #000; }
+
+        .btn-sm { padding: 5px 8px; width: auto; font-size: 0.65rem; margin-left: 5px; margin-bottom: 0; }
         .btn-abort { border-color: var(--danger); color: var(--danger); }
 
-        /* MODAL */
         .modal { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 1000;
         }
-        .modal-content { 
-            background: #0a0a1a; border: 2px solid var(--neon-blue); padding: 20px; width: 90%; max-width: 350px;
+        .modal-content { background: #050510; border: 2px solid var(--neon-blue); padding: 20px; width: 90%; max-width: 350px; }
+
+        .day-grid { display: flex; justify-content: space-between; gap: 4px; margin: 15px 0; }
+        .day-chk { display: none; }
+        .day-label { flex: 1; border: 1px solid #333; text-align: center; padding: 8px 0; font-size: 0.7rem; cursor: pointer; }
+        .day-chk:checked + .day-label { border-color: var(--neon-blue); color: var(--neon-blue); background: rgba(0,243,255,0.1); }
+
+        textarea, input[type="text"] {
+            width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 10px;
+            font-family: inherit; box-sizing: border-box; margin-bottom: 10px;
         }
-
-        .day-select { display: flex; justify-content: space-between; margin: 15px 0; }
-        .day-btn { flex: 1; border: 1px solid #333; text-align: center; padding: 5px; font-size: 0.7rem; cursor: pointer; color: #555; }
-        input[type="checkbox"]:checked + .day-btn { border-color: var(--neon-blue); color: var(--neon-blue); background: rgba(0, 243, 255, 0.1); }
-
-        input[type="text"] { width: 100%; background: #000; border: 1px solid #333; color: var(--neon-blue); padding: 10px; font-family: inherit; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="hud">
-        <div style="display:flex; justify-content:space-between; align-items:flex-end;">
-            <span style="color:var(--neon-blue); font-size:1.2rem;">SYSTEM PLAYER</span>
-            <span style="font-size:0.7rem;">LVL <strong id="lvl-txt" style="font-size:1rem; color:var(--neon-purple)">1</strong></span>
+        <div style="display:flex; justify-content:space-between;">
+            <span style="color:var(--neon-blue)">SYSTEM_PLAYER: PESCOCILDO</span>
+            <span style="color:var(--neon-purple)">LVL <strong id="lvl-txt">1</strong></span>
         </div>
         <div class="xp-bg"><div id="xp-bar" class="xp-bar"></div></div>
         <div class="stats-grid">
             <div class="stat-box"><span id="gold-txt" class="stat-val">0</span><span class="stat-lbl">GOLD</span></div>
             <div class="stat-box"><span id="streak-txt" class="stat-val">0</span><span class="stat-lbl">STREAK</span></div>
-            <div class="stat-box"><span id="rank-txt" class="stat-val" style="font-size:0.8rem">RANK E</span><span class="stat-lbl">STATUS</span></div>
+            <div class="stat-box"><span id="rank-txt" class="stat-val" style="font-size:0.75rem">E-RANK</span><span class="stat-lbl">CLASS</span></div>
         </div>
     </div>
 
-    <button class="btn-create" onclick="openModal()">[+] ADD NEW DIRECTIVE</button>
+    <div class="system-msg-box" id="daily-msg"></div>
 
-    <div id="active-quests">
-        <h3>ACTIVE QUESTS</h3>
-        <div id="todo-list"></div>
-    </div>
+    <button class="btn" onclick="openModal()">[+] REGISTER NEW QUEST</button>
 
-    <div id="completed-quests" style="margin-top: 30px;">
-        <h3>COMPLETED</h3>
-        <div id="done-list"></div>
-    </div>
+    <div class="section-title">Active Quests</div>
+    <div id="todo-list"></div>
+
+    <div class="section-title">Completed Today</div>
+    <div id="done-list" style="opacity:0.5"></div>
+
+    <div class="section-title">System Shop</div>
+    <div id="shop-list"></div>
+    <button class="btn" style="font-size:0.7rem; border-color:var(--neon-purple); color:var(--neon-purple)" onclick="addShopItem()">[+] ADD CUSTOM REWARD</button>
+
+    <div class="section-title">Hunter's Log</div>
+    <textarea id="log-input" placeholder="Enter report..."></textarea>
+    <button class="btn" onclick="saveLog()">ARCHIVE LOG</button>
+    <div id="logs-area" style="max-height: 200px; overflow-y: auto; font-size: 0.8rem;"></div>
 </div>
 
 <div id="modal" class="modal">
     <div class="modal-content">
-        <p style="color:var(--neon-blue); margin-top:0;">NEW DIRECTIVE</p>
-        <input type="text" id="quest-title" placeholder="QUEST NAME...">
-        <div class="day-select">
-            <label><input type="checkbox" class="day-chk" value="0" hidden><div class="day-btn">D</div></label>
-            <label><input type="checkbox" class="day-chk" value="1" hidden><div class="day-btn">S</div></label>
-            <label><input type="checkbox" class="day-chk" value="2" hidden><div class="day-btn">T</div></label>
-            <label><input type="checkbox" class="day-chk" value="3" hidden><div class="day-btn">Q</div></label>
-            <label><input type="checkbox" class="day-chk" value="4" hidden><div class="day-btn">Q</div></label>
-            <label><input type="checkbox" class="day-chk" value="5" hidden><div class="day-btn">S</div></label>
-            <label><input type="checkbox" class="day-chk" value="6" hidden><div class="day-btn">S</div></label>
+        <p style="color:var(--neon-blue); margin-top:0;">DEFINE QUEST PARAMETERS</p>
+        <input type="text" id="q-title" placeholder="Quest name...">
+        <div class="day-grid">
+            <label><input type="checkbox" class="day-chk" value="0"><div class="day-label">D</div></label>
+            <label><input type="checkbox" class="day-chk" value="1"><div class="day-label">S</div></label>
+            <label><input type="checkbox" class="day-chk" value="2"><div class="day-label">T</div></label>
+            <label><input type="checkbox" class="day-chk" value="3"><div class="day-label">Q</div></label>
+            <label><input type="checkbox" class="day-chk" value="4"><div class="day-label">Q</div></label>
+            <label><input type="checkbox" class="day-chk" value="5"><div class="day-label">S</div></label>
+            <label><input type="checkbox" class="day-chk" value="6"><div class="day-label">S</div></label>
         </div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-            <button class="btn-small" style="border-color:var(--danger); color:var(--danger)" onclick="closeModal()">CANCEL</button>
-            <button class="btn-small" onclick="saveQuest()">CONFIRM</button>
-        </div>
+        <button class="btn" onclick="saveQuest()">CONFIRM</button>
+        <button class="btn btn-abort" onclick="closeModal()">BACK</button>
     </div>
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('solo_system_v5')) || {
-        xp: 0, lvl: 1, gold: 0, streak: 0, tasks: []
+    const quotes = ["A dor é temporária, o rank é para sempre.", "Desperte o monarca que existe em você.", "Limites foram feitos para serem quebrados.", "Sua única competição é quem você foi ontem."];
+    const goals = ["Beber 2L de água.", "Fazer 15 minutos de leitura.", "Organizar o ambiente de trabalho.", "Evitar açúcar processado.", "Treinar por 20 minutos."];
+
+    let db = JSON.parse(localStorage.getItem('solo_v6_final')) || {
+        xp: 0, lvl: 1, gold: 0, streak: 0, tasks: [], logs: [], shop: [{id:1, title: "DESCANSO (30 MIN)", cost: 50}]
     };
 
+    function init() {
+        const d = new Date();
+        const seed = d.getDate() + d.getMonth();
+        document.getElementById('daily-msg').innerHTML = `<strong>[SYSTEM]:</strong> "${quotes[seed % quotes.length]}"<br><strong>[EXTRA]:</strong> ${goals[seed % goals.length]}`;
+        render();
+    }
+
     function render() {
-        const nextXp = Math.floor(100 * Math.pow(db.lvl, 1.5));
+        const nextXp = db.lvl * 100;
         document.getElementById('lvl-txt').innerText = db.lvl;
         document.getElementById('gold-txt').innerText = db.gold;
-        document.getElementById('streak-txt').innerText = `🔥 ${db.streak}`;
+        document.getElementById('streak-txt').innerText = db.streak;
         document.getElementById('xp-bar').style.width = (db.xp / nextXp * 100) + "%";
         
         const ranks = ["E-RANK", "D-RANK", "C-RANK", "B-RANK", "A-RANK", "S-RANK"];
@@ -142,63 +167,85 @@
 
         const today = new Date().getDay();
         const dateKey = new Date().toLocaleDateString('pt-BR');
+        
         const todoEl = document.getElementById('todo-list');
         const doneEl = document.getElementById('done-list');
-        
         todoEl.innerHTML = ''; doneEl.innerHTML = '';
 
         db.tasks.forEach(t => {
             if(t.days.includes(today)) {
                 const isDone = t.lastDone === dateKey;
                 const html = `
-                    <div class="quest-card ${isDone ? 'done' : ''}">
-                        <div style="font-size:0.9rem;">${t.title}</div>
+                    <div class="card">
+                        <span>${t.title}</span>
                         <div>
-                            ${!isDone ? `<button class="btn-small" onclick="complete(${t.id})">DONE</button>` : ''}
-                            <button class="btn-small btn-abort" onclick="abort(${t.id})">ABORT</button>
+                            ${!isDone ? `<button class="btn-sm" onclick="complete(${t.id})">DONE</button>` : '✔️'}
+                            <button class="btn-sm btn-abort" onclick="abort(${t.id})">ABORT</button>
                         </div>
                     </div>
                 `;
                 isDone ? doneEl.innerHTML += html : todoEl.innerHTML += html;
             }
         });
-        localStorage.setItem('solo_system_v5', JSON.stringify(db));
+
+        document.getElementById('shop-list').innerHTML = db.shop.map(i => `
+            <div class="card" style="border-left-color:var(--neon-purple)">
+                <span>${i.title}</span>
+                <button class="btn-sm" onclick="buy(${i.id})">${i.cost}G</button>
+            </div>
+        `).join('');
+
+        document.getElementById('logs-area').innerHTML = db.logs.map(l => `<div style="margin-bottom:10px; border-bottom:1px solid #222; padding-bottom:5px;"><small style="color:var(--neon-purple)">${l.date}</small><br>${l.text}</div>`).join('');
+        
+        localStorage.setItem('solo_v6_final', JSON.stringify(db));
     }
 
     function openModal() { document.getElementById('modal').style.display = 'flex'; }
     function closeModal() { document.getElementById('modal').style.display = 'none'; }
 
     function saveQuest() {
-        const title = document.getElementById('quest-title').value.toUpperCase();
+        const title = document.getElementById('q-title').value.toUpperCase();
         const days = Array.from(document.querySelectorAll('.day-chk:checked')).map(c => parseInt(c.value));
-        if(!title || days.length === 0) return alert("MISSING DATA");
+        if(!title || days.length === 0) return alert("DATA ERROR");
         db.tasks.push({id: Date.now(), title, days, lastDone: ""});
-        document.getElementById('quest-title').value = '';
+        document.getElementById('q-title').value = '';
         document.querySelectorAll('.day-chk').forEach(c => c.checked = false);
-        closeModal();
-        render();
+        closeModal(); render();
     }
 
     function complete(id) {
-        const task = db.tasks.find(t => t.id === id);
-        task.lastDone = new Date().toLocaleDateString('pt-BR');
-        db.xp += 50 + (db.streak * 5);
-        db.gold += 20;
-        const nextXp = Math.floor(100 * Math.pow(db.lvl, 1.5));
-        if(db.xp >= nextXp) { db.lvl++; db.xp = 0; alert("LEVEL UP!"); }
+        const t = db.tasks.find(x => x.id === id);
+        t.lastDone = new Date().toLocaleDateString('pt-BR');
+        db.xp += 50; db.gold += 15; db.streak++;
+        if(db.xp >= db.lvl * 100) { db.xp = 0; db.lvl++; alert("LEVEL UP!"); }
         render();
     }
 
     function abort(id) {
-        if(db.gold < 30) return alert("INSUFFICIENT GOLD TO ABORT (COST: 30G)");
-        if(confirm("ABORT THIS QUEST? COST: 30 GOLD")) {
-            db.gold -= 30;
-            db.tasks = db.tasks.filter(t => t.id !== id);
-            render();
-        }
+        if(db.gold < 30) return alert("NEED 30 GOLD");
+        if(confirm("ABORT? -30G")) { db.gold -= 30; db.tasks = db.tasks.filter(x => x.id !== id); render(); }
     }
 
-    render();
+    function saveLog() {
+        const txt = document.getElementById('log-input').value;
+        if(!txt) return;
+        db.logs.unshift({date: new Date().toLocaleString(), text: txt});
+        document.getElementById('log-input').value = ''; render();
+    }
+
+    function addShopItem() {
+        const t = prompt("ITEM NAME:");
+        const c = parseInt(prompt("COST (GOLD):"));
+        if(t && c) { db.shop.push({id: Date.now(), title: t.toUpperCase(), cost: c}); render(); }
+    }
+
+    function buy(id) {
+        const i = db.shop.find(x => x.id === id);
+        if(db.gold >= i.cost) { db.gold -= i.cost; alert("PURCHASED!"); render(); }
+        else alert("LOW GOLD");
+    }
+
+    init();
 </script>
 </body>
 </html>
