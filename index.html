@@ -16,7 +16,7 @@
             --rank-a: #ff4400;
             --rank-b: #cc00ff;
             --rank-c: #00ff88;
-            --panel-alpha: rgba(10, 10, 30, 0.9);
+            --panel-alpha: rgba(10, 10, 30, 0.85); /* Container principal levemente transparente */
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -31,20 +31,18 @@
             transition: background-image 0.8s ease;
         }
 
-        /* OVERLAY PARA CONTRASTE */
         body::before {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.9) 100%);
+            background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.8) 100%);
             z-index: -1;
         }
 
-        /* LINHA DE SCANNER CYBERPUNK */
         .scanner-line {
             position: fixed; top: 0; left: 0; width: 100%; height: 2px;
-            background: rgba(0, 243, 255, 0.2);
+            background: rgba(0, 243, 255, 0.15);
             box-shadow: 0 0 15px var(--neon-blue);
             z-index: 999; pointer-events: none;
-            animation: scanMove 8s linear infinite;
+            animation: scanMove 10s linear infinite;
         }
         @keyframes scanMove { 0% { top: -10%; } 100% { top: 110%; } }
 
@@ -54,72 +52,66 @@
             background: var(--panel-alpha);
             border-left: 1px solid rgba(0, 243, 255, 0.1);
             border-right: 1px solid rgba(0, 243, 255, 0.1);
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(10px);
         }
 
-        /* HUD & SINCRONIZAÇÃO */
         .hud {
             border: 1px solid var(--neon-blue); padding: 20px; margin-bottom: 25px;
             position: sticky; top: 10px; z-index: 100; background: rgba(5, 5, 20, 0.95);
-            box-shadow: 0 0 25px rgba(0, 243, 255, 0.15);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.2);
         }
 
-        .sync-container { margin-bottom: 15px; }
-        .sync-label { font-size: 0.6rem; color: var(--neon-blue); letter-spacing: 2px; }
         .sync-bar-bg { background: rgba(255,255,255,0.05); height: 4px; margin-top: 5px; }
         .sync-bar-fill { background: var(--neon-blue); height: 100%; width: 0%; transition: 1s; box-shadow: 0 0 10px var(--neon-blue); }
 
         .xp-bg { background: #000; height: 10px; border: 1px solid #222; margin: 15px 0; }
         .xp-bar { background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); height: 100%; width: 0%; transition: 1s; }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .stat-box { text-align: center; border: 1px solid rgba(255,255,255,0.05); padding: 10px 5px; background: rgba(0,0,0,0.3); }
-        .stat-val { color: var(--neon-blue); font-size: 1.1rem; font-weight: bold; }
-        .stat-lbl { font-size: 0.6rem; color: #666; display: block; }
-
-        /* CARDS E DIFICULDADES */
+        /* QUEST CARDS TRANSPARENTES */
         .card {
-            background: rgba(0,0,0,0.5); border: 1px solid #222; margin-bottom: 15px;
+            background: rgba(0,0,0,0.25); /* Bem transparente para ver o wallpaper */
+            border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;
             padding: 15px; position: relative; border-left: 3px solid #555;
-            transition: 0.2s;
+            transition: 0.2s; backdrop-filter: blur(2px);
         }
-        .card:active { transform: scale(0.98); }
         
-        /* CORES DE DIFICULDADE */
         .diff-E { border-left-color: #888; }
         .diff-D { border-left-color: var(--rank-c); }
         .diff-C { border-left-color: var(--neon-blue); }
         .diff-B { border-left-color: var(--rank-b); }
         .diff-A { border-left-color: var(--rank-a); }
-        .diff-S { border-left-color: var(--rank-s); box-shadow: inset 0 0 10px rgba(255,170,0,0.2); }
-
-        .quest-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-        .quest-rank-badge { font-size: 0.6rem; padding: 2px 6px; background: #222; color: #fff; }
+        .diff-S { border-left-color: var(--rank-s); box-shadow: 0 0 15px rgba(255,170,0,0.1); }
 
         .btn {
-            background: transparent; border: 1px solid var(--neon-blue); color: var(--neon-blue);
+            background: rgba(0,0,0,0.3); border: 1px solid var(--neon-blue); color: var(--neon-blue);
             padding: 12px; cursor: pointer; font-family: inherit; width: 100%; font-weight: bold;
             text-transform: uppercase; margin-bottom: 10px;
         }
-        .btn:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 15px var(--neon-blue); }
+        .btn:hover { background: var(--neon-blue); color: #000; }
         
-        .btn-sm { width: auto; padding: 5px 10px; font-size: 0.65rem; margin-left: 5px; }
+        .btn-sm { width: auto; padding: 5px 10px; font-size: 0.65rem; margin-left: 5px; margin-bottom: 0; }
         .btn-abort { border-color: var(--danger); color: var(--danger); }
 
-        /* MODAIS */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
-        .modal-content { background: #050510; border: 1px solid var(--neon-blue); padding: 20px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
+        /* DIAS DA SEMANA - CORREÇÃO VISUAL */
+        .day-label { 
+            flex: 1; border: 1px solid #333; text-align: center; 
+            padding: 10px 0; cursor: pointer; transition: 0.3s; 
+            font-size: 0.8rem; color: #555;
+        }
+        .d-chk:checked + .day-label { 
+            border-color: var(--neon-blue); 
+            color: var(--neon-blue); 
+            background: rgba(0, 243, 255, 0.15); 
+            box-shadow: 0 0 10px var(--neon-blue); 
+        }
 
-        .diff-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin: 10px 0; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+        .modal-content { background: #050510; border: 1px solid var(--neon-blue); padding: 20px; width: 100%; max-width: 400px; }
+
         .diff-opt { border: 1px solid #333; padding: 8px; font-size: 0.7rem; text-align: center; cursor: pointer; }
         input[name="diff"]:checked + .diff-opt { border-color: var(--neon-blue); background: rgba(0,243,255,0.1); color: var(--neon-blue); }
 
         input[type="text"], textarea { width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; font-family: inherit; margin-bottom: 15px; }
-        
-        /* SCROLLBAR */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: var(--neon-blue); }
     </style>
 </head>
 <body>
@@ -128,62 +120,56 @@
 
 <div class="container">
     <div class="hud">
-        <div class="sync-container">
-            <div style="display:flex; justify-content:space-between">
-                <span class="sync-label">SYSTEM_SYNC_STATUS</span>
-                <span id="sync-val" style="font-size:0.6rem; color:var(--neon-blue)">0%</span>
-            </div>
-            <div class="sync-bar-bg"><div id="sync-bar" class="sync-bar-fill"></div></div>
+        <div style="display:flex; justify-content:space-between">
+            <span style="font-size:0.6rem; color:var(--neon-blue)">SYNC_STATUS</span>
+            <span id="sync-val" style="font-size:0.6rem; color:var(--neon-blue)">0%</span>
         </div>
+        <div class="sync-bar-bg"><div id="sync-bar" class="sync-bar-fill"></div></div>
 
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="color:var(--neon-blue); letter-spacing:2px; font-size:0.8rem">PLAYER: PESCOCILDO</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px">
+            <span style="color:var(--neon-blue); letter-spacing:2px; font-size:0.8rem">SYSTEM_USER</span>
             <span style="color:var(--neon-purple)">LVL <strong id="lvl-txt">1</strong></span>
         </div>
         <div class="xp-bg"><div id="xp-bar" class="xp-bar"></div></div>
         
-        <div class="stats-grid">
-            <div class="stat-box"><span id="gold-txt" class="stat-val">0</span><span class="stat-lbl">GOLD</span></div>
-            <div class="stat-box"><span id="streak-txt" class="stat-val">0</span><span class="stat-lbl">STREAK</span></div>
-            <div class="stat-box"><span id="rank-txt" class="stat-val" style="font-size:0.7rem">E-RANK</span><span class="stat-lbl">CLASS</span></div>
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+            <div style="text-align:center"><span id="gold-txt" style="color:var(--neon-blue); font-weight:bold">0</span><br><small style="font-size:0.5rem; color:#666">GOLD</small></div>
+            <div style="text-align:center"><span id="streak-txt" style="color:var(--neon-blue); font-weight:bold">0</span><br><small style="font-size:0.5rem; color:#666">STREAK</small></div>
+            <div style="text-align:center"><span id="rank-txt" style="color:var(--neon-blue); font-size:0.6rem">E-RANK</span><br><small style="font-size:0.5rem; color:#666">CLASS</small></div>
         </div>
     </div>
 
-    <button class="btn" onclick="openModal('quest')">[+] REGISTER NEW DIRECTIVE</button>
+    <button class="btn" onclick="openModal('quest')">[+] REGISTER DIRECTIVE</button>
 
     <div id="todo-list"></div>
+    <div id="done-list" style="opacity:0.4; margin-top:20px"></div>
 
-    <div style="margin-top:40px; border-top:1px solid #222; padding-top:20px;">
-        <span style="font-size:0.7rem; color:var(--neon-purple); letter-spacing:2px">COMPLETED_LOGS</span>
-        <div id="done-list" style="opacity:0.4; margin-top:15px"></div>
+    <div style="margin-top:40px">
+        <div style="display:flex; justify-content:space-between; align-items:center">
+            <span style="font-size:0.7rem; color:var(--neon-blue); letter-spacing:2px">SHOP</span>
+            <button class="btn-sm btn" style="margin:0" onclick="addShopItem()">[+] ITEM</button>
+        </div>
+        <div id="shop-list" style="margin-top:10px"></div>
     </div>
 
     <div style="margin-top:40px">
         <div style="display:flex; justify-content:space-between; align-items:center">
-            <span style="font-size:0.7rem; color:var(--neon-blue); letter-spacing:2px">SYSTEM_SHOP</span>
-            <button class="btn-sm btn" style="margin:0" onclick="addShopItem()">[+] ADD ITEM</button>
+            <span style="font-size:0.7rem; color:var(--neon-purple); letter-spacing:2px">LOGS</span>
+            <button class="btn-sm btn" style="margin:0; border-color:#555; color:#555" onclick="openModal('bg')">⚙️</button>
         </div>
-        <div id="shop-list" style="margin-top:15px"></div>
-    </div>
-
-    <div style="margin-top:40px">
-        <div style="display:flex; justify-content:space-between; align-items:center">
-            <span style="font-size:0.7rem; color:var(--neon-purple); letter-spacing:2px">HUNTER_LOGS</span>
-            <button class="btn-sm btn" style="margin:0; border-color:#555; color:#555" onclick="openModal('bg')">⚙️ BG</button>
-        </div>
-        <textarea id="log-input" placeholder="Enter session report..." style="margin-top:15px; height:80px"></textarea>
-        <button class="btn" onclick="saveLog()">ARCHIVE DATA</button>
+        <textarea id="log-input" placeholder="Mission report..." style="margin-top:10px; height:60px"></textarea>
+        <button class="btn" onclick="saveLog()">ARCHIVE</button>
         <div id="logs-area"></div>
     </div>
 </div>
 
 <div id="modal-quest" class="modal">
     <div class="modal-content">
-        <p style="color:var(--neon-blue); border-bottom:1px solid var(--neon-blue); padding-bottom:5px">NEW DIRECTIVE SETUP</p>
+        <p style="color:var(--neon-blue)">NEW DIRECTIVE</p>
         <input type="text" id="q-title" placeholder="Objective name...">
         
-        <label style="font-size:0.6rem; color:#888">DIFFICULTY RANK:</label>
-        <div class="diff-selector">
+        <label style="font-size:0.6rem; color:#888">RANK:</label>
+        <div class="diff-selector" style="display:grid; grid-template-columns: repeat(6, 1fr); gap:4px; margin:10px 0">
             <label><input type="radio" name="diff" value="E" checked hidden><div class="diff-opt">E</div></label>
             <label><input type="radio" name="diff" value="D" hidden><div class="diff-opt">D</div></label>
             <label><input type="radio" name="diff" value="C" hidden><div class="diff-opt">C</div></label>
@@ -192,46 +178,33 @@
             <label><input type="radio" name="diff" value="S" hidden><div class="diff-opt">S</div></label>
         </div>
 
-        <label style="font-size:0.6rem; color:#888">RECURRENCE:</label>
+        <label style="font-size:0.6rem; color:#888">DAYS:</label>
         <div style="display:flex; gap:4px; margin:10px 0;" id="day-selector"></div>
         
         <button class="btn" onclick="saveQuest()">INITIALIZE</button>
-        <button class="btn btn-abort" onclick="closeModal('quest')">CANCEL</button>
+        <button class="btn btn-abort" onclick="closeModal('quest')">BACK</button>
     </div>
 </div>
 
 <div id="modal-bg" class="modal">
     <div class="modal-content">
-        <p style="color:var(--neon-blue)">OVERRIDE BACKGROUND</p>
-        <input type="text" id="bg-url-input" placeholder="Paste image URL...">
-        <button class="btn" onclick="applyBg()">APPLY CHANGES</button>
-        <button class="btn btn-abort" onclick="closeModal('bg')">CLOSE</button>
+        <p style="color:var(--neon-blue)">SYSTEM SETTINGS</p>
+        <label style="font-size:0.6rem; color:#888">WALLPAPER URL:</label>
+        <input type="text" id="bg-url-input" placeholder="Image link...">
+        <button class="btn" onclick="applyBg()">APPLY BG</button>
+        
+        <div style="margin-top:20px; border-top:1px solid #333; padding-top:20px">
+            <p style="color:var(--danger); font-size:0.6rem">DANGER ZONE:</p>
+            <button class="btn btn-abort" onclick="purgeQuests()">PURGE ALL QUESTS</button>
+        </div>
+        <button class="btn" onclick="closeModal('bg')" style="margin-top:15px; border-color:#555">CLOSE</button>
     </div>
 </div>
 
 <script>
-    // AUDIO ENGINE (Opcional - bipes simulados)
-    const playSound = (type) => {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        
-        if(type === 'success') {
-            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
-        } else {
-            osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-        }
-        
-        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.2);
-    };
-
     let db = JSON.parse(localStorage.getItem('solo_v9_core')) || {
         xp: 0, lvl: 1, gold: 0, streak: 0, tasks: [], logs: [], 
-        shop: [{id:1, title: "ENERGY DRINK (BREAK)", cost: 50}],
+        shop: [{id:1, title: "ENERGY DRINK", cost: 50}],
         bg: "https://images.alphacoders.com/105/1053746.jpg"
     };
 
@@ -248,7 +221,6 @@
 
         const today = new Date().getDay();
         const dateKey = new Date().toLocaleDateString('pt-BR');
-        
         const todoEl = document.getElementById('todo-list');
         const doneEl = document.getElementById('done-list');
         let activeCount = 0, doneCount = 0;
@@ -263,16 +235,13 @@
                 
                 const html = `
                     <div class="card diff-${t.difficulty || 'E'}">
-                        <div class="quest-header">
-                            <div>
-                                <span class="quest-rank-badge">LVL ${t.count || 0}</span>
-                                <div style="margin-top:5px; font-weight:bold">${t.title}</div>
-                            </div>
-                            <span style="color:var(--neon-blue); font-size:0.7rem">RANK ${t.difficulty || 'E'}</span>
+                        <div style="display:flex; justify-content:space-between; align-items:center">
+                            <div style="font-size:0.8rem; font-weight:bold">${t.title} <small style="color:#555; font-weight:normal">LVL ${t.count || 0}</small></div>
+                            <span style="color:var(--neon-blue); font-size:0.6rem">RANK ${t.difficulty || 'E'}</span>
                         </div>
-                        <div style="display:flex; justify-content:flex-end">
-                            ${!isDone ? `<button class="btn-sm btn" onclick="complete(${t.id})">COMPLETE</button>` : '✔️'}
-                            <button class="btn-sm btn btn-abort" onclick="abort(${t.id})">ABORT</button>
+                        <div style="display:flex; justify-content:flex-end; margin-top:10px">
+                            ${!isDone ? `<button class="btn-sm btn" onclick="complete(${t.id})">DONE</button>` : '✔️'}
+                            <button class="btn-sm btn btn-abort" onclick="abort(${t.id})">X</button>
                         </div>
                     </div>
                 `;
@@ -280,20 +249,18 @@
             }
         });
 
-        // Sync Bar Calculation
         const syncPct = activeCount > 0 ? Math.round((doneCount / activeCount) * 100) : 0;
         document.getElementById('sync-bar').style.width = syncPct + "%";
         document.getElementById('sync-val').innerText = syncPct + "%";
 
         document.getElementById('shop-list').innerHTML = db.shop.map(i => `
-            <div class="card" style="border-left: 2px solid var(--neon-purple); display:flex; justify-content:space-between; align-items:center">
-                <span>${i.title}</span>
+            <div class="card" style="border-left: 2px solid var(--neon-purple); display:flex; justify-content:space-between; align-items:center; padding:10px">
+                <span style="font-size:0.8rem">${i.title}</span>
                 <button class="btn-sm btn" onclick="buy(${i.id})">${i.cost}G</button>
             </div>
         `).join('');
 
-        document.getElementById('logs-area').innerHTML = db.logs.map(l => `<div style="margin-bottom:10px; border-bottom:1px solid #222; padding-bottom:5px; font-size:0.8rem;"><small style="color:var(--neon-purple)">${l.date}</small><br>${l.text}</div>`).join('');
-        
+        document.getElementById('logs-area').innerHTML = db.logs.map(l => `<div style="margin-bottom:8px; border-bottom:1px solid #222; font-size:0.75rem;"><small style="color:var(--neon-purple)">${l.date}</small> ${l.text}</div>`).join('');
         localStorage.setItem('solo_v9_core', JSON.stringify(db));
     }
 
@@ -303,7 +270,7 @@
             const days = ['D','S','T','Q','Q','S','S'];
             document.getElementById('day-selector').innerHTML = days.map((d, i) => `
                 <input type="checkbox" id="d-${i}" class="d-chk" value="${i}" hidden>
-                <label for="d-${i}" class="diff-opt" style="flex:1">${d}</label>
+                <label for="d-${i}" class="day-label">${d}</label>
             `).join('');
         }
     }
@@ -314,11 +281,15 @@
         if(url) { db.bg = url; closeModal('bg'); render(); }
     }
 
+    function purgeQuests() {
+        if(confirm("DELETE ALL QUESTS?")) { db.tasks = []; render(); closeModal('bg'); }
+    }
+
     function saveQuest() {
         const title = document.getElementById('q-title').value.toUpperCase();
         const diff = document.querySelector('input[name="diff"]:checked').value;
         const days = Array.from(document.querySelectorAll('.d-chk:checked')).map(c => parseInt(c.value));
-        if(!title || days.length === 0) return alert("SYSTEM ERROR: INCOMPLETE DATA");
+        if(!title || days.length === 0) return alert("INCOMPLETE DATA");
         db.tasks.push({id: Date.now(), title, difficulty: diff, days, lastDone: "", count: 0});
         closeModal('quest'); render();
     }
@@ -327,42 +298,34 @@
         const t = db.tasks.find(x => x.id === id);
         t.lastDone = new Date().toLocaleDateString('pt-BR');
         t.count = (t.count || 0) + 1;
-        
-        // Reward based on Difficulty
-        const rewards = { E: 10, D: 25, C: 50, B: 100, A: 200, S: 500 };
-        const xpGain = rewards[t.difficulty] || 10;
-        
-        db.xp += xpGain; 
-        db.gold += Math.floor(xpGain/2); 
-        db.streak++;
-        
-        if(db.xp >= db.lvl * 200) { db.xp = 0; db.lvl++; alert("SYSTEM: LEVEL UP!"); }
-        playSound('success');
+        const xpGain = { E: 10, D: 25, C: 50, B: 100, A: 200, S: 500 }[t.difficulty] || 10;
+        db.xp += xpGain; db.gold += Math.floor(xpGain/2); db.streak++;
+        if(db.xp >= db.lvl * 200) { db.xp = 0; db.lvl++; alert("LEVEL UP!"); }
         render();
     }
 
     function abort(id) {
-        if(db.gold < 30) return alert("INSUFFICIENT GOLD");
-        if(confirm("ABORT DIRECTIVE? (-30G)")) { db.gold -= 30; db.tasks = db.tasks.filter(x => x.id !== id); render(); }
+        if(db.gold < 30) return alert("NEED 30 GOLD");
+        if(confirm("ABORT? (-30G)")) { db.gold -= 30; db.tasks = db.tasks.filter(x => x.id !== id); render(); }
     }
 
     function saveLog() {
         const txt = document.getElementById('log-input').value;
         if(!txt) return;
-        db.logs.unshift({date: new Date().toLocaleString('pt-BR'), text: txt});
+        db.logs.unshift({date: new Date().toLocaleDateString('pt-BR'), text: txt});
         document.getElementById('log-input').value = ''; render();
     }
 
     function addShopItem() {
-        const t = prompt("ITEM NAME:");
-        const c = parseInt(prompt("COST (GOLD):"));
+        const t = prompt("NAME:");
+        const c = parseInt(prompt("COST:"));
         if(t && c) { db.shop.push({id: Date.now(), title: t.toUpperCase(), cost: c}); render(); }
     }
 
     function buy(id) {
         const i = db.shop.find(x => x.id === id);
-        if(db.gold >= i.cost) { db.gold -= i.cost; alert("SYSTEM: ITEM ACQUIRED"); render(); }
-        else alert("INSUFFICIENT GOLD");
+        if(db.gold >= i.cost) { db.gold -= i.cost; alert("ACQUIRED!"); render(); }
+        else alert("LOW GOLD");
     }
 
     render();
