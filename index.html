@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM - SOVEREIGN INTERFACE</title>
+    <title>SYSTEM - ETERNAL MONARCH</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
@@ -31,7 +31,7 @@
 
         body::before {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.3); z-index: -1;
+            background: rgba(0,0,0,0.4); z-index: -1;
         }
 
         .container { 
@@ -54,7 +54,7 @@
         .hud {
             border: 1px solid var(--neon-blue); padding: 18px; margin-bottom: 25px;
             position: sticky; top: 10px; z-index: 100; 
-            background: rgba(0, 0, 15, 0.85);
+            background: rgba(0, 0, 15, 0.9);
             box-shadow: 0 5px 20px rgba(0, 243, 255, 0.1);
         }
 
@@ -71,7 +71,7 @@
         .xp-bar { background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); height: 100%; width: 0%; transition: 1.5s; }
 
         .card {
-            background: rgba(0,0,0,0.55); 
+            background: rgba(0,0,0,0.6); 
             border: 1px solid rgba(255,255,255,0.15); margin-bottom: 15px;
             padding: 15px; border-left: 4px solid #555;
         }
@@ -121,12 +121,12 @@
 <audio id="snd-warn" src="https://assets.mixkit.co/active_storage/sfx/951/951-preview.mp3"></audio>
 
 <div class="container">
-    <div id="motive-banner" class="system-msg">AGUARDANDO ORDENS...</div>
+    <div id="motive-banner" class="system-msg">AGUARDANDO...</div>
 
     <div class="hud">
-        <div id="daily-tip" class="daily-tip">SISTEMA: Carregando...</div>
+        <div id="daily-tip" class="daily-tip">...</div>
         <div style="display:flex; justify-content:space-between">
-            <span style="font-size:0.6rem; color:var(--neon-blue)">SYNC_STATUS</span>
+            <span style="font-size:0.6rem; color:var(--neon-blue)">SYNC_PROGRESS</span>
             <span id="sync-val" style="font-size:0.6rem; color:var(--neon-blue)">0%</span>
         </div>
         <div class="sync-bar-bg"><div id="sync-bar" class="sync-bar-fill"></div></div>
@@ -142,14 +142,14 @@
         </div>
     </div>
 
-    <button class="btn" onclick="openModal('quest')">[+] REGISTER DIRECTIVE</button>
+    <button class="btn" onclick="openModal('quest')">[+] NOVA DIRETRIZ</button>
 
     <div id="todo-list"></div>
     <div id="done-list" style="opacity:0.4; margin-top:20px"></div>
 
     <div style="margin-top:40px">
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid var(--neon-blue); padding-bottom: 5px; margin-bottom: 15px;">
-            <span style="font-size:0.8rem; color:var(--neon-blue); letter-spacing:2px">SYSTEM SHOP</span>
+            <span style="font-size:0.8rem; color:var(--neon-blue); letter-spacing:2px">SISTEMA SHOP</span>
             <button class="btn-sm btn" style="border-color:var(--neon-purple); color:var(--neon-purple)" onclick="addShopItem()">[+] ITEM</button>
         </div>
         <div id="shop-list"></div>
@@ -160,8 +160,8 @@
             <span style="font-size:1rem; color:var(--neon-purple); letter-spacing:3px; font-weight:bold">SEMI DIÁRIO</span>
             <button class="btn-sm btn" style="margin:0; border-color:#555; color:#555" onclick="openModal('bg')">⚙️</button>
         </div>
-        <textarea id="log-input" class="semi-diario-input" placeholder="O que aconteceu na dungeon de hoje?"></textarea>
-        <button class="btn" style="border-color: var(--neon-purple); color: var(--neon-purple); margin-top: 10px;" onclick="saveLog()">GRAVAR RELATÓRIO</button>
+        <textarea id="log-input" class="semi-diario-input" placeholder="Relate o dia de hoje..."></textarea>
+        <button class="btn" style="border-color: var(--neon-purple); color: var(--neon-purple); margin-top: 10px;" onclick="saveLog()">ARQUIVAR RELATÓRIO</button>
         <div id="logs-area" style="margin-top:20px"></div>
     </div>
 </div>
@@ -186,19 +186,25 @@
 
 <div id="modal-bg" class="modal">
     <div class="modal-content">
-        <p style="color:var(--neon-blue)">CONFIGURAÇÕES</p>
+        <p style="color:var(--neon-blue)">PAINEL DO SISTEMA</p>
         <input type="text" id="bg-url-input" placeholder="Link do Wallpaper...">
         <button class="btn" onclick="applyBg()">APLICAR BG</button>
+        
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+            <button class="btn" style="margin:0; font-size: 0.7rem;" onclick="exportData()">EXPORTAR DADOS</button>
+            <button class="btn" style="margin:0; font-size: 0.7rem; border-color: var(--neon-purple); color: var(--neon-purple)" onclick="importData()">IMPORTAR DADOS</button>
+        </div>
+
         <button class="btn" style="border-color:var(--danger)" onclick="purgeQuests()">DELETAR TUDO</button>
         <button class="btn" onclick="closeModal('bg')">FECHAR</button>
     </div>
 </div>
 
 <script>
-    const phrases = ["ERGA-SE.", "O DESTINO É SEU.", "LIMITES SÃO APENAS PALAVRAS.", "FOCO NO OBJETIVO.", "O MUNDO É SUA DUNGEON."];
-    const tips = ["SISTEMA: Itens no Shop podem acelerar seu progresso.", "SISTEMA: Missões perdidas reduzem seu Streak.", "SISTEMA: O Semi Diário é sua maior prova de esforço.", "SISTEMA: Beba água, Hunter."];
+    const phrases = ["ERGA-SE.", "O DESTINO É SEU.", "LIMITES SÃO ILUSÕES.", "SISTEMA ONLINE.", "FOCO NO OBJETIVO."];
+    const tips = ["SISTEMA: Use o Shop para recompensas reais.", "SISTEMA: O Semi Diário ajuda na evolução.", "SISTEMA: Sincronize PC e Celular via Exportação.", "SISTEMA: Beba água, Hunter."];
 
-    let db = JSON.parse(localStorage.getItem('solo_v11_core')) || {
+    let db = JSON.parse(localStorage.getItem('solo_v12_core')) || {
         xp: 0, lvl: 1, gold: 0, streak: 0, tasks: [], logs: [], 
         shop: [{id: 1, title: "ENERGY DRINK", cost: 100}],
         bg: "https://images.alphacoders.com/105/1053746.jpg", nick: "HUNTER"
@@ -232,7 +238,7 @@
                         <span style="color:var(--neon-blue); font-size:0.6rem">RANK_${t.difficulty}</span>
                     </div>
                     <div style="display:flex; justify-content:flex-end; margin-top:10px">
-                        ${!isDone ? `<button class="btn-sm btn" onclick="complete(${t.id})">CONCLUIR</button>` : '✔️'}
+                        ${!isDone ? `<button class="btn-sm btn" onclick="complete(${t.id})">DONE</button>` : '✔️'}
                         <button class="btn-sm btn" style="border-color:var(--danger); color:var(--danger)" onclick="abort(${t.id})">X</button>
                     </div>
                 </div>`;
@@ -242,23 +248,12 @@
 
         document.getElementById('sync-bar').style.width = (active > 0 ? (done/active*100) : 0) + "%";
         document.getElementById('sync-val').innerText = (active > 0 ? Math.round(done/active*100) : 0) + "%";
-
-        // RENDER SHOP
-        document.getElementById('shop-list').innerHTML = db.shop.map(i => `
-            <div class="card" style="border-left: 2px solid var(--neon-purple); display:flex; justify-content:space-between; align-items:center; padding:10px; background:rgba(0,0,0,0.7)">
-                <span style="font-size:0.85rem">${i.title}</span>
-                <button class="btn-sm btn" onclick="buy(${i.id})">${i.cost}G</button>
-            </div>
-        `).join('');
-
-        document.getElementById('logs-area').innerHTML = db.logs.map(l => `
-            <div class="log-entry"><small style="color:var(--neon-purple)">[${l.date}]</small><br>${l.text}</div>
-        `).join('');
-        
-        localStorage.setItem('solo_v11_core', JSON.stringify(db));
+        document.getElementById('shop-list').innerHTML = db.shop.map(i => `<div class="card" style="border-left:2px solid var(--neon-purple); display:flex; justify-content:space-between; align-items:center; padding:10px; background:rgba(0,0,0,0.7)"><span style="font-size:0.85rem">${i.title}</span><button class="btn-sm btn" onclick="buy(${i.id})">${i.cost}G</button></div>`).join('');
+        document.getElementById('logs-area').innerHTML = db.logs.map(l => `<div class="log-entry"><small style="color:var(--neon-purple)">[${l.date}]</small><br>${l.text}</div>`).join('');
+        localStorage.setItem('solo_v12_core', JSON.stringify(db));
     }
 
-    function changeNick() { playSnd('snd-click'); const n = prompt("CODENOME:", db.nick); if(n) { db.nick = n.toUpperCase(); render(); } }
+    function changeNick() { playSnd('snd-click'); const n = prompt("NOME:", db.nick); if(n) { db.nick = n.toUpperCase(); render(); } }
     function openModal(id) { playSnd('snd-click'); document.getElementById('modal-' + id).style.display = 'flex'; if(id==='quest') { const days = ['D','S','T','Q','Q','S','S']; document.getElementById('day-selector').innerHTML = days.map((d, i) => `<input type="checkbox" id="d-${i}" class="d-chk" value="${i}" hidden><label for="d-${i}" class="day-label">${d}</label>`).join(''); } }
     function closeModal(id) { document.getElementById('modal-' + id).style.display = 'none'; }
     function applyBg() { const url = document.getElementById('bg-url-input').value; if(url) { db.bg = url; render(); closeModal('bg'); } }
@@ -283,21 +278,30 @@
     }
 
     function abort(id) { if(db.gold >= 30 && confirm("ABORTAR? (-30G)")) { db.gold -= 30; db.tasks = db.tasks.filter(x => x.id !== id); playSnd('snd-warn'); render(); } }
+    function saveLog() { const txt = document.getElementById('log-input').value; if(txt) { db.logs.unshift({date: new Date().toLocaleString('pt-BR'), text: txt}); document.getElementById('log-input').value = ''; playSnd('snd-success'); render(); } }
+    function addShopItem() { const t = prompt("ITEM:"), c = parseInt(prompt("GOLD:")); if(t && c) { db.shop.push({id: Date.now(), title: t.toUpperCase(), cost: c}); render(); } }
+    function buy(id) { const i = db.shop.find(x => x.id === id); if(db.gold >= i.cost) { db.gold -= i.cost; playSnd('snd-success'); alert("COMPRADO!"); render(); } else { playSnd('snd-warn'); alert("GOLD INSUFICIENTE"); } }
 
-    function saveLog() { 
-        const txt = document.getElementById('log-input').value; 
-        if(txt) { db.logs.unshift({date: new Date().toLocaleString('pt-BR'), text: txt}); document.getElementById('log-input').value = ''; playSnd('snd-success'); render(); } 
+    // SYNC FUNCTIONS
+    function exportData() {
+        const dataStr = btoa(JSON.stringify(db)); // Converte para Base64 para facilitar cópia
+        prompt("COPIE ESTE CÓDIGO E COLE NO OUTRO DISPOSITIVO:", dataStr);
+    }
+    function importData() {
+        const dataStr = prompt("COLE O CÓDIGO DE EXPORTAÇÃO AQUI:");
+        if(dataStr) {
+            try {
+                const imported = JSON.parse(atob(dataStr));
+                if(confirm("SUBSCREVER DADOS ATUAIS PELOS IMPORTADOS?")) {
+                    db = imported;
+                    render();
+                    alert("DADOS SINCRONIZADOS!");
+                }
+            } catch(e) { alert("CÓDIGO INVÁLIDO!"); }
+        }
     }
 
-    function addShopItem() { const t = prompt("ITEM:"), c = parseInt(prompt("PREÇO:")); if(t && c) { db.shop.push({id: Date.now(), title: t.toUpperCase(), cost: c}); render(); } }
-    
-    function buy(id) {
-        const i = db.shop.find(x => x.id === id);
-        if(db.gold >= i.cost) { db.gold -= i.cost; playSnd('snd-success'); alert("ADQUIRIDO!"); render(); }
-        else { playSnd('snd-warn'); alert("GOLD INSUFICIENTE"); }
-    }
-
-    function purgeQuests() { if(confirm("REINICIAR SISTEMA?")) { db.tasks = []; db.logs = []; render(); } }
+    function purgeQuests() { if(confirm("RESETAR TUDO?")) { db.tasks = []; db.logs = []; render(); } }
 
     document.getElementById('motive-banner').innerText = phrases[Math.floor(Math.random() * phrases.length)];
     document.getElementById('daily-tip').innerText = tips[Math.floor(Math.random() * tips.length)];
