@@ -3,127 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM - MOBILE PRIME</title>
+    <title>SYSTEM - THE SANCTUM</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap');
 
         :root {
-            --bg: #0b0e14;
-            --panel: #161b26;
+            --bg: #0d0f14;
+            --panel: #1a1e29;
             --primary: #00f3ff;
-            --secondary: #bd00ff;
+            --secondary: #7000ff;
             --text: #f0f4f8;
             --success: #00ffa3;
-            --danger: #ff0055;
-            --gray: #64748b;
+            --danger: #ff4d4d;
+            --gray: #94a3b8;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
 
         body { 
             font-family: 'Outfit', sans-serif; 
-            background-color: var(--bg); 
-            color: var(--text); 
-            margin: 0; padding: 0; 
-            overflow: hidden; /* Mantém a navegação fixa */
-            height: 100vh;
+            background-color: var(--bg); color: var(--text); 
+            margin: 0; padding: 0; overflow: hidden; height: 100vh;
         }
 
-        /* CONTAINER PRINCIPAL */
-        .app-container {
-            display: flex; flex-direction: column; height: 100vh;
-            max-width: 500px; margin: 0 auto;
-            position: relative;
-        }
+        .app-container { display: flex; flex-direction: column; height: 100vh; max-width: 500px; margin: 0 auto; }
+        .main-content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 120px; }
 
-        .main-content {
-            flex: 1; overflow-y: auto; padding: 20px;
-            padding-bottom: 100px; /* Espaço para a nav-bar */
-        }
+        /* NAVEGAÇÃO SUPERIOR (TÍTULOS) */
+        .view-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; margin: 10px 0 20px 0; font-weight: 700; color: #fff; }
 
-        /* TITULOS */
-        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; margin: 10px 0 20px 0; font-weight: 700; }
-
-        /* ABA ATIVA */
-        .tab-content { display: none; animation: slideUp 0.3s ease-out; }
+        /* ABAS */
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
         .tab-content.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* NAVEGAÇÃO MOBILE ESTILIZADA */
+        /* BARRA DE NAVEGAÇÃO INFERIOR */
         .nav-bar {
-            position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 450px; height: 70px;
-            background: rgba(22, 27, 38, 0.95); backdrop-filter: blur(10px);
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px; height: 75px;
+            background: rgba(26, 30, 41, 0.98); backdrop-filter: blur(15px);
             display: flex; justify-content: space-around; align-items: center;
-            border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 1000;
+            border-radius: 25px; border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6); z-index: 1000;
         }
 
         .nav-item {
             background: none; border: none; color: var(--gray);
             display: flex; flex-direction: column; align-items: center;
-            cursor: pointer; transition: 0.3s; flex: 1;
+            cursor: pointer; transition: 0.2s; flex: 1;
         }
 
         .nav-item.active { color: var(--primary); }
-        .nav-item span { font-size: 22px; }
+        .nav-item span { font-size: 24px; }
         .nav-item label { font-size: 10px; font-weight: 700; text-transform: uppercase; margin-top: 4px; }
 
-        /* STATUS CIRCLE (PIE CHART) */
-        .progress-box {
-            position: relative; width: 200px; height: 200px; margin: 20px auto;
-            display: flex; justify-content: center; align-items: center;
-        }
-
+        /* STATUS CIRCLE */
+        .progress-center { position: relative; width: 200px; height: 200px; margin: 20px auto; display: flex; justify-content: center; align-items: center; }
         .pie-chart {
             width: 100%; height: 100%; border-radius: 50%;
-            background: conic-gradient(var(--primary) 0deg, #232a3b 0deg);
-            transition: background 0.5s ease;
+            background: conic-gradient(var(--primary) 0deg, #252b3d 0deg);
+            transition: 0.5s cubic-bezier(0.17, 0.67, 0.83, 0.67);
         }
-
         .pie-inner {
             position: absolute; width: 170px; height: 170px;
             background: var(--bg); border-radius: 50%;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
 
-        .lvl-display { font-size: 3.5rem; font-weight: 700; line-height: 1; font-family: 'Space Grotesk', sans-serif; }
-        .rank-label { font-size: 0.7rem; color: var(--primary); letter-spacing: 2px; font-weight: 700; }
-
-        /* CARDS */
-        .card {
-            background: var(--panel); padding: 18px; border-radius: 18px;
-            margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.03);
-        }
-
-        /* BOTOES GIGANTES (MOBILE-FIRST) */
-        .btn-action {
-            width: 100%; height: 60px; border-radius: 15px; border: none;
+        /* CARDS E BOTÕES */
+        .card { background: var(--panel); padding: 22px; border-radius: 24px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.03); }
+        
+        .btn-main {
+            width: 100%; min-height: 65px; border-radius: 20px; border: none;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            box-shadow: 0 4px 15px rgba(0, 243, 255, 0.2); transition: 0.2s;
+            color: #fff; font-size: 1.1rem; font-weight: 700; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 243, 255, 0.15); transition: 0.2s;
+            font-family: 'Space Grotesk', sans-serif;
         }
+        .btn-main:active { transform: scale(0.96); opacity: 0.9; }
 
-        .btn-action:active { transform: scale(0.97); opacity: 0.9; }
-
-        /* INPUTS */
         input, textarea {
-            width: 100%; padding: 16px; background: #1f2633; border: 1px solid #2d364a;
-            color: #fff; border-radius: 14px; font-size: 1rem; margin-bottom: 12px; font-family: inherit;
+            width: 100%; padding: 18px; background: #232936; border: 2px solid #2d364a;
+            color: #fff; border-radius: 18px; font-size: 1.1rem; margin-bottom: 15px; font-family: inherit;
         }
 
-        input:focus { border-color: var(--primary); }
+        /* ESTILO APEX (A MISSÃO) */
+        .apex-label { font-size: 0.75rem; color: var(--primary); letter-spacing: 4px; font-weight: 700; text-align: center; display: block; margin-bottom: 10px; }
+        .apex-text { font-size: 1.8rem; font-weight: 700; text-align: center; margin: 15px 0 30px 0; color: #fff; line-height: 1.2; }
 
-        .quest-item {
-            background: #1f2633; padding: 15px; border-radius: 15px;
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
-            border-left: 4px solid var(--primary);
-        }
-
-        .btn-check {
-            background: var(--success); color: #0b0e14; border: none;
-            padding: 10px 15px; border-radius: 10px; font-weight: 700;
+        .quest-row {
+            background: #232936; padding: 18px; border-radius: 20px;
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
         }
     </style>
 </head>
@@ -133,68 +103,74 @@
     <div class="main-content">
         
         <div id="tab-status" class="tab-content active">
-            <h1>Evolução</h1>
-            <div class="progress-box">
+            <h1 class="view-title">Sincronia</h1>
+            <div class="progress-center">
                 <div class="pie-chart" id="pie-chart"></div>
                 <div class="pie-inner">
-                    <span class="rank-label" id="rank-name">RECRUTA</span>
-                    <span class="lvl-display" id="lvl-txt">1</span>
-                    <span style="font-size: 0.8rem; color: var(--gray);" id="xp-txt">0/200 XP</span>
+                    <span style="font-size:0.7rem; color:var(--primary); font-weight:700" id="rank-txt">RECRUTA</span>
+                    <span style="font-size:4rem; font-weight:700; line-height:1" id="lvl-txt">1</span>
+                    <span style="font-size:0.9rem; color:var(--gray)" id="xp-txt">0/200 XP</span>
                 </div>
             </div>
-
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:20px;">
                 <div class="card" style="text-align:center">
-                    <div style="color:var(--primary); font-size:1.5rem; font-weight:700" id="stat-xp">0</div>
+                    <div style="color:var(--primary); font-size:1.6rem; font-weight:700" id="stat-xp">0</div>
                     <div style="font-size:0.7rem; color:var(--gray)">XP TOTAL</div>
                 </div>
                 <div class="card" style="text-align:center">
-                    <div style="color:var(--success); font-size:1.5rem; font-weight:700" id="stat-streak">0</div>
+                    <div style="color:var(--success); font-size:1.6rem; font-weight:700" id="stat-streak">0</div>
                     <div style="font-size:0.7rem; color:var(--gray)">DIAS ATIVOS</div>
                 </div>
             </div>
         </div>
 
         <div id="tab-apex" class="tab-content">
-            <h1>Objetivo Principal</h1>
-            <div class="card" style="border: 2px solid var(--primary); background: linear-gradient(180deg, rgba(0,243,255,0.1), transparent);">
-                <h3 style="margin-top:0; color:var(--primary); font-size:0.8rem; letter-spacing:1px">BOSS DO DIA</h3>
-                <p id="main-task-text" style="font-size: 1.3rem; font-weight:700; margin: 15px 0;">Defina o objetivo no menu Sistema!</p>
-                <div id="apex-action">
-                    <button class="btn-action" onclick="completeMain()">CONCLUIR MISSÃO</button>
-                </div>
+            <h1 class="view-title">Objetivo Apex</h1>
+            
+            <div id="apex-setup" class="card">
+                <span class="apex-label">NOVA DIRETRIZ</span>
+                <p style="text-align:center; color:var(--gray); font-size:0.9rem; margin-bottom:20px">Defina a sua maior prioridade para hoje.</p>
+                <input type="text" id="apex-input" placeholder="Ex: Finalizar projeto X">
+                <button class="btn-main" onclick="setApex()">ESTABELECER FOCO</button>
+            </div>
+
+            <div id="apex-active" class="card" style="display:none; border-color: var(--primary);">
+                <span class="apex-label">MISSÃO EM CURSO</span>
+                <div class="apex-text" id="apex-display">---</div>
+                <button class="btn-main" onclick="completeApex()">CONCLUIR (+100 XP)</button>
+                <button style="background:none; border:none; color:var(--gray); width:100%; margin-top:20px; font-size:0.8rem" onclick="cancelApex()">REDEFINIR OBJETIVO</button>
+            </div>
+
+            <div id="apex-done" class="card" style="display:none; text-align:center; border-color: var(--success);">
+                <div style="font-size:3.5rem; margin-bottom:10px">⭐</div>
+                <span class="apex-label" style="color:var(--success)">DOMÍNIO ALCANÇADO</span>
+                <p style="color:var(--gray); margin-bottom:0">Você venceu o desafio principal de hoje.</p>
             </div>
         </div>
 
         <div id="tab-side" class="tab-content">
-            <h1>Quests Secundárias</h1>
-            <input type="text" id="side-input" placeholder="Nova tarefa...">
-            <button class="btn-action" style="background:var(--panel); border:1px solid var(--primary); color:var(--primary)" onclick="addSide()">+ ADICIONAR TAREFA</button>
-            <div id="side-list" style="margin-top:20px"></div>
+            <h1 class="view-title">Side Quests</h1>
+            <input type="text" id="side-input" placeholder="Nova tarefa rápida...">
+            <button class="btn-main" style="min-height:50px; background:var(--panel); border:1px solid var(--primary); color:var(--primary)" onclick="addSide()">ADICIONAR</button>
+            <div id="side-list" style="margin-top:25px"></div>
         </div>
 
         <div id="tab-log" class="tab-content">
-            <h1>Relatório</h1>
-            <textarea id="log-input" rows="3" placeholder="O que aprendeu hoje?"></textarea>
-            <button class="btn-action" onclick="addLog()">GRAVAR NO DIÁRIO</button>
-            <div id="log-list" style="margin-top:20px"></div>
+            <h1 class="view-title">Relatório</h1>
+            <textarea id="log-input" rows="4" placeholder="O que você aprendeu hoje?"></textarea>
+            <button class="btn-main" onclick="addLog()">ARQUIVAR NO DIÁRIO</button>
+            <div id="log-list" style="margin-top:25px"></div>
         </div>
 
         <div id="tab-sys" class="tab-content">
-            <h1>Sistema</h1>
+            <h1 class="view-title">Sistema</h1>
             <div class="card">
-                <label style="font-size:0.8rem; color:var(--gray)">ALTERAR OBJETIVO DO DIA</label>
-                <input type="text" id="new-main-input" style="margin-top:10px">
-                <button class="btn-action" style="height:45px; font-size:0.8rem" onclick="updateMain()">ATUALIZAR BOSS</button>
+                <h3 style="margin-top:0">Exportar/Importar</h3>
+                <button class="btn-main" style="background:var(--success); color:#000; margin-bottom:12px; min-height:50px" onclick="exportData()">📤 EXPORTAR</button>
+                <button class="btn-main" style="background:var(--gray); min-height:50px" onclick="document.getElementById('f-in').click()">📥 IMPORTAR</button>
+                <input type="file" id="f-in" style="display:none" onchange="importData(event)">
             </div>
-
-            <div class="card">
-                <h3>Dados</h3>
-                <button class="btn-action" style="background:var(--success); color:#000; margin-bottom:10px" onclick="exportData()">EXPORTAR (.JSON)</button>
-                <button class="btn-action" style="background:var(--gray)" onclick="document.getElementById('file-in').click()">IMPORTAR</button>
-                <input type="file" id="file-in" style="display:none" onchange="importData(event)">
-            </div>
-            <button class="btn-action" style="background:none; color:var(--danger); border:1px solid var(--danger)" onclick="reset()">RESET TOTAL</button>
+            <button class="btn-main" style="background:none; color:var(--danger); border:1px solid var(--danger); min-height:50px" onclick="resetAll()">RESET TOTAL</button>
         </div>
 
     </div>
@@ -202,37 +178,32 @@
     <nav class="nav-bar">
         <button class="nav-item active" onclick="nav('tab-status', this)"><span>📊</span><label>Stats</label></button>
         <button class="nav-item" onclick="nav('tab-apex', this)"><span>⭐</span><label>Apex</label></button>
-        <button class="nav-item" onclick="nav('tab-side', this)"><span>⚔️</span><label>Quests</label></button>
+        <button class="nav-item" onclick="nav('tab-side', this)"><span>⚔️</span><label>Side</label></button>
         <button class="nav-item" onclick="nav('tab-log', this)"><span>📜</span><label>Log</label></button>
         <button class="nav-item" onclick="nav('tab-sys', this)"><span>⚙️</span><label>Sys</label></button>
     </nav>
 </div>
 
 <script>
-    // --- DATABASE ---
-    let db = JSON.parse(localStorage.getItem('solo_v17_prime')) || {
+    let db = JSON.parse(localStorage.getItem('sanctum_v19')) || {
         xp: 0, lvl: 1, streak: 0,
-        mainTask: "Beber 2L de água e treinar!",
-        mainDoneDate: "",
+        apexTask: "",
+        apexStatus: "setup", // setup, active, done
+        lastReset: "",
         sideQuests: [],
         logs: []
     };
 
-    // --- AUDIO ENGINE ---
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playSound(f, t='sine') {
-        const o = audioCtx.createOscillator();
-        const g = audioCtx.createGain();
-        o.type = t; o.frequency.value = f;
-        g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    function playBeep(f, t='sine') {
+        const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+        o.type = t; o.frequency.value = f; g.gain.setValueAtTime(0.1, audioCtx.currentTime);
         g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
-        o.connect(g); g.connect(audioCtx.destination);
-        o.start(); o.stop(audioCtx.currentTime + 0.2);
+        o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.2);
     }
 
-    // --- NAV ---
     function nav(id, btn) {
-        playSound(400);
+        playBeep(450);
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
         document.getElementById(id).classList.add('active');
@@ -240,108 +211,111 @@
         render();
     }
 
+    // --- LOGICA APEX ---
+    function setApex() {
+        const val = document.getElementById('apex-input').value;
+        if(!val) return;
+        db.apexTask = val.toUpperCase();
+        db.apexStatus = "active";
+        save(); render(); playBeep(800, 'square');
+    }
+
+    function completeApex() {
+        db.apexStatus = "done";
+        db.lastReset = new Date().toLocaleDateString();
+        db.streak++;
+        addXP(100);
+    }
+
+    function cancelApex() {
+        if(confirm("Mudar o foco de hoje?")) {
+            db.apexStatus = "setup";
+            db.apexTask = "";
+            save(); render();
+        }
+    }
+
     // --- CORE ---
     function addXP(amount) {
         db.xp += amount;
         db.lvl = Math.floor(db.xp / 200) + 1;
-        save(); render();
-        playSound(800, 'square');
+        save(); render(); playBeep(1000, 'square');
     }
 
     function render() {
+        // Status
         const xpInLvl = db.xp % 200;
         const deg = (xpInLvl / 200) * 360;
-        
-        // UI Status
         document.getElementById('lvl-txt').innerText = db.lvl;
         document.getElementById('stat-xp').innerText = db.xp;
         document.getElementById('stat-streak').innerText = db.streak;
         document.getElementById('xp-txt').innerText = `${xpInLvl}/200 XP`;
-        document.getElementById('pie-chart').style.background = `conic-gradient(var(--primary) ${deg}deg, #232a3b 0deg)`;
+        document.getElementById('pie-chart').style.background = `conic-gradient(var(--primary) ${deg}deg, #252b3d 0deg)`;
         
-        // Rank Names
-        const ranks = ["RECRUTA", "ELITE", "MESTRE", "LENDA", "SOBERANO"];
-        document.getElementById('rank-name').innerText = ranks[Math.min(Math.floor(db.lvl/5), 4)];
+        const ranks = ["RECÉM-CHEGADO", "ESCUDEIRO", "GUERREIRO", "ELITE", "LENDA", "SOBERANO"];
+        document.getElementById('rank-txt').innerText = ranks[Math.min(Math.floor(db.lvl/5), 5)];
 
-        // Main Task
+        // Apex Interface (Reset diário)
         const today = new Date().toLocaleDateString();
-        const done = db.mainDoneDate === today;
-        document.getElementById('main-task-text').innerText = done ? "✨ OBJETIVO CONCLUÍDO ✨" : db.mainTask;
-        document.getElementById('apex-action').style.display = done ? 'none' : 'block';
+        if(db.lastReset !== today && db.apexStatus === "done") {
+            db.apexStatus = "setup";
+            db.apexTask = "";
+        }
+
+        document.getElementById('apex-setup').style.display = db.apexStatus === "setup" ? "block" : "none";
+        document.getElementById('apex-active').style.display = db.apexStatus === "active" ? "block" : "none";
+        document.getElementById('apex-done').style.display = db.apexStatus === "done" ? "block" : "none";
+        document.getElementById('apex-display').innerText = db.apexTask;
 
         // Side Quests
         document.getElementById('side-list').innerHTML = db.sideQuests.map(q => `
-            <div class="quest-item">
+            <div class="quest-row">
                 <span style="font-weight:700">${q.text}</span>
-                <button class="btn-check" onclick="completeSide(${q.id})">OK</button>
+                <button style="background:var(--success); border:none; padding:12px 18px; border-radius:15px; font-weight:700" onclick="completeSide(${q.id})">OK</button>
             </div>
         `).join('');
 
         // Logs
         document.getElementById('log-list').innerHTML = db.logs.map(l => `
             <div class="card" style="font-size:0.9rem">
-                <div style="color:var(--primary); font-weight:700; margin-bottom:5px">${l.date}</div>
+                <div style="color:var(--primary); font-weight:700; margin-bottom:8px">${l.date}</div>
                 ${l.text}
             </div>
         `).join('');
     }
 
-    // --- ACTIONS ---
-    function updateMain() {
-        const val = document.getElementById('new-main-input').value;
-        if(val) { db.mainTask = val.toUpperCase(); db.mainDoneDate = ""; save(); render(); alert("Boss atualizado!"); }
-    }
-
-    function completeMain() {
-        db.mainDoneDate = new Date().toLocaleDateString();
-        db.streak++;
-        addXP(100);
-    }
-
+    // --- AUX ---
     function addSide() {
         const input = document.getElementById('side-input');
         if(!input.value) return;
         db.sideQuests.push({id: Date.now(), text: input.value.toUpperCase()});
-        input.value = ""; save(); render();
+        input.value = ""; save(); render(); playBeep(600);
     }
-
     function completeSide(id) {
         db.sideQuests = db.sideQuests.filter(q => q.id !== id);
         addXP(20);
     }
-
     function addLog() {
         const input = document.getElementById('log-input');
         if(!input.value) return;
         db.logs.unshift({date: new Date().toLocaleString(), text: input.value});
-        input.value = ""; save(); render();
+        input.value = ""; save(); render(); playBeep(500);
     }
-
-    // --- SYSTEM ---
-    function save() { localStorage.setItem('solo_v17_prime', JSON.stringify(db)); }
-    
+    function save() { localStorage.setItem('sanctum_v19', JSON.stringify(db)); }
     function exportData() {
         const blob = new Blob([JSON.stringify(db)], {type: 'application/json'});
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `hero_data.json`;
-        a.click();
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+        a.download = `hero_progress.json`; a.click();
     }
-
     function importData(e) {
         const file = e.target.files[0];
         const reader = new FileReader();
-        reader.onload = (event) => {
-            db = JSON.parse(event.target.result);
-            save(); render(); alert("Sincronizado!");
-        };
+        reader.onload = (event) => { db = JSON.parse(event.target.result); save(); render(); alert("Sincronizado!"); };
         reader.readAsText(file);
     }
-
-    function reset() { if(confirm("Deseja apagar tudo?")) { localStorage.clear(); location.reload(); } }
+    function resetAll() { if(confirm("Apagar todos os dados?")) { localStorage.clear(); location.reload(); } }
 
     render();
 </script>
-
 </body>
 </html>
