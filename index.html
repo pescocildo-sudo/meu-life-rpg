@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM - TITAN TOUCH</title>
+    <title>SYSTEM - AVATAR PROTOCOL</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap');
 
@@ -18,7 +18,6 @@
             --gray: #94a3b8;
         }
 
-        /* Bloqueia o zoom acidental no mobile */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; touch-action: manipulation; }
 
         body { 
@@ -27,15 +26,22 @@
             color: var(--text); margin: 0; padding: 0; overflow: hidden; height: 100vh;
         }
 
-        .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: -1; }
+        .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); z-index: -1; }
 
         .app-container { display: flex; flex-direction: column; height: 100vh; max-width: 500px; margin: 0 auto; position: relative; }
         .main-content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 130px; }
 
-        /* HEADER */
-        .header-greeting { margin-top: 15px; margin-bottom: 20px; padding: 0 5px; }
-        #greeting-text { font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 700; color: #fff; margin: 0; }
-        #quote-text { font-size: 0.95rem; color: var(--primary); font-style: italic; opacity: 0.9; margin-top: 8px; line-height: 1.4; }
+        /* HEADER COM AVATAR */
+        .header-profile { display: flex; align-items: center; gap: 15px; margin-top: 15px; margin-bottom: 25px; }
+        .avatar-frame { 
+            width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--primary); 
+            overflow: hidden; background: #1a1e29; flex-shrink: 0;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
+        .avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
+        
+        #greeting-text { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: #fff; margin: 0; }
+        #quote-text { font-size: 0.85rem; color: var(--primary); font-style: italic; opacity: 0.8; margin-top: 4px; }
 
         .view-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; margin: 25px 0 15px 0; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--gray); border-left: 4px solid var(--primary); padding-left: 10px; }
         
@@ -43,21 +49,19 @@
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* NAV BAR (MOBILE OPTIMIZED) */
+        /* NAV BAR */
         .nav-bar {
             position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
             width: 94%; max-width: 450px; height: 85px;
             background: rgba(22, 27, 38, 0.98); backdrop-filter: blur(20px);
             display: flex; justify-content: space-around; align-items: center;
             border-radius: 30px; border: 1px solid rgba(255,255,255,0.12); z-index: 1000;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
         .nav-item { background: none; border: none; color: var(--gray); display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%; justify-content: center; }
         .nav-item.active { color: var(--primary); }
-        .nav-item span { font-size: 30px; transition: 0.2s; }
-        .nav-item.active span { transform: scale(1.2); text-shadow: 0 0 15px var(--primary); }
+        .nav-item span { font-size: 30px; }
 
-        /* PROGRESS */
+        /* PROGRESS BOX */
         .progress-center { position: relative; width: 180px; height: 180px; margin: 10px auto; display: flex; justify-content: center; align-items: center; }
         .pie-chart { width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(var(--primary) 0deg, rgba(255,255,255,0.1) 0deg); transition: 0.8s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
         .pie-inner { position: absolute; width: 150px; height: 150px; background: var(--panel); border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
@@ -65,20 +69,17 @@
         .bar-container { width: 100%; height: 18px; background: rgba(255,255,255,0.08); border-radius: 9px; margin: 20px 0; overflow: hidden; }
         .bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: 1s ease; box-shadow: 0 0 10px var(--primary); }
 
-        /* CARDS & TITAN BUTTONS */
+        /* TITAN UI */
         .card { background: var(--panel); backdrop-filter: blur(15px); padding: 25px; border-radius: 28px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); }
-        
         .btn-main { 
             width: 100%; height: 70px; border-radius: 22px; border: none; 
             background: linear-gradient(135deg, var(--primary), var(--secondary)); 
             color: #fff; font-size: 1.2rem; font-weight: 700; font-family: 'Space Grotesk', sans-serif;
-            cursor: pointer; box-shadow: 0 10px 25px rgba(0, 243, 255, 0.2); margin-top: 10px;
+            cursor: pointer; margin-top: 10px;
         }
-        .btn-main:active { transform: scale(0.95); opacity: 0.9; }
-
         input, textarea { 
             width: 100%; padding: 20px; background: rgba(255,255,255,0.07); border: 2px solid rgba(255,255,255,0.1); 
-            color: #fff; border-radius: 20px; margin-bottom: 15px; font-size: 1.1rem; font-family: inherit; 
+            color: #fff; border-radius: 20px; margin-bottom: 15px; font-size: 1.1rem; 
         }
 
         .conquest-item { display: flex; align-items: center; gap: 12px; font-size: 1rem; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--success); }
@@ -90,14 +91,19 @@
     </style>
 </head>
 <body id="body-bg">
-<div class="bg-overlay" id="flash-overlay"></div>
+<div class="bg-overlay"></div>
 
 <div class="app-container">
     <div class="main-content">
         
-        <header class="header-greeting">
-            <h1 id="greeting-text">Olá, Arquiteto</h1>
-            <div id="quote-text">Sincronizando sistemas...</div>
+        <header class="header-profile">
+            <div class="avatar-frame">
+                <img id="display-avatar" src="https://via.placeholder.com/150/1a1e29/00f3ff?text=USER" alt="Avatar">
+            </div>
+            <div>
+                <h1 id="greeting-text">Iniciando...</h1>
+                <div id="quote-text">Sincronizando sistemas...</div>
+            </div>
         </header>
 
         <div id="tab-status" class="tab-content active">
@@ -106,18 +112,13 @@
                 <div class="pie-chart" id="pie-chart"></div>
                 <div class="pie-inner">
                     <span style="font-size:3.5rem; font-weight:700; line-height:1" id="lvl-txt">1</span>
-                    <span style="font-size:0.75rem; color:var(--primary); font-weight:700; letter-spacing:2px" id="rank-txt">RECRUTA</span>
+                    <span style="font-size:0.75rem; color:var(--primary); font-weight:700; letter-spacing:2px">NÍVEL</span>
                 </div>
             </div>
-
-            <div class="bar-container">
-                <div class="bar-fill" id="lvl-bar"></div>
-            </div>
+            <div class="bar-container"><div class="bar-fill" id="lvl-bar"></div></div>
             <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--gray); margin-top:-10px; font-weight:700">
-                <span>PROGRESSO</span>
-                <span id="xp-detail">0 / 200 XP</span>
+                <span>PROGRESSO</span><span id="xp-detail">0 / 200 XP</span>
             </div>
-
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:25px">
                 <div class="card" style="text-align:center; padding:15px">
                     <div style="color:var(--primary); font-size:1.6rem; font-weight:700" id="stat-xp">0</div>
@@ -128,11 +129,8 @@
                     <div style="font-size:0.7rem; color:var(--gray); text-transform:uppercase">Streak</div>
                 </div>
             </div>
-
             <div class="card">
-                <h3 style="margin:0 0 15px 0; font-size:1rem; color:var(--primary); display:flex; align-items:center; gap:10px">
-                    <span>🏆</span> CONQUISTAS DE HOJE
-                </h3>
+                <h3 style="margin:0 0 15px 0; font-size:1rem; color:var(--primary)">🏆 CONQUISTAS DE HOJE</h3>
                 <div id="conquest-list"></div>
             </div>
         </div>
@@ -140,49 +138,45 @@
         <div id="tab-apex" class="tab-content">
             <h2 class="view-title">Alvo Principal</h2>
             <div id="apex-setup" class="card">
-                <input type="text" id="apex-input" placeholder="O que vamos dominar?">
-                <button class="btn-main" onclick="setApex()">ESTABELECER ALVO</button>
+                <input type="text" id="apex-input" placeholder="Seu foco hoje?">
+                <button class="btn-main" onclick="setApex()">DEFINIR</button>
             </div>
-            <div id="apex-active" class="card" style="display:none; text-align:center; border: 2px solid var(--primary);">
-                <div style="font-size:0.8rem; color:var(--primary); letter-spacing:4px; font-weight:700">MISSÃO ATIVA</div>
-                <div style="font-size:1.8rem; font-weight:700; margin:30px 0; line-height:1.2" id="apex-display">---</div>
-                <button class="btn-main" onclick="completeApex()">CONCLUIR MISSÃO</button>
-                <button style="background:none; border:none; color:var(--gray); margin-top:25px; font-size:0.9rem; text-decoration:underline" onclick="cancelApex()">REDEFINIR FOCO</button>
+            <div id="apex-active" class="card" style="display:none; text-align:center">
+                <div id="apex-display" style="font-size:1.8rem; font-weight:700; margin:30px 0">---</div>
+                <button class="btn-main" onclick="completeApex()">CONCLUIR</button>
             </div>
-            <div id="apex-done" class="card" style="display:none; text-align:center; border: 2px solid var(--success);">
-                <div style="font-size:4rem; margin-bottom:15px">⚡</div>
-                <h2 style="color:var(--success); margin:0">DOMINADO</h2>
-                <p style="color:var(--gray); font-size:1rem">Aguardando novo ciclo...</p>
-            </div>
+            <div id="apex-done" class="card" style="display:none; text-align:center"><h2>MISSÃO CUMPRIDA</h2></div>
         </div>
 
         <div id="tab-side" class="tab-content">
-            <h2 class="view-title">Missões de Apoio</h2>
-            <input type="text" id="side-input" placeholder="Tarefa rápida...">
-            <button class="btn-main" onclick="addSide()">ADICIONAR SIDE QUEST</button>
-            <div id="side-list" style="margin-top:25px"></div>
+            <h2 class="view-title">Side Quests</h2>
+            <input type="text" id="side-input" placeholder="Nova tarefa...">
+            <button class="btn-main" onclick="addSide()">ADICIONAR</button>
+            <div id="side-list" style="margin-top:20px"></div>
         </div>
 
         <div id="tab-log" class="tab-content">
-            <h2 class="view-title">Arquivos de Log</h2>
-            <textarea id="log-input" rows="4" placeholder="Relatório de progresso..."></textarea>
-            <button class="btn-main" onclick="addLog()">SALVAR ENTRADA</button>
-            <div id="log-list" style="margin-top:25px"></div>
+            <h2 class="view-title">Relatórios</h2>
+            <textarea id="log-input" rows="4" placeholder="Log do dia..."></textarea>
+            <button class="btn-main" onclick="addLog()">SALVAR</button>
+            <div id="log-list" style="margin-top:20px"></div>
         </div>
 
         <div id="tab-sys" class="tab-content">
-            <h2 class="view-title">Configurações</h2>
+            <h2 class="view-title">Sistema</h2>
             <div class="card">
-                <h3>Estética do HQ</h3>
+                <h3>Perfil</h3>
+                <input type="text" id="player-name-input" placeholder="Seu nome">
+                <input type="text" id="player-img-input" placeholder="URL da foto de perfil">
+                <button class="btn-main" onclick="updateProfile()">SALVAR PERFIL</button>
+            </div>
+            <div class="card">
+                <h3>Estética HQ</h3>
                 <input type="text" id="custom-bg" placeholder="URL da imagem de fundo">
-                <button class="btn-main" style="height:60px; font-size:1rem" onclick="setTheme(document.getElementById('custom-bg').value)">APLICAR TEMA</button>
+                <button class="btn-main" onclick="setTheme(document.getElementById('custom-bg').value)">APLICAR TEMA</button>
             </div>
-            <div class="card">
-                <button class="btn-main" style="background:var(--success); color:#000; margin-bottom:15px; height:60px" onclick="exportData()">EXPORTAR (.JSON)</button>
-                <button class="btn-main" style="background:var(--gray); height:60px" onclick="document.getElementById('f-in').click()">IMPORTAR (.JSON)</button>
-                <input type="file" id="f-in" style="display:none" onchange="importData(event)">
-            </div>
-            <button class="btn-main" style="background:none; border:2px solid var(--danger); color:var(--danger); height:60px" onclick="resetAll()">RESET TOTAL</button>
+            <button class="btn-main" style="background:var(--success); color:#000; margin-bottom:15px" onclick="exportData()">EXPORTAR</button>
+            <button class="btn-main" style="background:none; border:2px solid var(--danger); color:var(--danger)" onclick="resetAll()">RESET TOTAL</button>
         </div>
 
     </div>
@@ -197,21 +191,13 @@
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('titan_touch_v23')) || {
-        xp: 0, lvl: 1, streak: 0,
+    let db = JSON.parse(localStorage.getItem('avatar_v25')) || {
+        xp: 0, lvl: 1, streak: 0, playerName: "Jogador", playerImg: "",
         apexTask: "", apexStatus: "setup", lastReset: "",
-        sideQuests: [], logs: [], theme: "none",
-        dailyConquests: []
+        sideQuests: [], logs: [], theme: "none", dailyConquests: []
     };
 
-    const quotes = [
-        "A disciplina é a liberdade.",
-        "Pequenos passos, grandes distâncias.",
-        "O foco é o superpoder do século 21.",
-        "Não pare até se orgulhar.",
-        "A maestria exige paciência."
-    ];
-
+    const quotes = ["A disciplina é a liberdade.", "Foco gera resultados.", "Vença o dia de hoje."];
     const audio = new (window.AudioContext || window.webkitAudioContext)();
     function sound(f, t='sine', d=0.2, v=0.1) {
         const o = audio.createOscillator(); const g = audio.createGain();
@@ -222,12 +208,18 @@
 
     function updateHeader() {
         const hour = new Date().getHours();
-        let g = "Boa madrugada";
-        if(hour >= 5 && hour < 12) g = "Bom dia";
-        else if(hour >= 12 && hour < 18) g = "Boa tarde";
-        else if(hour >= 18) g = "Boa noite";
-        document.getElementById('greeting-text').innerText = `${g}, Arquiteto.`;
+        let g = hour < 12 ? "Bom dia" : hour < 18 ? "Boa tarde" : "Boa noite";
+        document.getElementById('greeting-text').innerText = `${g}, ${db.playerName}.`;
         document.getElementById('quote-text').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+        if(db.playerImg) document.getElementById('display-avatar').src = db.playerImg;
+    }
+
+    function updateProfile() {
+        const name = document.getElementById('player-name-input').value;
+        const img = document.getElementById('player-img-input').value;
+        if(name) db.playerName = name;
+        if(img) db.playerImg = img;
+        save(); updateHeader(); sound(800); alert("Perfil atualizado!");
     }
 
     function nav(id, btn) {
@@ -236,49 +228,16 @@
         document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         btn.classList.add('active');
-        updateHeader();
-        render();
+        updateHeader(); render();
     }
 
-    function addXP(amount) {
-        db.xp += amount; db.lvl = Math.floor(db.xp / 200) + 1;
-        save(); render(); sound(1000, 'sine', 0.3);
-    }
-
-    function setApex() {
-        const v = document.getElementById('apex-input').value;
-        if(!v) return;
-        db.apexTask = v.toUpperCase(); db.apexStatus = "active";
-        save(); render(); sound(600);
-    }
-
-    function completeApex() {
-        const flash = document.getElementById('flash-overlay');
-        flash.classList.add('victory-flash');
-        setTimeout(() => flash.classList.remove('victory-flash'), 600);
-        db.dailyConquests.push({ text: db.apexTask, type: 'APEX', date: new Date().toLocaleDateString() });
-        db.apexStatus = "done"; db.lastReset = new Date().toLocaleDateString();
-        db.streak++; addXP(100);
-        sound(800, 'square', 0.4); sound(1100, 'square', 0.4);
-    }
-
-    function completeSide(id) {
-        const q = db.sideQuests.find(x => x.id === id);
-        db.dailyConquests.push({ text: q.text, type: 'SIDE', date: new Date().toLocaleDateString() });
-        db.sideQuests = db.sideQuests.filter(x => x.id !== id);
-        addXP(20);
-    }
-
+    function addXP(amount) { db.xp += amount; db.lvl = Math.floor(db.xp / 200) + 1; save(); render(); sound(1000); }
+    function setApex() { db.apexTask = document.getElementById('apex-input').value.toUpperCase(); db.apexStatus = "active"; save(); render(); }
+    function completeApex() { db.dailyConquests.push({ text: db.apexTask, type: 'APEX', date: new Date().toLocaleDateString() }); db.apexStatus = "done"; db.lastReset = new Date().toLocaleDateString(); db.streak++; addXP(100); }
+    function completeSide(id) { const q = db.sideQuests.find(x => x.id === id); db.dailyConquests.push({ text: q.text, type: 'SIDE', date: new Date().toLocaleDateString() }); db.sideQuests = db.sideQuests.filter(x => x.id !== id); addXP(20); }
+    
     function render() {
-        const today = new Date().toLocaleDateString();
-        if(db.lastReset !== today) {
-            db.dailyConquests = db.dailyConquests.filter(c => c.date === today);
-            if(db.apexStatus === "done") { db.apexStatus = "setup"; db.apexTask = ""; }
-        }
-
-        const xpInLvl = db.xp % 200;
-        const perc = (xpInLvl / 200) * 100;
-        
+        const xpInLvl = db.xp % 200; const perc = (xpInLvl / 200) * 100;
         document.getElementById('lvl-txt').innerText = db.lvl;
         document.getElementById('stat-xp').innerText = db.xp;
         document.getElementById('stat-streak').innerText = db.streak;
@@ -286,37 +245,24 @@
         document.getElementById('lvl-bar').style.width = `${perc}%`;
         document.getElementById('pie-chart').style.background = `conic-gradient(var(--primary) ${perc * 3.6}deg, rgba(255,255,255,0.1) 0deg)`;
         
-        const conquestDiv = document.getElementById('conquest-list');
-        conquestDiv.innerHTML = db.dailyConquests.length > 0 ? 
-            db.dailyConquests.map(c => `<div class="conquest-item"><div class="conquest-badge">${c.type}</div><span>${c.text}</span></div>`).join('') :
-            `<p style="font-size:0.9rem; color:var(--gray); text-align:center; padding:10px">Nenhuma conquista hoje.</p>`;
-
+        document.getElementById('conquest-list').innerHTML = db.dailyConquests.map(c => `<div class="conquest-item"><div class="conquest-badge">${c.type}</div><span>${c.text}</span></div>`).join('');
         document.getElementById('apex-setup').style.display = db.apexStatus === "setup" ? "block" : "none";
         document.getElementById('apex-active').style.display = db.apexStatus === "active" ? "block" : "none";
         document.getElementById('apex-done').style.display = db.apexStatus === "done" ? "block" : "none";
         document.getElementById('apex-display').innerText = db.apexTask;
-
-        document.getElementById('side-list').innerHTML = db.sideQuests.map(q => `
-            <div class="quest-row">
-                <span style="font-weight:700; font-size:1rem; flex:1; padding-right:10px">${q.text}</span>
-                <button class="btn-small" onclick="completeSide(${q.id})">OK</button>
-            </div>`).join('');
-
-        document.getElementById('log-list').innerHTML = db.logs.map(l => `<div class="card" style="font-size:0.9rem"><div style="color:var(--primary); font-weight:700; margin-bottom:10px">${l.date}</div>${l.text}</div>`).join('');
+        document.getElementById('side-list').innerHTML = db.sideQuests.map(q => `<div class="quest-row"><span>${q.text}</span><button class="btn-small" onclick="completeSide(${q.id})">OK</button></div>`).join('');
+        document.getElementById('log-list').innerHTML = db.logs.map(l => `<div class="card">${l.date}<br>${l.text}</div>`).join('');
         if(db.theme !== 'none') document.body.style.backgroundImage = `url('${db.theme}')`;
     }
 
-    function addSide() { const i = document.getElementById('side-input'); if(!i.value) return; db.sideQuests.push({id: Date.now(), text: i.value.toUpperCase()}); i.value = ""; save(); render(); sound(600); }
-    function addLog() { const i = document.getElementById('log-input'); if(!i.value) return; db.logs.unshift({date: new Date().toLocaleString(), text: i.value}); i.value = ""; save(); render(); }
-    function save() { localStorage.setItem('titan_touch_v23', JSON.stringify(db)); }
-    function exportData() { const b = new Blob([JSON.stringify(db)], {type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `hero_progress.json`; a.click(); }
-    function importData(e) { const f = e.target.files[0]; const r = new FileReader(); r.onload = (ev) => { db = JSON.parse(ev.target.result); save(); render(); alert("Sincronizado!"); }; r.readAsText(f); }
-    function resetAll() { if(confirm("Apagar tudo?")) { localStorage.clear(); location.reload(); } }
-    function cancelApex() { if(confirm("Mudar foco?")) { db.apexStatus = "setup"; db.apexTask = ""; save(); render(); } }
+    function addSide() { const i = document.getElementById('side-input'); db.sideQuests.push({id: Date.now(), text: i.value.toUpperCase()}); i.value = ""; save(); render(); }
+    function addLog() { const i = document.getElementById('log-input'); db.logs.unshift({date: new Date().toLocaleString(), text: i.value}); i.value = ""; save(); render(); }
+    function save() { localStorage.setItem('avatar_v25', JSON.stringify(db)); }
+    function exportData() { const b = new Blob([JSON.stringify(db)], {type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `progress.json`; a.click(); }
+    function resetAll() { if(confirm("Resetar?")) { localStorage.clear(); location.reload(); } }
     function setTheme(u) { db.theme = u; save(); render(); }
 
-    updateHeader();
-    render();
+    updateHeader(); render();
 </script>
 </body>
 </html>
