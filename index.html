@@ -3,187 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM - AVATAR PROTOCOL</title>
+    <title>SYSTEM - ARCHIVIST PROTOCOL</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap');
-
-        :root {
-            --bg: #0d0f14;
-            --panel: rgba(26, 30, 41, 0.92);
-            --primary: #00f3ff;
-            --secondary: #7000ff;
-            --text: #f0f4f8;
-            --success: #00ffa3;
-            --danger: #ff4d4d;
-            --gray: #94a3b8;
-        }
-
+        :root { --bg: #0d0f14; --panel: rgba(26, 30, 41, 0.95); --primary: #00f3ff; --secondary: #7000ff; --text: #f0f4f8; --success: #00ffa3; --danger: #ff4d4d; --gray: #94a3b8; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; touch-action: manipulation; }
-
-        body { 
-            font-family: 'Outfit', sans-serif; 
-            background-color: var(--bg); background-size: cover; background-position: center; background-attachment: fixed;
-            color: var(--text); margin: 0; padding: 0; overflow: hidden; height: 100vh;
-        }
-
-        .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); z-index: -1; }
-
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg); background-size: cover; background-position: center; background-attachment: fixed; color: var(--text); margin: 0; padding: 0; overflow: hidden; height: 100vh; }
+        .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: -1; }
         .app-container { display: flex; flex-direction: column; height: 100vh; max-width: 500px; margin: 0 auto; position: relative; }
         .main-content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 130px; }
-
-        /* HEADER COM AVATAR */
-        .header-profile { display: flex; align-items: center; gap: 15px; margin-top: 15px; margin-bottom: 25px; }
-        .avatar-frame { 
-            width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--primary); 
-            overflow: hidden; background: #1a1e29; flex-shrink: 0;
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
-        }
-        .avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
         
+        /* HEADER */
+        .header-profile { display: flex; align-items: center; gap: 15px; margin-top: 15px; margin-bottom: 25px; }
+        .avatar-frame { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--primary); overflow: hidden; background: #1a1e29; flex-shrink: 0; box-shadow: 0 0 15px rgba(0, 243, 255, 0.3); }
+        .avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
         #greeting-text { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: #fff; margin: 0; }
-        #quote-text { font-size: 0.85rem; color: var(--primary); font-style: italic; opacity: 0.8; margin-top: 4px; }
-
+        
         .view-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; margin: 25px 0 15px 0; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--gray); border-left: 4px solid var(--primary); padding-left: 10px; }
         
         .tab-content { display: none; animation: fadeIn 0.3s ease; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* NAV BAR */
-        .nav-bar {
-            position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
-            width: 94%; max-width: 450px; height: 85px;
-            background: rgba(22, 27, 38, 0.98); backdrop-filter: blur(20px);
-            display: flex; justify-content: space-around; align-items: center;
-            border-radius: 30px; border: 1px solid rgba(255,255,255,0.12); z-index: 1000;
-        }
+        
+        /* NAVIGATION */
+        .nav-bar { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 94%; max-width: 450px; height: 85px; background: rgba(22, 27, 38, 0.98); backdrop-filter: blur(20px); display: flex; justify-content: space-around; align-items: center; border-radius: 30px; border: 1px solid rgba(255,255,255,0.12); z-index: 1000; }
         .nav-item { background: none; border: none; color: var(--gray); display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%; justify-content: center; }
         .nav-item.active { color: var(--primary); }
-        .nav-item span { font-size: 30px; }
+        .nav-item span { font-size: 28px; }
 
-        /* PROGRESS BOX */
-        .progress-center { position: relative; width: 180px; height: 180px; margin: 10px auto; display: flex; justify-content: center; align-items: center; }
-        .pie-chart { width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(var(--primary) 0deg, rgba(255,255,255,0.1) 0deg); transition: 0.8s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
-        .pie-inner { position: absolute; width: 150px; height: 150px; background: var(--panel); border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-
-        .bar-container { width: 100%; height: 18px; background: rgba(255,255,255,0.08); border-radius: 9px; margin: 20px 0; overflow: hidden; }
-        .bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: 1s ease; box-shadow: 0 0 10px var(--primary); }
-
-        /* TITAN UI */
+        /* CARDS & BUTTONS */
         .card { background: var(--panel); backdrop-filter: blur(15px); padding: 25px; border-radius: 28px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); }
-        .btn-main { 
-            width: 100%; height: 70px; border-radius: 22px; border: none; 
-            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
-            color: #fff; font-size: 1.2rem; font-weight: 700; font-family: 'Space Grotesk', sans-serif;
-            cursor: pointer; margin-top: 10px;
-        }
-        input, textarea { 
-            width: 100%; padding: 20px; background: rgba(255,255,255,0.07); border: 2px solid rgba(255,255,255,0.1); 
-            color: #fff; border-radius: 20px; margin-bottom: 15px; font-size: 1.1rem; 
-        }
-
-        .conquest-item { display: flex; align-items: center; gap: 12px; font-size: 1rem; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--success); }
-        .conquest-item span { text-decoration: line-through; color: var(--gray); flex: 1; }
-        .conquest-badge { background: var(--success); color: #000; font-size: 0.7rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; }
-
+        .btn-main { width: 100%; height: 70px; border-radius: 22px; border: none; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; font-size: 1.2rem; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        input, textarea { width: 100%; padding: 20px; background: rgba(255,255,255,0.07); border: 2px solid rgba(255,255,255,0.1); color: #fff; border-radius: 20px; margin-bottom: 15px; font-size: 1.1rem; font-family: inherit; }
+        
         .quest-row { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 22px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .btn-small { background: var(--success); border: none; height: 50px; padding: 0 25px; border-radius: 15px; font-weight: 700; font-size: 1rem; }
+        .btn-small { background: var(--success); border: none; height: 50px; padding: 0 25px; border-radius: 15px; font-weight: 700; }
+        
+        .log-item { border-left: 2px solid var(--primary); padding-left: 15px; margin-bottom: 20px; }
+        .log-date { font-size: 0.75rem; color: var(--primary); font-weight: 700; margin-bottom: 5px; }
+        .log-text { font-size: 1rem; line-height: 1.5; color: var(--text); }
     </style>
 </head>
 <body id="body-bg">
 <div class="bg-overlay"></div>
-
 <div class="app-container">
     <div class="main-content">
-        
         <header class="header-profile">
-            <div class="avatar-frame">
-                <img id="display-avatar" src="https://via.placeholder.com/150/1a1e29/00f3ff?text=USER" alt="Avatar">
-            </div>
-            <div>
-                <h1 id="greeting-text">Iniciando...</h1>
-                <div id="quote-text">Sincronizando sistemas...</div>
-            </div>
+            <div class="avatar-frame"><img id="display-avatar" src="https://via.placeholder.com/150/1a1e29/00f3ff?text=USER"></div>
+            <div><h1 id="greeting-text">Olá...</h1><div style="font-size: 0.8rem; color: var(--primary);" id="lvl-status">Nível 1</div></div>
         </header>
 
         <div id="tab-status" class="tab-content active">
-            <h2 class="view-title">Stats de Elite</h2>
-            <div class="progress-center">
-                <div class="pie-chart" id="pie-chart"></div>
-                <div class="pie-inner">
-                    <span style="font-size:3.5rem; font-weight:700; line-height:1" id="lvl-txt">1</span>
-                    <span style="font-size:0.75rem; color:var(--primary); font-weight:700; letter-spacing:2px">NÍVEL</span>
-                </div>
-            </div>
-            <div class="bar-container"><div class="bar-fill" id="lvl-bar"></div></div>
-            <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--gray); margin-top:-10px; font-weight:700">
-                <span>PROGRESSO</span><span id="xp-detail">0 / 200 XP</span>
-            </div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:25px">
-                <div class="card" style="text-align:center; padding:15px">
-                    <div style="color:var(--primary); font-size:1.6rem; font-weight:700" id="stat-xp">0</div>
-                    <div style="font-size:0.7rem; color:var(--gray); text-transform:uppercase">XP Total</div>
-                </div>
-                <div class="card" style="text-align:center; padding:15px">
-                    <div style="color:var(--success); font-size:1.6rem; font-weight:700" id="stat-streak">0</div>
-                    <div style="font-size:0.7rem; color:var(--gray); text-transform:uppercase">Streak</div>
-                </div>
+            <h2 class="view-title">Sua Evolução</h2>
+            <div style="text-align:center; margin-bottom:30px;">
+               <span style="font-size:5rem; font-weight:700; line-height:1" id="lvl-txt">1</span><br>
+               <span id="xp-detail" style="color:var(--primary); font-weight:700; letter-spacing:2px">0 / 200 XP</span>
             </div>
             <div class="card">
-                <h3 style="margin:0 0 15px 0; font-size:1rem; color:var(--primary)">🏆 CONQUISTAS DE HOJE</h3>
+                <h3 style="margin:0 0 15px 0; font-size:1rem;">🏆 VITÓRIAS RECENTES</h3>
                 <div id="conquest-list"></div>
             </div>
         </div>
 
-        <div id="tab-apex" class="tab-content">
-            <h2 class="view-title">Alvo Principal</h2>
-            <div id="apex-setup" class="card">
-                <input type="text" id="apex-input" placeholder="Seu foco hoje?">
-                <button class="btn-main" onclick="setApex()">DEFINIR</button>
-            </div>
-            <div id="apex-active" class="card" style="display:none; text-align:center">
-                <div id="apex-display" style="font-size:1.8rem; font-weight:700; margin:30px 0">---</div>
-                <button class="btn-main" onclick="completeApex()">CONCLUIR</button>
-            </div>
-            <div id="apex-done" class="card" style="display:none; text-align:center"><h2>MISSÃO CUMPRIDA</h2></div>
-        </div>
-
         <div id="tab-side" class="tab-content">
-            <h2 class="view-title">Side Quests</h2>
-            <input type="text" id="side-input" placeholder="Nova tarefa...">
+            <h2 class="view-title">Missões do Dia</h2>
+            <div id="side-list"></div>
+            <h2 class="view-title">Extra</h2>
+            <input type="text" id="side-input" placeholder="Nova tarefa avulsa...">
             <button class="btn-main" onclick="addSide()">ADICIONAR</button>
-            <div id="side-list" style="margin-top:20px"></div>
         </div>
 
         <div id="tab-log" class="tab-content">
             <h2 class="view-title">Relatórios</h2>
-            <textarea id="log-input" rows="4" placeholder="Log do dia..."></textarea>
-            <button class="btn-main" onclick="addLog()">SALVAR</button>
-            <div id="log-list" style="margin-top:20px"></div>
+            <textarea id="log-input" rows="4" placeholder="Escreva seu relatório de hoje..."></textarea>
+            <button class="btn-main" onclick="addLog()">ARQUIVAR RELATÓRIO</button>
+            <div id="log-list" style="margin-top:30px"></div>
         </div>
 
         <div id="tab-sys" class="tab-content">
-            <h2 class="view-title">Sistema</h2>
+            <h2 class="view-title">Rotina Diária</h2>
             <div class="card">
-                <h3>Perfil</h3>
+                <input type="text" id="routine-input" placeholder="Tarefa que se repete todo dia">
+                <button class="btn-main" style="height:55px; font-size:1rem" onclick="addRoutine()">FIXAR NA ROTINA</button>
+                <div id="routine-list" style="margin-top:20px"></div>
+            </div>
+            <h2 class="view-title">Configurações</h2>
+            <div class="card">
                 <input type="text" id="player-name-input" placeholder="Seu nome">
-                <input type="text" id="player-img-input" placeholder="URL da foto de perfil">
-                <button class="btn-main" onclick="updateProfile()">SALVAR PERFIL</button>
+                <input type="text" id="player-img-input" placeholder="URL da foto">
+                <button class="btn-main" onclick="updateProfile()">ATUALIZAR PERFIL</button>
             </div>
-            <div class="card">
-                <h3>Estética HQ</h3>
-                <input type="text" id="custom-bg" placeholder="URL da imagem de fundo">
-                <button class="btn-main" onclick="setTheme(document.getElementById('custom-bg').value)">APLICAR TEMA</button>
-            </div>
-            <button class="btn-main" style="background:var(--success); color:#000; margin-bottom:15px" onclick="exportData()">EXPORTAR</button>
+            <button class="btn-main" style="background:var(--success); color:#000" onclick="exportData()">EXPORTAR TUDO (JSON)</button>
+            <button class="btn-main" style="background:var(--gray); color:#000" onclick="document.getElementById('f-in').click()">IMPORTAR BACKUP</button>
+            <input type="file" id="f-in" style="display:none" onchange="importData(event)">
             <button class="btn-main" style="background:none; border:2px solid var(--danger); color:var(--danger)" onclick="resetAll()">RESET TOTAL</button>
         </div>
-
     </div>
 
     <nav class="nav-bar">
         <button class="nav-item active" onclick="nav('tab-status', this)"><span>📊</span></button>
-        <button class="nav-item" onclick="nav('tab-apex', this)"><span>⭐</span></button>
         <button class="nav-item" onclick="nav('tab-side', this)"><span>⚔️</span></button>
         <button class="nav-item" onclick="nav('tab-log', this)"><span>📜</span></button>
         <button class="nav-item" onclick="nav('tab-sys', this)"><span>⚙️</span></button>
@@ -191,78 +109,121 @@
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('avatar_v25')) || {
-        xp: 0, lvl: 1, streak: 0, playerName: "Jogador", playerImg: "",
-        apexTask: "", apexStatus: "setup", lastReset: "",
-        sideQuests: [], logs: [], theme: "none", dailyConquests: []
+    let db = JSON.parse(localStorage.getItem('archivist_v27')) || {
+        xp: 0, playerName: "Jogador", playerImg: "",
+        sideQuests: [], routine: [], logs: [], dailyConquests: [],
+        lastLoginDate: ""
     };
 
-    const quotes = ["A disciplina é a liberdade.", "Foco gera resultados.", "Vença o dia de hoje."];
-    const audio = new (window.AudioContext || window.webkitAudioContext)();
-    function sound(f, t='sine', d=0.2, v=0.1) {
-        const o = audio.createOscillator(); const g = audio.createGain();
-        o.type = t; o.frequency.value = f; g.gain.setValueAtTime(v, audio.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.01, audio.currentTime+d);
-        o.connect(g); g.connect(audio.destination); o.start(); o.stop(audio.currentTime+d);
+    function save() { localStorage.setItem('archivist_v27', JSON.stringify(db)); }
+
+    function checkDailyReset() {
+        const today = new Date().toLocaleDateString();
+        if (db.lastLoginDate !== today) {
+            db.dailyConquests = [];
+            db.routine.forEach(task => {
+                if(!db.sideQuests.some(q => q.text === task)) {
+                    db.sideQuests.push({ id: Date.now() + Math.random(), text: task, type: 'ROUTINE' });
+                }
+            });
+            db.lastLoginDate = today;
+            save();
+        }
     }
 
-    function updateHeader() {
-        const hour = new Date().getHours();
-        let g = hour < 12 ? "Bom dia" : hour < 18 ? "Boa tarde" : "Boa noite";
-        document.getElementById('greeting-text').innerText = `${g}, ${db.playerName}.`;
-        document.getElementById('quote-text').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+    function render() {
+        const lvl = Math.floor(db.xp / 200) + 1;
+        document.getElementById('lvl-txt').innerText = lvl;
+        document.getElementById('lvl-status').innerText = `Nível ${lvl}`;
+        document.getElementById('xp-detail').innerText = `${db.xp % 200} / 200 XP`;
         if(db.playerImg) document.getElementById('display-avatar').src = db.playerImg;
+        document.getElementById('greeting-text').innerText = `Olá, ${db.playerName}`;
+
+        document.getElementById('side-list').innerHTML = db.sideQuests.map(q => `
+            <div class="quest-row">
+                <span>${q.text} ${q.type === 'ROUTINE' ? '🔄' : '⚡'}</span>
+                <button class="btn-small" onclick="completeQuest(${q.id})">OK</button>
+            </div>`).join('');
+
+        document.getElementById('routine-list').innerHTML = db.routine.map((text, idx) => `
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px; background:rgba(255,255,255,0.05); padding:10px; border-radius:10px">
+                <span>${text}</span>
+                <button style="color:var(--danger); background:none; border:none;" onclick="removeRoutine(${idx})">Remover</button>
+            </div>`).join('');
+
+        document.getElementById('log-list').innerHTML = db.logs.map(l => `
+            <div class="log-item">
+                <div class="log-date">${l.date}</div>
+                <div class="log-text">${l.text}</div>
+            </div>`).join('');
+
+        document.getElementById('conquest-list').innerHTML = db.dailyConquests.length > 0 ? 
+            db.dailyConquests.map(c => `<div style="color:var(--success); margin-bottom:8px">✓ ${c}</div>`).join('') :
+            `<div style="color:var(--gray); font-size:0.8rem">Nenhuma vitória hoje ainda.</div>`;
     }
 
+    function addLog() {
+        const i = document.getElementById('log-input');
+        if(!i.value) return;
+        db.logs.unshift({ date: new Date().toLocaleString(), text: i.value });
+        i.value = ""; save(); render();
+    }
+
+    function addSide() {
+        const i = document.getElementById('side-input');
+        if(!i.value) return;
+        db.sideQuests.push({ id: Date.now(), text: i.value.toUpperCase(), type: 'MANUAL' });
+        i.value = ""; save(); render();
+    }
+
+    function completeQuest(id) {
+        const q = db.sideQuests.find(x => x.id === id);
+        db.dailyConquests.push(q.text);
+        db.sideQuests = db.sideQuests.filter(x => x.id !== id);
+        db.xp += 20;
+        save(); render();
+    }
+
+    function addRoutine() {
+        const i = document.getElementById('routine-input');
+        if(!i.value) return;
+        db.routine.push(i.value.toUpperCase());
+        db.sideQuests.push({ id: Date.now(), text: i.value.toUpperCase(), type: 'ROUTINE' });
+        i.value = ""; save(); render();
+    }
+
+    function removeRoutine(idx) { db.routine.splice(idx, 1); save(); render(); }
+    
     function updateProfile() {
-        const name = document.getElementById('player-name-input').value;
-        const img = document.getElementById('player-img-input').value;
-        if(name) db.playerName = name;
-        if(img) db.playerImg = img;
-        save(); updateHeader(); sound(800); alert("Perfil atualizado!");
+        db.playerName = document.getElementById('player-name-input').value || db.playerName;
+        db.playerImg = document.getElementById('player-img-input').value || db.playerImg;
+        save(); render(); alert("Perfil atualizado!");
     }
 
     function nav(id, btn) {
-        sound(450, 'triangle', 0.1, 0.05);
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         btn.classList.add('active');
-        updateHeader(); render();
     }
 
-    function addXP(amount) { db.xp += amount; db.lvl = Math.floor(db.xp / 200) + 1; save(); render(); sound(1000); }
-    function setApex() { db.apexTask = document.getElementById('apex-input').value.toUpperCase(); db.apexStatus = "active"; save(); render(); }
-    function completeApex() { db.dailyConquests.push({ text: db.apexTask, type: 'APEX', date: new Date().toLocaleDateString() }); db.apexStatus = "done"; db.lastReset = new Date().toLocaleDateString(); db.streak++; addXP(100); }
-    function completeSide(id) { const q = db.sideQuests.find(x => x.id === id); db.dailyConquests.push({ text: q.text, type: 'SIDE', date: new Date().toLocaleDateString() }); db.sideQuests = db.sideQuests.filter(x => x.id !== id); addXP(20); }
+    function exportData() {
+        const b = new Blob([JSON.stringify(db)], {type:'application/json'});
+        const a = document.createElement('a'); a.href = URL.createObjectURL(b);
+        a.download = `backup_progresso.json`; a.click();
+    }
+
+    function importData(e) {
+        const f = e.target.files[0];
+        const r = new FileReader();
+        r.onload = (ev) => { db = JSON.parse(ev.target.result); save(); render(); alert("Dados importados!"); };
+        r.readAsText(f);
+    }
+
+    function resetAll() { if(confirm("Isso apagará todos os relatórios e progresso. Continuar?")) { localStorage.clear(); location.reload(); } }
     
-    function render() {
-        const xpInLvl = db.xp % 200; const perc = (xpInLvl / 200) * 100;
-        document.getElementById('lvl-txt').innerText = db.lvl;
-        document.getElementById('stat-xp').innerText = db.xp;
-        document.getElementById('stat-streak').innerText = db.streak;
-        document.getElementById('xp-detail').innerText = `${xpInLvl} / 200 XP`;
-        document.getElementById('lvl-bar').style.width = `${perc}%`;
-        document.getElementById('pie-chart').style.background = `conic-gradient(var(--primary) ${perc * 3.6}deg, rgba(255,255,255,0.1) 0deg)`;
-        
-        document.getElementById('conquest-list').innerHTML = db.dailyConquests.map(c => `<div class="conquest-item"><div class="conquest-badge">${c.type}</div><span>${c.text}</span></div>`).join('');
-        document.getElementById('apex-setup').style.display = db.apexStatus === "setup" ? "block" : "none";
-        document.getElementById('apex-active').style.display = db.apexStatus === "active" ? "block" : "none";
-        document.getElementById('apex-done').style.display = db.apexStatus === "done" ? "block" : "none";
-        document.getElementById('apex-display').innerText = db.apexTask;
-        document.getElementById('side-list').innerHTML = db.sideQuests.map(q => `<div class="quest-row"><span>${q.text}</span><button class="btn-small" onclick="completeSide(${q.id})">OK</button></div>`).join('');
-        document.getElementById('log-list').innerHTML = db.logs.map(l => `<div class="card">${l.date}<br>${l.text}</div>`).join('');
-        if(db.theme !== 'none') document.body.style.backgroundImage = `url('${db.theme}')`;
-    }
-
-    function addSide() { const i = document.getElementById('side-input'); db.sideQuests.push({id: Date.now(), text: i.value.toUpperCase()}); i.value = ""; save(); render(); }
-    function addLog() { const i = document.getElementById('log-input'); db.logs.unshift({date: new Date().toLocaleString(), text: i.value}); i.value = ""; save(); render(); }
-    function save() { localStorage.setItem('avatar_v25', JSON.stringify(db)); }
-    function exportData() { const b = new Blob([JSON.stringify(db)], {type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `progress.json`; a.click(); }
-    function resetAll() { if(confirm("Resetar?")) { localStorage.clear(); location.reload(); } }
-    function setTheme(u) { db.theme = u; save(); render(); }
-
-    updateHeader(); render();
+    checkDailyReset();
+    render();
 </script>
 </body>
 </html>
