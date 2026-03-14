@@ -3,51 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM - UNITY FIX</title>
+    <title>SYSTEM - LEGACY KEEPER</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap');
-        :root { --bg: #0d0f14; --panel: rgba(26, 30, 41, 0.98); --primary: #00f3ff; --secondary: #7000ff; --text: #f0f4f8; --success: #00ffa3; --danger: #ff4d4d; --gray: #94a3b8; }
+        :root { --bg: #0b0e14; --panel: rgba(22, 27, 34, 0.98); --primary: #00f3ff; --secondary: #7000ff; --text: #f0f4f8; --success: #00ffa3; --danger: #ff4d4d; --gray: #8b949e; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-        body { font-family: 'Outfit', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; overflow: hidden; height: 100vh; }
-        .app-container { display: flex; flex-direction: column; height: 100vh; max-width: 500px; margin: 0 auto; position: relative; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; overflow: hidden; height: 100vh; }
         
-        /* CORREÇÃO CRÍTICA: Esconder abas inativas */
-        .tab-content { display: none; height: 100%; overflow-y: auto; padding: 20px; padding-bottom: 120px; animation: fadeIn 0.2s ease; }
+        /* Sistema de Abas */
+        .tab-content { display: none; height: 100vh; overflow-y: auto; padding: 20px 20px 140px; animation: fadeIn 0.25s ease-out; }
         .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* HEADER */
-        .header-profile { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
-        .avatar-frame { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--primary); overflow: hidden; background: #1a1e29; flex-shrink: 0; }
+        /* Header e Frases */
+        .header-profile { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; margin-top: 10px; }
+        .avatar-frame { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--primary); overflow: hidden; box-shadow: 0 0 15px rgba(0, 243, 255, 0.3); }
         .avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
-        #greeting-text { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; margin: 0; }
-        
-        /* GRAFICO E STATUS */
-        .progress-center { position: relative; width: 140px; height: 140px; margin: 0 auto; display: flex; justify-content: center; align-items: center; }
-        .pie-chart { width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(var(--primary) 0deg, rgba(255,255,255,0.05) 0deg); transition: 0.8s; }
-        .pie-inner { position: absolute; width: 115px; height: 115px; background: var(--bg); border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .weekly-grid { display: flex; justify-content: space-between; align-items: flex-end; height: 60px; margin-top: 20px; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 15px; }
-        .day-bar { width: 10px; background: rgba(255,255,255,0.1); border-radius: 5px; min-height: 5px; }
-        .day-bar.active { background: var(--primary); box-shadow: 0 0 8px var(--primary); }
+        #greeting-text { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; font-weight: 700; margin: 0; color: #fff; }
+        #motivational-quote { font-size: 0.8rem; color: var(--primary); font-style: italic; opacity: 0.9; }
 
-        /* UI */
-        .view-title { font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; margin: 25px 0 15px; color: var(--gray); text-transform: uppercase; letter-spacing: 2px; border-left: 3px solid var(--primary); padding-left: 10px; }
-        .card { background: var(--panel); padding: 20px; border-radius: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
-        .btn-main { width: 100%; height: 65px; border-radius: 20px; border: none; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
-        input, textarea { width: 100%; padding: 18px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 15px; margin-bottom: 12px; font-size: 1rem; }
+        /* Dashboard & Gráficos */
+        .progress-circle { position: relative; width: 150px; height: 150px; margin: 10px auto; display: flex; justify-content: center; align-items: center; }
+        .pie-chart { width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(var(--primary) 0deg, rgba(255,255,255,0.05) 0deg); transition: 1s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
+        .pie-inner { position: absolute; width: 125px; height: 125px; background: var(--bg); border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .weekly-grid { display: flex; justify-content: space-between; align-items: flex-end; height: 70px; margin: 20px 0; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 18px; }
+        .day-bar { width: 12px; background: rgba(255,255,255,0.1); border-radius: 6px; min-height: 4px; transition: 0.5s; }
+        .day-bar.active { background: var(--primary); box-shadow: 0 0 12px var(--primary); }
+
+        /* Cards e Inputs */
+        .card { background: var(--panel); padding: 22px; border-radius: 28px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.06); }
+        .view-title { font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; margin: 25px 0 15px; color: var(--gray); text-transform: uppercase; letter-spacing: 2px; border-left: 4px solid var(--primary); padding-left: 12px; }
+        .btn-main { width: 100%; height: 68px; border-radius: 22px; border: none; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-main:active { transform: scale(0.96); }
+        input, textarea { width: 100%; padding: 18px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 18px; margin-bottom: 12px; font-size: 1rem; font-family: inherit; }
         
-        /* QUESTS UNIFICADAS */
-        .quest-box { background: rgba(255,255,255,0.04); padding: 18px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-right: 4px solid var(--secondary); }
-        .quest-box.is-routine { border-right-color: var(--primary); }
-        .btn-check { background: var(--success); border: none; height: 50px; padding: 0 20px; border-radius: 12px; font-weight: 700; color: #000; }
+        /* Lista Única de Missões */
+        .quest-item { background: rgba(255,255,255,0.04); padding: 18px; border-radius: 22px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-left: 4px solid var(--secondary); }
+        .quest-item.is-routine { border-left-color: var(--primary); }
+        .btn-check { background: var(--success); border: none; height: 52px; padding: 0 22px; border-radius: 14px; font-weight: 700; color: #000; font-size: 1rem; }
         
-        /* NAV BAR */
-        .nav-bar { position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%); width: 94%; max-width: 450px; height: 80px; background: rgba(18, 22, 30, 0.98); backdrop-filter: blur(20px); display: flex; border-radius: 28px; border: 1px solid rgba(255,255,255,0.1); z-index: 100; }
-        .nav-item { flex: 1; background: none; border: none; color: var(--gray); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        /* NavBar */
+        .nav-bar { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 450px; height: 85px; background: rgba(15, 18, 25, 0.98); backdrop-filter: blur(20px); display: flex; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); z-index: 999; }
+        .nav-item { flex: 1; background: none; border: none; color: var(--gray); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
         .nav-item.active { color: var(--primary); }
         .nav-item span { font-size: 26px; }
 
-        .log-entry { border-left: 2px solid var(--primary); padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.02); border-radius: 0 15px 15px 0; }
+        .log-entry { border-left: 3px solid var(--primary); padding: 14px; margin-bottom: 15px; background: rgba(255,255,255,0.02); border-radius: 0 18px 18px 0; }
     </style>
 </head>
 <body>
@@ -56,90 +57,103 @@
     <div id="tab-status" class="tab-content active">
         <header class="header-profile">
             <div class="avatar-frame"><img id="display-avatar" src="https://via.placeholder.com/100/161b22/00f3ff?text=USER"></div>
-            <div><h1 id="greeting-text">Jogador</h1><div style="font-size: 0.75rem; color: var(--primary); font-weight: 700" id="lvl-status">RANK 1</div></div>
+            <div>
+                <h1 id="greeting-text">Olá, Jogador</h1>
+                <div id="motivational-quote">Pronto para a próxima missão?</div>
+            </div>
         </header>
-        <div class="progress-center">
+        <div class="progress-circle">
             <div class="pie-chart" id="pie-chart"></div>
-            <div class="pie-inner"><span style="font-size:3rem; font-weight:700;" id="lvl-txt">1</span><span style="font-size:0.6rem; color:var(--primary); font-weight:700;">LVL</span></div>
+            <div class="pie-inner"><span style="font-size:3rem; font-weight:700;" id="lvl-txt">1</span><span style="font-size:0.65rem; color:var(--primary); font-weight:700; letter-spacing:1px">RANK</span></div>
         </div>
-        <div style="text-align:center; margin:12px 0; font-weight:700" id="xp-detail">0 / 200 XP</div>
-        <h2 class="view-title">Constância Semanal</h2>
+        <div style="text-align:center; margin:15px 0; font-weight:700" id="xp-detail">0 / 200 XP</div>
+        <h2 class="view-title">Evolução Semanal</h2>
         <div class="weekly-grid" id="weekly-graph"></div>
     </div>
 
     <div id="tab-apex" class="tab-content">
-        <h2 class="view-title">Objetivo Mestre</h2>
+        <h2 class="view-title">Alvo Principal (Apex)</h2>
         <div id="apex-setup" class="card">
-            <input type="text" id="apex-input" placeholder="O que define seu dia hoje?">
-            <button class="btn-main" onclick="setApex()">ESTABELECER ALVO</button>
+            <input type="text" id="apex-input" placeholder="Qual o grande foco de hoje?">
+            <button class="btn-main" onclick="setApex()">DEFINIR OBJETIVO MESTRE</button>
         </div>
         <div id="apex-active" class="card" style="display:none; text-align:center; border: 1px solid var(--primary)">
-            <div style="font-size:1.4rem; font-weight:700; margin:25px 0" id="apex-display">---</div>
-            <button class="btn-main" onclick="completeApex()">OBJETIVO ALCANÇADO</button>
+            <div style="font-size:1.6rem; font-weight:700; margin:30px 0; color:#fff" id="apex-display">---</div>
+            <button class="btn-main" onclick="completeApex()">MISSÃO CUMPRIDA</button>
         </div>
     </div>
 
-    <div id="tab-side" class="tab-content">
-        <h2 class="view-title">Todas as Missões</h2>
+    <div id="tab-missions" class="tab-content">
+        <h2 class="view-title">Quadro de Missões (Diárias + Extras)</h2>
         <div id="unified-list"></div>
-        <h2 class="view-title">Nova Missão Extra</h2>
+        <h2 class="view-title">Adicionar Side Quest</h2>
         <div class="card">
-            <input type="text" id="side-input" placeholder="Algo extra para fazer?">
+            <input type="text" id="side-input" placeholder="Nova tarefa temporária...">
             <button class="btn-main" style="height:55px" onclick="addSide()">ADICIONAR ⚡</button>
         </div>
     </div>
 
     <div id="tab-log" class="tab-content">
-        <h2 class="view-title">Histórico de Logs</h2>
-        <textarea id="log-input" rows="4" placeholder="O que você conquistou hoje?"></textarea>
-        <button class="btn-main" onclick="addLog()">SALVAR RELATÓRIO</button>
-        <div id="log-list" style="margin-top:20px"></div>
+        <h2 class="view-title">Relatórios Archivados</h2>
+        <textarea id="log-input" rows="4" placeholder="O que você aprendeu ou conquistou agora?"></textarea>
+        <button class="btn-main" onclick="addLog()">SALVAR NO DIÁRIO</button>
+        <div id="log-list" style="margin-top:25px"></div>
     </div>
 
     <div id="tab-sys" class="tab-content">
-        <h2 class="view-title">Gerenciar Rotina Diária</h2>
+        <h2 class="view-title">Configurar Rotina Permanente</h2>
         <div class="card">
-            <input type="text" id="routine-input" placeholder="Ex: Academia, Estudo...">
-            <button class="btn-main" style="height:50px; font-size:1rem" onclick="addRoutine()">FIXAR NA ROTINA</button>
-            <div id="routine-list" style="margin-top:15px"></div>
+            <input type="text" id="routine-input" placeholder="Ex: Treinar, Ler 20min...">
+            <button class="btn-main" style="height:50px; font-size:1rem" onclick="addRoutine()">FIXAR NA ROTINA ♾️</button>
+            <div id="routine-list" style="margin-top:18px"></div>
         </div>
-        <h2 class="view-title">Perfil</h2>
+        <h2 class="view-title">Perfil e Backup</h2>
         <div class="card">
-            <input type="text" id="p-name" placeholder="Seu nome">
-            <input type="text" id="p-img" placeholder="Link da imagem">
-            <button class="btn-main" onclick="updateProfile()">SALVAR PERFIL</button>
+            <input type="text" id="p-name" placeholder="Seu Nome">
+            <input type="text" id="p-img" placeholder="URL da sua Foto">
+            <button class="btn-main" onclick="updateProfile()">ATUALIZAR IDENTIDADE</button>
         </div>
-        <button class="btn-main" style="background:var(--success); color:#000; margin-bottom:12px" onclick="exportData()">EXPORTAR BACKUP</button>
-        <button class="btn-main" style="background:var(--gray); color:#000" onclick="document.getElementById('f-in').click()">IMPORTAR BACKUP</button>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <button class="btn-main" style="background:var(--success); color:#000; height:55px; font-size:0.9rem" onclick="exportData()">EXPORTAR</button>
+            <button class="btn-main" style="background:var(--gray); color:#000; height:55px; font-size:0.9rem" onclick="document.getElementById('f-in').click()">IMPORTAR</button>
+        </div>
         <input type="file" id="f-in" style="display:none" onchange="importData(event)">
-        <button class="btn-main" style="background:none; border:2px solid var(--danger); color:var(--danger); margin-top:30px" onclick="resetAll()">RESET TOTAL</button>
+        <button class="btn-main" style="background:none; border:2px solid var(--danger); color:var(--danger); margin-top:35px; height:50px" onclick="resetAll()">APAGAR TUDO</button>
     </div>
 
     <nav class="nav-bar">
         <button class="nav-item active" onclick="nav('tab-status', this)"><span>📊</span></button>
         <button class="nav-item" onclick="nav('tab-apex', this)"><span>⭐</span></button>
-        <button class="nav-item" onclick="nav('tab-side', this)"><span>⚔️</span></button>
+        <button class="nav-item" onclick="nav('tab-missions', this)"><span>⚔️</span></button>
         <button class="nav-item" onclick="nav('tab-log', this)"><span>📜</span></button>
         <button class="nav-item" onclick="nav('tab-sys', this)"><span>⚙️</span></button>
     </nav>
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('core_unity_v31')) || {
+    const quotes = [
+        "A disciplina é a alma do guerreiro.",
+        "Prepare-se para a glória hoje.",
+        "Um passo de cada vez, um nível por vez.",
+        "Sua única competição é quem você foi ontem.",
+        "O sistema está operante. Vá vencer."
+    ];
+
+    let db = JSON.parse(localStorage.getItem('legacy_keeper_v32')) || {
         xp: 0, playerName: "Jogador", playerImg: "",
         sideQuests: [], routine: [], logs: [], apexTask: "", apexStatus: "setup",
         lastLoginDate: "", weeklyHistory: [0,0,0,0,0,0,0]
     };
 
     const audio = new (window.AudioContext || window.webkitAudioContext)();
-    function sound(f, d=0.1) {
+    function sound(f, d=0.12) {
         const o = audio.createOscillator(); const g = audio.createGain();
-        o.frequency.value = f; g.gain.setValueAtTime(0.05, audio.currentTime);
+        o.frequency.value = f; g.gain.setValueAtTime(0.04, audio.currentTime);
         g.gain.exponentialRampToValueAtTime(0.01, audio.currentTime+d);
         o.connect(g); g.connect(audio.destination); o.start(); o.stop(audio.currentTime+d);
     }
 
-    function save() { localStorage.setItem('core_unity_v31', JSON.stringify(db)); }
+    function save() { localStorage.setItem('legacy_keeper_v32', JSON.stringify(db)); }
 
     function checkDailyReset() {
         const today = new Date().toLocaleDateString();
@@ -160,37 +174,38 @@
         const perc = (xpInLvl / 200) * 100;
         
         document.getElementById('lvl-txt').innerText = lvl;
-        document.getElementById('lvl-status').innerText = `RANK ${lvl}`;
         document.getElementById('xp-detail').innerText = `${xpInLvl} / 200 XP`;
         document.getElementById('pie-chart').style.background = `conic-gradient(var(--primary) ${perc * 3.6}deg, rgba(255,255,255,0.05) 0deg)`;
         if(db.playerImg) document.getElementById('display-avatar').src = db.playerImg;
-        document.getElementById('greeting-text').innerText = db.playerName;
+        document.getElementById('greeting-text').innerText = `Olá, ${db.playerName}`;
+        document.getElementById('motivational-quote').innerText = quotes[Math.floor(Math.random() * quotes.length)];
 
         const todayIdx = new Date().getDay();
         document.getElementById('weekly-graph').innerHTML = db.weeklyHistory.map((val, i) => `
-            <div class="day-bar ${i === todayIdx ? 'active' : ''}" style="height: ${Math.min(val/2, 50) + 5}px"></div>
+            <div class="day-bar ${i === todayIdx ? 'active' : ''}" style="height: ${Math.min(val/2, 55) + 5}px"></div>
         `).join('');
 
         document.getElementById('apex-setup').style.display = db.apexStatus === "setup" ? "block" : "none";
         document.getElementById('apex-active').style.display = db.apexStatus === "active" ? "block" : "none";
         document.getElementById('apex-display').innerText = db.apexTask;
 
+        // Lista Unificada de Missões (Aba ⚔️)
         document.getElementById('unified-list').innerHTML = db.sideQuests.map(q => `
-            <div class="quest-box ${q.type === 'ROUTINE' ? 'is-routine' : ''}">
-                <div style="display:flex; flex-direction:column; gap:4px">
-                    <span style="font-size:0.6rem; color:var(--gray); font-weight:800">${q.type === 'ROUTINE' ? '♾️ DIÁRIA' : '⚡ EXTRA'}</span>
-                    <span style="font-weight:700">${q.text}</span>
+            <div class="quest-item ${q.type === 'ROUTINE' ? 'is-routine' : ''}">
+                <div>
+                    <div style="font-size:0.6rem; color:var(--gray); font-weight:800; letter-spacing:1px">${q.type === 'ROUTINE' ? '♾️ ROTINA' : '⚡ SIDE QUEST'}</div>
+                    <div style="font-weight:700; font-size:1.05rem">${q.text}</div>
                 </div>
                 <button class="btn-check" onclick="completeQuest(${q.id})">OK</button>
             </div>`).join('');
 
         document.getElementById('routine-list').innerHTML = db.routine.map((t, i) => `
-            <div style="display:flex; justify-content:space-between; padding:12px; background:rgba(255,255,255,0.03); margin-bottom:5px; border-radius:10px">
+            <div style="display:flex; justify-content:space-between; padding:12px; background:rgba(255,255,255,0.03); margin-bottom:6px; border-radius:12px">
                 <span style="font-size:0.9rem">${t}</span>
-                <button style="color:var(--danger); background:none; border:none; font-weight:700" onclick="removeRoutine(${i})">X</button>
+                <button style="color:var(--danger); background:none; border:none; font-weight:700" onclick="removeRoutine(${i})">REMOVER</button>
             </div>`).join('');
 
-        document.getElementById('log-list').innerHTML = db.logs.map(l => `<div class="log-entry"><div style="font-size:0.65rem; color:var(--primary); font-weight:700">${l.date}</div><div>${l.text}</div></div>`).join('');
+        document.getElementById('log-list').innerHTML = db.logs.map(l => `<div class="log-entry"><div style="font-size:0.7rem; color:var(--primary); font-weight:700">${l.date}</div><div style="margin-top:4px">${l.text}</div></div>`).join('');
     }
 
     function setApex() { 
@@ -224,6 +239,7 @@
     }
 
     function removeRoutine(idx) { db.routine.splice(idx, 1); save(); render(); }
+    
     function addLog() {
         const i = document.getElementById('log-input'); if(!i.value) return;
         db.logs.unshift({ date: new Date().toLocaleString(), text: i.value });
@@ -233,7 +249,7 @@
     function updateProfile() {
         db.playerName = document.getElementById('p-name').value || db.playerName;
         db.playerImg = document.getElementById('p-img').value || db.playerImg;
-        save(); render(); alert("Perfil Sincronizado!");
+        save(); render(); alert("Identidade Atualizada!");
     }
 
     function nav(id, btn) {
@@ -247,16 +263,16 @@
     function exportData() {
         const b = new Blob([JSON.stringify(db)], {type:'application/json'});
         const a = document.createElement('a'); a.href = URL.createObjectURL(b);
-        a.download = `backup_v31.json`; a.click();
+        a.download = `hero_backup.json`; a.click();
     }
 
     function importData(e) {
         const f = e.target.files[0]; const r = new FileReader();
-        r.onload = (ev) => { db = JSON.parse(ev.target.result); save(); render(); alert("Importado!"); };
+        r.onload = (ev) => { db = JSON.parse(ev.target.result); save(); render(); alert("Backup Restaurado!"); };
         r.readAsText(f);
     }
 
-    function resetAll() { if(confirm("Apagar tudo?")) { localStorage.clear(); location.reload(); } }
+    function resetAll() { if(confirm("Apagar todos os dados permanentemente?")) { localStorage.clear(); location.reload(); } }
     
     checkDailyReset(); render();
 </script>
