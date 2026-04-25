@@ -3,65 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM - CUSTOM UNIVERSE</title>
+    <title>SYSTEM - PRO EDITION</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap');
-        :root { --bg: #0b0e14; --panel: rgba(22, 27, 34, 0.92); --primary: #00f3ff; --secondary: #7000ff; --text: #f0f4f8; --success: #00ffa3; --danger: #ff4d4d; --gray: #8b949e; }
+        :root { --bg: #0b0e14; --panel: rgba(22, 27, 34, 0.94); --primary: #00f3ff; --secondary: #7000ff; --text: #f0f4f8; --success: #00ffa3; --danger: #ff4d4d; --gray: #8b949e; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         
-        body { 
-            font-family: 'Outfit', sans-serif; 
-            background-color: var(--bg);
-            color: var(--text); margin: 0; padding: 0; overflow: hidden; height: 100vh; 
-        }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; overflow: hidden; height: 100vh; }
 
-        /* Plano de Fundo Dinâmico */
+        /* FUNDO DINÂMICO BLINDADO */
         #dynamic-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-size: cover; background-position: center;
-            z-index: -2; transition: 0.5s;
+            background-size: cover; background-position: center; background-repeat: no-repeat;
+            z-index: -2; transition: background-image 0.5s ease-in-out;
         }
 
-        .bg-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(11, 14, 20, 0.82); z-index: -1; backdrop-filter: blur(2px); }
-
+        .bg-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(11, 14, 20, 0.85); z-index: -1; backdrop-filter: blur(3px); }
         .app-container { display: flex; flex-direction: column; height: 100vh; max-width: 500px; margin: 0 auto; position: relative; }
         
-        .tab-content { display: none; height: 100vh; overflow-y: auto; padding: 20px 20px 140px; animation: fadeIn 0.25s ease-out; }
+        .tab-content { display: none; height: 100vh; overflow-y: auto; padding: 20px 20px 140px; animation: fadeIn 0.2s ease-out; }
         .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
-        /* Header & Streak */
+        /* PERFIL & STREAK */
         .header-profile { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; margin-top: 10px; position: relative; }
-        .avatar-frame { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--primary); overflow: hidden; box-shadow: 0 0 15px rgba(0, 243, 255, 0.3); }
+        .avatar-frame { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--primary); overflow: hidden; box-shadow: 0 0 15px rgba(0, 243, 255, 0.3); background: #161b22; display: flex; justify-content: center; align-items: center; }
         .avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
-        #greeting-text { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; font-weight: 700; margin: 0; color: #fff; }
+        #greeting-text { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; font-weight: 700; margin: 0; }
         .streak-badge { position: absolute; right: 0; top: 10px; background: rgba(255, 68, 0, 0.2); border: 1px solid #ff4400; padding: 5px 12px; border-radius: 12px; font-weight: 700; color: #ffbb00; display: flex; align-items: center; gap: 5px; font-size: 0.8rem; }
 
-        /* Progress Circle */
+        /* STATUS */
         .progress-circle { position: relative; width: 140px; height: 140px; margin: 10px auto; display: flex; justify-content: center; align-items: center; }
-        .pie-chart { width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(var(--primary) 0deg, rgba(255,255,255,0.05) 0deg); transition: 1s; }
-        .pie-inner { position: absolute; width: 115px; height: 115px; background: rgba(11, 14, 20, 0.9); border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        
+        .pie-chart { width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(var(--primary) 0deg, rgba(255,255,255,0.05) 0deg); transition: 1s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
+        .pie-inner { position: absolute; width: 115px; height: 115px; background: rgba(11, 14, 20, 0.95); border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .weekly-grid { display: flex; justify-content: space-between; align-items: flex-end; height: 60px; margin: 20px 0; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 18px; }
-        .day-bar { width: 10px; background: rgba(255,255,255,0.1); border-radius: 5px; min-height: 4px; }
+        .day-bar { width: 10px; background: rgba(255,255,255,0.1); border-radius: 5px; min-height: 4px; transition: 0.3s; }
         .day-bar.active { background: var(--primary); box-shadow: 0 0 10px var(--primary); }
 
-        /* UI Elements */
+        /* CARDS & INPUTS */
         .card { background: var(--panel); padding: 22px; border-radius: 28px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(10px); }
         .view-title { font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; margin: 25px 0 12px; color: var(--gray); text-transform: uppercase; letter-spacing: 2px; border-left: 4px solid var(--primary); padding-left: 12px; }
-        .btn-main { width: 100%; height: 65px; border-radius: 20px; border: none; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        input, textarea { width: 100%; padding: 18px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 18px; margin-bottom: 12px; font-size: 1rem; }
+        .btn-main { width: 100%; height: 60px; border-radius: 18px; border: none; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-main:active { transform: scale(0.97); }
+        input, textarea { width: 100%; padding: 16px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); color: #fff; border-radius: 15px; margin-bottom: 12px; font-size: 1rem; font-family: 'Outfit', sans-serif; }
         
-        /* Unified Quest List */
-        .quest-item { background: rgba(255,255,255,0.05); padding: 16px; border-radius: 22px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-left: 4px solid var(--secondary); }
+        .quest-item { background: rgba(255,255,255,0.05); padding: 16px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-left: 4px solid var(--secondary); }
         .quest-item.is-routine { border-left-color: var(--primary); }
-        .btn-check { background: var(--success); border: none; height: 48px; padding: 0 20px; border-radius: 12px; font-weight: 700; color: #000; }
+        .btn-check { background: var(--success); border: none; height: 45px; padding: 0 18px; border-radius: 10px; font-weight: 700; color: #000; cursor: pointer;}
         
-        /* Navbar */
-        .nav-bar { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 450px; height: 80px; background: rgba(15, 18, 25, 0.98); display: flex; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); z-index: 999; }
-        .nav-item { flex: 1; background: none; border: none; color: var(--gray); display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .nav-item.active { color: var(--primary); }
-        .nav-item span { font-size: 24px; }
+        .nav-bar { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 450px; height: 75px; background: rgba(15, 18, 25, 0.98); display: flex; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); z-index: 999; }
+        .nav-item { flex: 1; background: none; border: none; color: var(--gray); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+        .nav-item.active { color: var(--primary); transform: translateY(-3px); }
+        .nav-item span { font-size: 22px; }
     </style>
 </head>
 <body>
@@ -70,19 +63,18 @@
 <div style="display:none"><div id="player"></div></div>
 
 <div class="app-container">
-    
     <div id="tab-status" class="tab-content active">
         <header class="header-profile">
-            <div class="avatar-frame"><img id="display-avatar" src="https://via.placeholder.com/100/161b22/00f3ff?text=USER"></div>
+            <div class="avatar-frame"><img id="display-avatar" src="https://via.placeholder.com/100/161b22/00f3ff?text=SYS" onerror="this.src='https://via.placeholder.com/100/161b22/00f3ff?text=SYS'"></div>
             <div>
                 <h1 id="greeting-text">Olá...</h1>
-                <div id="motivational-quote" style="font-size:0.8rem; color:var(--primary); font-style:italic">Prepare-se.</div>
+                <div id="motivational-quote" style="font-size:0.75rem; color:var(--primary); font-style:italic">Carregando dados...</div>
             </div>
             <div class="streak-badge">🔥 <span id="streak-count">0</span> DIAS</div>
         </header>
         <div class="progress-circle">
             <div class="pie-chart" id="pie-chart"></div>
-            <div class="pie-inner"><span style="font-size:3rem; font-weight:700;" id="lvl-txt">1</span><span style="font-size:0.6rem; color:var(--primary); font-weight:700;">RANK</span></div>
+            <div class="pie-inner"><span style="font-size:2.8rem; font-weight:700;" id="lvl-txt">1</span><span style="font-size:0.6rem; color:var(--primary); font-weight:700;">RANK</span></div>
         </div>
         <div style="text-align:center; margin:15px 0; font-weight:700" id="xp-detail">0 / 200 XP</div>
         <h2 class="view-title">Desempenho Semanal</h2>
@@ -90,65 +82,69 @@
     </div>
 
     <div id="tab-apex" class="tab-content">
-        <h2 class="view-title">Objetivo Mestre (Apex)</h2>
+        <h2 class="view-title">Protocolo Apex</h2>
         <div id="apex-setup" class="card">
-            <input type="text" id="apex-input" placeholder="O que define seu sucesso hoje?">
-            <button class="btn-main" onclick="setApex()">ATIVAR PROTOCOLO</button>
+            <input type="text" id="apex-input" placeholder="Alvo principal definitivo de hoje">
+            <button class="btn-main" onclick="setApex()">DEFINIR FOCO MASTER</button>
         </div>
         <div id="apex-active" class="card" style="display:none; text-align:center; border: 1px solid var(--primary)">
-            <div style="font-size:1.5rem; font-weight:700; margin:30px 0; color:#fff" id="apex-display">---</div>
+            <div style="font-size:1.4rem; font-weight:700; margin:25px 0; color:#fff" id="apex-display">---</div>
             <button class="btn-main" onclick="completeApex()">MISSÃO CONCLUÍDA</button>
         </div>
     </div>
 
     <div id="tab-missions" class="tab-content">
-        <h2 class="view-title">Quadro de Missões</h2>
+        <h2 class="view-title">Quadro de Operações</h2>
         <div id="unified-list"></div>
-        <h2 class="view-title">Adicionar Side Quest</h2>
+        <h2 class="view-title">Acionar Extra Quest</h2>
         <div class="card">
-            <input type="text" id="side-input" placeholder="Tarefa extra...">
-            <button class="btn-main" style="height:55px" onclick="addSide()">ADICIONAR ⚡</button>
+            <input type="text" id="side-input" placeholder="Nova side quest temporária...">
+            <button class="btn-main" onclick="addSide()">ADICIONAR ⚡</button>
         </div>
     </div>
 
     <div id="tab-log" class="tab-content">
-        <h2 class="view-title">Arquivos de Campanha</h2>
-        <textarea id="log-input" rows="4" placeholder="Relate suas vitórias de hoje..."></textarea>
-        <button class="btn-main" onclick="addLog()">SALVAR LOG</button>
+        <h2 class="view-title">Diário de Campanha</h2>
+        <textarea id="log-input" rows="4" placeholder="Registre suas vitórias ou aprendizados da missão..."></textarea>
+        <button class="btn-main" onclick="addLog()">ARQUIVAR REGISTRO</button>
         <div id="log-list" style="margin-top:20px"></div>
     </div>
 
     <div id="tab-sys" class="tab-content">
-        <h2 class="view-title">Aparência & Atmosfera</h2>
+        <h2 class="view-title">Perfil do Jogador</h2>
         <div class="card">
-            <p style="font-size:0.75rem; color:var(--gray)">URL do Plano de Fundo:</p>
-            <input type="text" id="bg-url" placeholder="Link da imagem (Ex: Imgur, Pinterest)">
-            <button class="btn-main" style="height:50px; font-size:1rem; margin-bottom:15px" onclick="updateBg()">APLICAR FUNDO</button>
-            
-            <p style="font-size:0.75rem; color:var(--gray)">ID de Música (YouTube):</p>
-            <input type="text" id="yt-url" placeholder="Ex: dQw4w9WgXcQ">
-            <button class="btn-main" style="height:50px; font-size:1rem" onclick="updateMusic()">SOLTAR O SOM 🎵</button>
+            <label style="font-size:0.7rem; color:var(--gray); font-weight:bold;">NOME DE EXIBIÇÃO:</label>
+            <input type="text" id="p-name-input" placeholder="Seu Nome">
+            <label style="font-size:0.7rem; color:var(--gray); font-weight:bold;">URL DO AVATAR:</label>
+            <input type="text" id="p-img-input" placeholder="Link da foto de perfil">
+            <button class="btn-main" style="height:45px; font-size:0.9rem" onclick="updateProfile()">SALVAR IDENTIDADE</button>
         </div>
 
-        <h2 class="view-title">Configurar Diárias</h2>
+        <h2 class="view-title">Universo (Fundo & Áudio)</h2>
         <div class="card">
-            <input type="text" id="routine-input" placeholder="Tarefa recorrente">
-            <button class="btn-main" style="height:50px; font-size:1rem" onclick="addRoutine()">FIXAR NA ROTINA</button>
+            <label style="font-size:0.7rem; color:var(--gray); font-weight:bold;">URL DO PLANO DE FUNDO:</label>
+            <input type="text" id="bg-url-input" placeholder="Link da imagem do fundo">
+            <button class="btn-main" style="height:45px; font-size:0.9rem; margin-bottom:15px" onclick="updateBg()">APLICAR FUNDO</button>
+            
+            <label style="font-size:0.7rem; color:var(--gray); font-weight:bold;">ID DO VÍDEO NO YOUTUBE:</label>
+            <input type="text" id="yt-url" placeholder="Ex: dQw4w9WgXcQ">
+            <button class="btn-main" style="height:45px; font-size:0.9rem" onclick="updateMusic()">SINTONIZAR RÁDIO 🎵</button>
+        </div>
+
+        <h2 class="view-title">Rotina Diária Automática</h2>
+        <div class="card">
+            <input type="text" id="routine-input" placeholder="Ex: Estudar 30min, Beber 2L Água...">
+            <button class="btn-main" style="height:45px; font-size:0.9rem" onclick="addRoutine()">FIXAR NO SISTEMA</button>
             <div id="routine-list" style="margin-top:15px"></div>
         </div>
 
-        <h2 class="view-title">Perfil & Dados</h2>
-        <div class="card">
-            <input type="text" id="p-name" placeholder="Seu Nome">
-            <input type="text" id="p-img" placeholder="Link do Avatar">
-            <button class="btn-main" onclick="updateProfile()">ATUALIZAR PERFIL</button>
-        </div>
+        <h2 class="view-title">Sistema (Backup)</h2>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
-            <button class="btn-main" style="background:var(--success); color:#000; height:50px; font-size:0.9rem" onclick="exportData()">EXPORTAR</button>
-            <button class="btn-main" style="background:var(--gray); color:#000; height:50px; font-size:0.9rem" onclick="document.getElementById('f-in').click()">IMPORTAR</button>
+            <button class="btn-main" style="background:var(--success); color:#000; height:45px" onclick="exportData()">EXPORTAR</button>
+            <button class="btn-main" style="background:var(--gray); color:#000; height:45px" onclick="document.getElementById('f-in').click()">IMPORTAR</button>
         </div>
         <input type="file" id="f-in" style="display:none" onchange="importData(event)">
-        <button class="btn-main" style="background:none; border:2px solid var(--danger); color:var(--danger); margin-top:30px; height:45px" onclick="resetAll()">RESET TOTAL</button>
+        <button class="btn-main" style="background:none; border:1px solid var(--danger); color:var(--danger); margin-top:20px; height:40px" onclick="resetAll()">APAGAR TUDO</button>
     </div>
 
     <nav class="nav-bar">
@@ -162,11 +158,13 @@
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
-    const quotes = ["A vitória é uma decisão diária.", "O sistema reconhece seu esforço.", "Mantenha a guarda alta.", "Execute o plano com perfeição."];
+    const quotes = ["A disciplina supera o talento.", "Sistemas ligados. Avante.", "O seu esforço de hoje é o seu rank de amanhã.", "Foco total na missão primária."];
     let player;
 
-    let db = JSON.parse(localStorage.getItem('custom_universe_v34')) || {
-        xp: 0, playerName: "Jogador", playerImg: "", streak: 0, bgImg: "https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070",
+    // Manter dados salvos na chave definitiva "pro_edition" e tentar resgatar da v35 se for o primeiro uso
+    let db = JSON.parse(localStorage.getItem('system_pro_v36')) || JSON.parse(localStorage.getItem('v35_final')) || {
+        xp: 0, playerName: "Jogador", playerImg: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=100&auto=format&fit=crop", streak: 0, 
+        bgImg: "https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070",
         sideQuests: [], routine: [], logs: [], apexTask: "", apexStatus: "setup",
         lastLoginDate: "", weeklyHistory: [0,0,0,0,0,0,0], ytId: ""
     };
@@ -180,13 +178,14 @@
 
     const audio = new (window.AudioContext || window.webkitAudioContext)();
     function sound(f, d=0.1) {
+        if(audio.state === 'suspended') audio.resume();
         const o = audio.createOscillator(); const g = audio.createGain();
         o.frequency.value = f; g.gain.setValueAtTime(0.04, audio.currentTime);
         g.gain.exponentialRampToValueAtTime(0.01, audio.currentTime+d);
         o.connect(g); g.connect(audio.destination); o.start(); o.stop(audio.currentTime+d);
     }
 
-    function save() { localStorage.setItem('custom_universe_v34', JSON.stringify(db)); }
+    function save() { localStorage.setItem('system_pro_v36', JSON.stringify(db)); }
 
     function checkDailyReset() {
         const today = new Date().toLocaleDateString();
@@ -203,47 +202,73 @@
     }
 
     function render() {
+        // Status & XP
         const lvl = Math.floor(db.xp / 200) + 1;
         const xpInLvl = db.xp % 200;
         const perc = (xpInLvl / 200) * 100;
-        
         document.getElementById('lvl-txt').innerText = lvl;
         document.getElementById('xp-detail').innerText = `${xpInLvl} / 200 XP`;
         document.getElementById('pie-chart').style.background = `conic-gradient(var(--primary) ${perc * 3.6}deg, rgba(255,255,255,0.05) 0deg)`;
+        
+        // Visual (Avatar, BG, Nome)
         if(db.playerImg) document.getElementById('display-avatar').src = db.playerImg;
+        if(db.bgImg) document.getElementById('dynamic-bg').style.backgroundImage = `url('${db.bgImg}')`;
         document.getElementById('greeting-text').innerText = `Olá, ${db.playerName}`;
         document.getElementById('motivational-quote').innerText = quotes[Math.floor(Math.random() * quotes.length)];
         document.getElementById('streak-count').innerText = db.streak;
-        document.getElementById('dynamic-bg').style.backgroundImage = `url('${db.bgImg}')`;
 
+        // Preencher inputs com dados atuais (Memória Visual)
+        document.getElementById('p-name-input').value = db.playerName;
+        document.getElementById('p-img-input').value = db.playerImg;
+        document.getElementById('bg-url-input').value = db.bgImg;
+        document.getElementById('yt-url').value = db.ytId;
+
+        // Gráfico Semanal
         const todayIdx = new Date().getDay();
         document.getElementById('weekly-graph').innerHTML = db.weeklyHistory.map((val, i) => `
             <div class="day-bar ${i === todayIdx ? 'active' : ''}" style="height: ${Math.min(val/2.5, 50) + 4}px"></div>
         `).join('');
 
+        // Apex
         document.getElementById('apex-setup').style.display = db.apexStatus === "setup" ? "block" : "none";
         document.getElementById('apex-active').style.display = db.apexStatus === "active" ? "block" : "none";
         document.getElementById('apex-display').innerText = db.apexTask;
 
+        // Listas (Missões, Rotinas e Logs)
         document.getElementById('unified-list').innerHTML = db.sideQuests.map(q => `
             <div class="quest-item ${q.type === 'ROUTINE' ? 'is-routine' : ''}">
-                <div>
-                    <div style="font-size:0.55rem; color:var(--gray); font-weight:800">${q.type === 'ROUTINE' ? '♾️ ROTINA' : '⚡ EXTRA'}</div>
-                    <div style="font-weight:700">${q.text}</div>
-                </div>
+                <div><small style="color:var(--gray); font-weight:bold">${q.type === 'ROUTINE' ? '♾️ ROTINA' : '⚡ EXTRA'}</small><br><b style="font-size:1.1rem">${q.text}</b></div>
                 <button class="btn-check" onclick="completeQuest(${q.id})">OK</button>
             </div>`).join('');
 
         document.getElementById('routine-list').innerHTML = db.routine.map((t, i) => `
-            <div style="display:flex; justify-content:space-between; padding:10px; background:rgba(255,255,255,0.03); margin-bottom:5px; border-radius:10px">
-                <span style="font-size:0.85rem">${t}</span>
-                <button style="color:var(--danger); background:none; border:none; font-weight:700" onclick="removeRoutine(${i})">X</button>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; margin-bottom:5px; background:rgba(255,255,255,0.03); border-radius:12px; border: 1px solid rgba(255,255,255,0.05)">
+                <span>${t}</span><button style="color:var(--danger); background:none; border:none; font-weight:bold; cursor:pointer" onclick="removeRoutine(${i})">REMOVER</button>
             </div>`).join('');
 
-        document.getElementById('log-list').innerHTML = db.logs.map(l => `<div style="border-left:2px solid var(--primary); padding:10px; margin-bottom:10px; background:rgba(255,255,255,0.02)">
-            <div style="font-size:0.6rem; color:var(--primary)">${l.date}</div><div>${l.text}</div></div>`).join('');
+        document.getElementById('log-list').innerHTML = db.logs.map(l => `<div style="padding:12px; border-left:3px solid var(--primary); margin-bottom:10px; background:rgba(255,255,255,0.02); border-radius: 0 12px 12px 0"><small style="color:var(--primary); font-weight:bold">${l.date}</small><br>${l.text}</div>`).join('');
     }
 
+    // Funções de Interface
+    function updateProfile() {
+        const name = document.getElementById('p-name-input').value;
+        const img = document.getElementById('p-img-input').value;
+        if(name) db.playerName = name;
+        if(img) db.playerImg = img;
+        save(); render(); sound(400, 0.1);
+    }
+
+    function updateBg() {
+        const val = document.getElementById('bg-url-input').value;
+        if(val) { db.bgImg = val; save(); render(); sound(400, 0.1); }
+    }
+
+    function updateMusic() {
+        const id = document.getElementById('yt-url').value;
+        if(id) { db.ytId = id; save(); if(player && player.loadVideoById) player.loadVideoById(id); sound(400, 0.1); }
+    }
+
+    // Funções de Gamificação
     function setApex() { 
         const v = document.getElementById('apex-input').value; if(!v) return;
         db.apexTask = v.toUpperCase(); db.apexStatus = "active"; sound(600); save(); render(); 
@@ -257,7 +282,7 @@
 
     function addSide() { 
         const i = document.getElementById('side-input'); if(!i.value) return;
-        db.sideQuests.push({ id: Date.now(), text: i.value.toUpperCase(), type: 'MANUAL' });
+        db.sideQuests.push({ id: Date.now(), text: i.value.toUpperCase(), type: 'EXTRA' });
         i.value = ""; sound(500); save(); render(); 
     }
 
@@ -271,32 +296,18 @@
         const i = document.getElementById('routine-input'); if(!i.value) return;
         db.routine.push(i.value.toUpperCase());
         db.sideQuests.push({ id: Date.now(), text: i.value.toUpperCase(), type: 'ROUTINE' });
-        i.value = ""; save(); render();
+        i.value = ""; sound(400, 0.1); save(); render();
     }
 
-    function removeRoutine(idx) { db.routine.splice(idx, 1); save(); render(); }
+    function removeRoutine(idx) { db.routine.splice(idx, 1); sound(300, 0.1); save(); render(); }
+    
     function addLog() {
         const i = document.getElementById('log-input'); if(!i.value) return;
         db.logs.unshift({ date: new Date().toLocaleString(), text: i.value });
-        i.value = ""; save(); render();
+        i.value = ""; sound(400, 0.1); save(); render();
     }
 
-    function updateProfile() {
-        db.playerName = document.getElementById('p-name').value || db.playerName;
-        db.playerImg = document.getElementById('p-img').value || db.playerImg;
-        save(); render(); alert("Sincronizado!");
-    }
-
-    function updateBg() {
-        const url = document.getElementById('bg-url').value;
-        if(url) { db.bgImg = url; save(); render(); }
-    }
-
-    function updateMusic() {
-        const id = document.getElementById('yt-url').value;
-        if(id) { db.ytId = id; save(); player.loadVideoById(id); }
-    }
-
+    // Funções do Sistema
     function nav(id, btn) {
         sound(400, 0.02);
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -308,18 +319,20 @@
     function exportData() {
         const b = new Blob([JSON.stringify(db)], {type:'application/json'});
         const a = document.createElement('a'); a.href = URL.createObjectURL(b);
-        a.download = `hero_backup_v34.json`; a.click();
+        a.download = `sistema_pro_backup.json`; a.click();
     }
 
     function importData(e) {
         const f = e.target.files[0]; const r = new FileReader();
-        r.onload = (ev) => { db = JSON.parse(ev.target.result); save(); render(); location.reload(); };
+        r.onload = (ev) => { db = JSON.parse(ev.target.result); save(); location.reload(); };
         r.readAsText(f);
     }
 
-    function resetAll() { if(confirm("Apagar tudo?")) { localStorage.clear(); location.reload(); } }
+    function resetAll() { if(confirm("Alerta: Isso apagará seu progresso e banco de dados. Confirmar?")) { localStorage.clear(); location.reload(); } }
     
+    // Inicialização
     checkDailyReset(); render();
 </script>
 </body>
 </html>
+
